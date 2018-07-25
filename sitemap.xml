@@ -2,14 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://scoolor.com/2018/04/18/letsencrypt/</loc>
+    <loc>https://scoolor.github.io/about/index.html</loc>
+    
+    <lastmod>2018-07-25T15:34:25.773Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://scoolor.github.io/2018/04/18/letsencrypt/</loc>
     
     <lastmod>2018-04-20T09:28:37.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://scoolor.com/2018/04/17/hello-world/</loc>
+    <loc>https://scoolor.github.io/2018/04/17/hello-world/</loc>
     
     <lastmod>2018-04-17T14:56:28.000Z</lastmod>
     
