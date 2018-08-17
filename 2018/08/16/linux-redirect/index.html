@@ -4,25 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>使用Certbot开启网站HTTPS | 为什么这么涛的个人博客</title>
+    <title>Linux重定向 | 为什么这么涛的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="为什么这么涛">
     
 
     
-    <meta name="description" content="Let’s Encrypt 是一个免费开源的SSL项目，由Mozilla、Cisco、Akamai、IdenTrust、EFF等组织人员发起。在一定程度上Let’s Encrypt推进了国内HTTPS的进程。CertBot 是基于Let’s Encrypt 的简化部署解决方案。另外acme也是也不不错的解决方案。下面简单介绍一下使用Certbot部署Let’s Encrypt。 环境debian">
-<meta name="keywords" content="Linux,Nginx">
+    <meta name="description" content="了解linux重定向之前需要先简单介绍一下文件描述符（fd）。 linux文件描述符：文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Certbot开启网站HTTPS">
-<meta property="og:url" content="https://scoolor.github.io/2018/04/18/letsencrypt/index.html">
+<meta property="og:title" content="Linux重定向">
+<meta property="og:url" content="https://scoolor.github.io/2018/08/16/linux-redirect/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
-<meta property="og:description" content="Let’s Encrypt 是一个免费开源的SSL项目，由Mozilla、Cisco、Akamai、IdenTrust、EFF等组织人员发起。在一定程度上Let’s Encrypt推进了国内HTTPS的进程。CertBot 是基于Let’s Encrypt 的简化部署解决方案。另外acme也是也不不错的解决方案。下面简单介绍一下使用Certbot部署Let’s Encrypt。 环境debian">
+<meta property="og:description" content="了解linux重定向之前需要先简单介绍一下文件描述符（fd）。 linux文件描述符：文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-01T08:53:38.634Z">
+<meta property="og:updated_time" content="2018-08-17T01:06:53.731Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Certbot开启网站HTTPS">
-<meta name="twitter:description" content="Let’s Encrypt 是一个免费开源的SSL项目，由Mozilla、Cisco、Akamai、IdenTrust、EFF等组织人员发起。在一定程度上Let’s Encrypt推进了国内HTTPS的进程。CertBot 是基于Let’s Encrypt 的简化部署解决方案。另外acme也是也不不错的解决方案。下面简单介绍一下使用Certbot部署Let’s Encrypt。 环境debian">
+<meta name="twitter:title" content="Linux重定向">
+<meta name="twitter:description" content="了解linux重定向之前需要先简单介绍一下文件描述符（fd）。 linux文件描述符：文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是">
 
     
     <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
@@ -78,14 +77,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/04/18/letsencrypt/" title="使用Certbot开启网站HTTPS" itemprop="url">使用Certbot开启网站HTTPS</a>
+      <a href="/2018/08/16/linux-redirect/" title="Linux重定向" itemprop="url">Linux重定向</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
 		
   <p class="article-time">
-    <time datetime="2018-04-18T13:25:25.000Z" itemprop="datePublished"> Published 2018-04-18</time>
+    <time datetime="2018-08-16T14:09:19.000Z" itemprop="datePublished"> Published 2018-08-16</time>
     
   </p>
 </header>
@@ -94,34 +93,40 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#环境"><span class="toc-number">1.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装Certbot客户端"><span class="toc-number">2.</span> <span class="toc-text">安装Certbot客户端</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#获取SSL证书"><span class="toc-number">3.</span> <span class="toc-text">获取SSL证书</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置Nginx"><span class="toc-number">4.</span> <span class="toc-text">配置Nginx</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#linux文件描述符："><span class="toc-number">1.</span> <span class="toc-text">linux文件描述符：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出重定向"><span class="toc-number">2.</span> <span class="toc-text">输出重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输入重定向"><span class="toc-number">3.</span> <span class="toc-text">输入重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用解释"><span class="toc-number">4.</span> <span class="toc-text">常用解释</span></a></li></ol>
 		
 		</div>
 		
-		<p>Let’s Encrypt 是一个免费开源的SSL项目，由Mozilla、Cisco、Akamai、IdenTrust、EFF等组织人员发起。在一定程度上Let’s Encrypt推进了国内HTTPS的进程。<br>CertBot 是基于Let’s Encrypt 的简化部署解决方案。另外<a href="https://github.com/Neilpang/acme.sh" target="_blank" rel="noopener">acme</a>也是也不不错的解决方案。<br>下面简单介绍一下使用Certbot部署Let’s Encrypt。</p>
-<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>debian 8 X64<br>nginx</p>
-<p>本文以nginx为例介绍。</p>
-<h1 id="安装Certbot客户端"><a href="#安装Certbot客户端" class="headerlink" title="安装Certbot客户端"></a>安装Certbot客户端</h1><p>Certbot官网：<a href="https://certbot.eff.org/" target="_blank" rel="noopener">https://certbot.eff.org/</a></p>
-<p>debian 8 的默认仓库是没有Certbot的，需要依赖第三方仓库Jessie backports；执行以下命令安装仓库；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;deb http://ftp.debian.org/debian jessie-backports main&apos;\</span><br><span class="line">| sudo tee /etc/apt/sources.list.d/backports.list</span><br></pre></td></tr></table></figure></p>
-<p>执行完后，更新apt包管理工具<br><code>sudo apt-get update</code><br>接下来就可以安装certbot了，执行以下命令<br><code>sudo apt-get install certbot -t jessie-backports</code></p>
-<h1 id="获取SSL证书"><a href="#获取SSL证书" class="headerlink" title="获取SSL证书"></a>获取SSL证书</h1><p>let’S Encrypt 支持两种获取证书的方式，Webroot和Standalone，Standalone需要80或443端口没有占用，往往需要暂停nginx服务，所以我们一般使用Webroot方式。<br>首先需要配置一个nginx服务，添加以下配置，重启nginx：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /.well-known &#123;</span><br><span class="line">    allow all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo certbot certonly -a webroot \</span><br><span class="line">--webroot-path=/var/www/html -d example.com -d www.example.com</span><br></pre></td></tr></table></figure></p>
-<p>根据提示填写即可。<br>在<code>/etc/letsencrypt/live/</code>目录下就已经生成了你的证书文件。<br>为了进一步提高安全性，需要dhparam.pem文件，生成命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048</span><br></pre></td></tr></table></figure></p>
-<h1 id="配置Nginx"><a href="#配置Nginx" class="headerlink" title="配置Nginx"></a>配置Nginx</h1><p>SSL部分nginx 配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ssl_certificate      /etc/letsencrypt/live/example.com/fullchain.pem;</span><br><span class="line">ssl_certificate_key  /etc/letsencrypt/live/example.com/privkey.pem;</span><br><span class="line">ssl_dhparam /etc/ssl/certs/dhparams.pem;</span><br><span class="line"></span><br><span class="line">ssl_session_cache shared:SSL:1m;</span><br><span class="line">ssl_session_timeout  10m;</span><br><span class="line">ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br></pre></td></tr></table></figure></p>
-<p>80端口配置自动Https</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return 301 https://$server_name$request_uri;</span><br></pre></td></tr></table></figure>
-<p>最后，测试证书更新：<code>certbot renew --dry-run</code><br>如果没有返回错误信息，则说明配置正常，可以配置自动更新了。</p>
-<p>配置自动更新：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">30 2 * * * /usr/bin/certbot renew --noninteractive \</span><br><span class="line">--renew-hook &quot;/bin/systemctl reload nginx&quot; &gt;&gt; /var/log/le-renew.log</span><br></pre></td></tr></table></figure></p>
+		<p>了解linux重定向之前需要先简单介绍一下文件描述符（fd）。</p>
+<h2 id="linux文件描述符："><a href="#linux文件描述符：" class="headerlink" title="linux文件描述符："></a>linux文件描述符：</h2><p>文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。<br>一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是 2；文件描述符的有效范围是 0 到 OPEN_MAX。</p>
+<p>linux shell下常用输入输出操作符是：</p>
+<ol>
+<li>标准输入(stdin) ：代码为 0 ，使用 &lt; 或 &lt;&lt; ； /dev/stdin -&gt; /proc/self/fd/0   0代表：/dev/stdin </li>
+<li>标准输出(stdout)：代码为 1 ，使用 &gt; 或 &gt;&gt; ； /dev/stdout -&gt; /proc/self/fd/1  1代表：/dev/stdout</li>
+<li>标准错误输出(stderr)：代码为 2 ，使用 2&gt; 或 2&gt;&gt; ； /dev/stderr -&gt; /proc/self/fd/2 2代表：/dev/stderr</li>
+</ol>
+<h2 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h2><p>格式：</p>
+<p>command-line1 [1-n] &gt; file或文件操作符或设备</p>
+<p>上面命令意思是：将一条命令执行结果（标准输出，或者错误输出，本来都要打印到屏幕上面的）  重定向其它输出设备（文件，打开文件操作符，或打印机等等）1,2分别是标准输出，错误输出。</p>
+<h2 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a>输入重定向</h2><p>格式：</p>
+<p>command-line [n] &lt;file或文件描述符&amp;设备</p>
+<p>将然有，命令默认从键盘获得的输入，改成从文件，或者其它打开文件以及设备输入。执行这个命令，将标准输入0，与文件或设备绑定。将由它进行输入。</p>
+<h2 id="常用解释"><a href="#常用解释" class="headerlink" title="常用解释"></a>常用解释</h2><ul>
+<li><code>&gt;</code> 表示定向输出到文件，覆盖原有内容；</li>
+<li><code>&gt;&gt;</code> 表示定向追加到目标文件，追加到末尾；</li>
+<li><code>&lt;</code> 表示导入；</li>
+<li><code>1&gt;</code> 表示输出重定向，1可以省略；</li>
+<li><code>2&gt;</code> 表示标准错误（stderr）输出重定向；</li>
+<li><code>2&gt;&amp;-</code> 表示将错误输出关闭，&amp;-表示关闭与它绑定的描述符；</li>
+<li><code>1&gt;&amp;-</code> 表示关闭标准输出；</li>
+<li><code>2&gt; /dev/null</code> 表示错误重定向到黑洞，linux 中/dev/null表示黑洞设备，吃掉一切；</li>
+<li><code>&gt;/dev/null 2&gt;&amp;1</code> 将错误输出2绑定给正确输出1，然后将 正确输出 发送给 /dev/null设备</li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Nginx/">Nginx</a>
-  </div>
 
 </div>
 
@@ -129,7 +134,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://scoolor.github.io/2018/04/18/letsencrypt/" data-title="使用Certbot开启网站HTTPS | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  <div data-url="https://scoolor.github.io/2018/08/16/linux-redirect/" data-title="Linux重定向 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -142,19 +147,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/08/16/linux-redirect/" title="Linux重定向">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Linux重定向</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/04/17/hello-world/"  title="Hello World">
+<a href="/2018/04/18/letsencrypt/"  title="使用Certbot开启网站HTTPS">
  <strong>下一篇：</strong><br/> 
- <span>Hello World
+ <span>使用Certbot开启网站HTTPS
 </span>
 </a>
 </div>
@@ -171,7 +168,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#环境"><span class="toc-number">1.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#安装Certbot客户端"><span class="toc-number">2.</span> <span class="toc-text">安装Certbot客户端</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#获取SSL证书"><span class="toc-number">3.</span> <span class="toc-text">获取SSL证书</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置Nginx"><span class="toc-number">4.</span> <span class="toc-text">配置Nginx</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#linux文件描述符："><span class="toc-number">1.</span> <span class="toc-text">linux文件描述符：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出重定向"><span class="toc-number">2.</span> <span class="toc-text">输出重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输入重定向"><span class="toc-number">3.</span> <span class="toc-text">输入重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用解释"><span class="toc-number">4.</span> <span class="toc-text">常用解释</span></a></li></ol>
  
   </div>
 
