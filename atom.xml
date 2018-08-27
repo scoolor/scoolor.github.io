@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://scoolor.github.io/"/>
-  <updated>2018-08-17T01:06:53.731Z</updated>
+  <updated>2018-08-27T16:17:04.513Z</updated>
   <id>https://scoolor.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux进程组与会话</title>
+    <link href="https://scoolor.github.io/2018/08/27/linux-session/"/>
+    <id>https://scoolor.github.io/2018/08/27/linux-session/</id>
+    <published>2018-08-27T15:16:08.000Z</published>
+    <updated>2018-08-27T16:17:04.513Z</updated>
+    
+    <content type="html"><![CDATA[<p>Linux的进程之间有一定的关系。</p><h2 id="进程组（process-group）"><a href="#进程组（process-group）" class="headerlink" title="进程组（process group）"></a>进程组（process group）</h2><p>每个进程都属于一个进程组，每个进程组包含一个或多个进程。进程组有一个进程领导进程组（process group leader），领导进程的PID成为进程组的ID（process group ID，PGID），以识别进程组。<br>程序创建了一个进程，该进程又创建了子进程，于是父进程和子进程构成了一个进程组，进程组的组长为父进程。<br>引入的原因：用于控制向多个进程进行信号的分发，发给一个进程组是信号会发生给进程组中每一个进程</p><h2 id="作业（job）"><a href="#作业（job）" class="headerlink" title="作业（job）"></a>作业（job）</h2><p>作业（job）是shell的内部概念。通常shell中的每个作业对应于内核中的一个进程组。所有作业都是进程组，而不是左右的进程组都是作业。</p><h2 id="会话（session）"><a href="#会话（session）" class="headerlink" title="会话（session）"></a>会话（session）</h2><p>通常，会话主要是针对一个终端建立的。一个会话开始于用户登录，终止于用户退出，在此期间该用户运行的所有进程都属于这个会话期。<br>当我们打开多个终端窗口时，实际上就创建了多个终端会话。每个会话都会有自己的前台工作和后台工作。这样，我们就为进程增加了管理和运行的层次。在没有图形化界面的时代，会话允许用户通过shell进行多层次的进程发起和管理。<br>多个进程组可以构成一个会话（session），会话由其中一个进程建立，该进程叫做会话的领导进程（session leader），该领导进程的PID成为识别会话的SID（session ID），会话中的每个进程组成为一个工作（job）。<br>会话的意义在于将多个工作囊括在一个终端，并取其中的一个工作作为前台，来直接接收该终端的输入输出以及终端信号。</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol><li><a href="https://www.quora.com/What-is-the-difference-between-jobs-and-processes-on-Unix" target="_blank" rel="noopener">https://www.quora.com/What-is-the-difference-between-jobs-and-processes-on-Unix</a></li><li><a href="https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job</a></li><li><a href="https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job</a></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Linux的进程之间有一定的关系。&lt;/p&gt;
+&lt;h2 id=&quot;进程组（process-group）&quot;&gt;&lt;a href=&quot;#进程组（process-group）&quot; class=&quot;headerlink&quot; title=&quot;进程组（process group）&quot;&gt;&lt;/a&gt;进程组（pro
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Linux重定向</title>

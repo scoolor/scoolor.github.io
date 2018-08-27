@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Linux重定向 | 为什么这么涛的个人博客</title>
+    <title>Linux进程组与会话 | 为什么这么涛的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="为什么这么涛">
     
 
     
-    <meta name="description" content="了解linux重定向之前需要先简单介绍一下文件描述符（fd）。 linux文件描述符：文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是">
+    <meta name="description" content="Linux的进程之间有一定的关系。 进程组（process group）每个进程都属于一个进程组，每个进程组包含一个或多个进程。进程组有一个进程领导进程组（process group leader），领导进程的PID成为进程组的ID（process group ID，PGID），以识别进程组。程序创建了一个进程，该进程又创建了子进程，于是父进程和子进程构成了一个进程组，进程组的组长为父进程。引入的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux重定向">
-<meta property="og:url" content="https://scoolor.github.io/2018/08/16/linux-redirect/index.html">
+<meta property="og:title" content="Linux进程组与会话">
+<meta property="og:url" content="https://scoolor.github.io/2018/08/27/linux-session/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
-<meta property="og:description" content="了解linux重定向之前需要先简单介绍一下文件描述符（fd）。 linux文件描述符：文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是">
+<meta property="og:description" content="Linux的进程之间有一定的关系。 进程组（process group）每个进程都属于一个进程组，每个进程组包含一个或多个进程。进程组有一个进程领导进程组（process group leader），领导进程的PID成为进程组的ID（process group ID，PGID），以识别进程组。程序创建了一个进程，该进程又创建了子进程，于是父进程和子进程构成了一个进程组，进程组的组长为父进程。引入的">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-17T01:06:53.731Z">
+<meta property="og:updated_time" content="2018-08-27T16:17:04.513Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux重定向">
-<meta name="twitter:description" content="了解linux重定向之前需要先简单介绍一下文件描述符（fd）。 linux文件描述符：文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是">
+<meta name="twitter:title" content="Linux进程组与会话">
+<meta name="twitter:description" content="Linux的进程之间有一定的关系。 进程组（process group）每个进程都属于一个进程组，每个进程组包含一个或多个进程。进程组有一个进程领导进程组（process group leader），领导进程的PID成为进程组的ID（process group ID，PGID），以识别进程组。程序创建了一个进程，该进程又创建了子进程，于是父进程和子进程构成了一个进程组，进程组的组长为父进程。引入的">
 
     
     <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
@@ -77,14 +77,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/08/16/linux-redirect/" title="Linux重定向" itemprop="url">Linux重定向</a>
+      <a href="/2018/08/27/linux-session/" title="Linux进程组与会话" itemprop="url">Linux进程组与会话</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
 		
   <p class="article-time">
-    <time datetime="2018-08-16T14:09:19.000Z" itemprop="datePublished"> Published 2018-08-16</time>
+    <time datetime="2018-08-27T15:16:08.000Z" itemprop="datePublished"> Published 2018-08-27</time>
     
   </p>
 </header>
@@ -93,35 +93,19 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#linux文件描述符："><span class="toc-number">1.</span> <span class="toc-text">linux文件描述符：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出重定向"><span class="toc-number">2.</span> <span class="toc-text">输出重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输入重定向"><span class="toc-number">3.</span> <span class="toc-text">输入重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用解释"><span class="toc-number">4.</span> <span class="toc-text">常用解释</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程组（process-group）"><span class="toc-number">1.</span> <span class="toc-text">进程组（process group）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#作业（job）"><span class="toc-number">2.</span> <span class="toc-text">作业（job）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话（session）"><span class="toc-number">3.</span> <span class="toc-text">会话（session）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
-		<p>了解linux重定向之前需要先简单介绍一下文件描述符（fd）。</p>
-<h2 id="linux文件描述符："><a href="#linux文件描述符：" class="headerlink" title="linux文件描述符："></a>linux文件描述符：</h2><p>文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。<br>一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是 2；文件描述符的有效范围是 0 到 OPEN_MAX。</p>
-<p>linux shell下常用输入输出操作符是：</p>
-<ol>
-<li>标准输入(stdin) ：代码为 0 ，使用 &lt; 或 &lt;&lt; ； /dev/stdin -&gt; /proc/self/fd/0   0代表：/dev/stdin </li>
-<li>标准输出(stdout)：代码为 1 ，使用 &gt; 或 &gt;&gt; ； /dev/stdout -&gt; /proc/self/fd/1  1代表：/dev/stdout</li>
-<li>标准错误输出(stderr)：代码为 2 ，使用 2&gt; 或 2&gt;&gt; ； /dev/stderr -&gt; /proc/self/fd/2 2代表：/dev/stderr</li>
+		<p>Linux的进程之间有一定的关系。</p>
+<h2 id="进程组（process-group）"><a href="#进程组（process-group）" class="headerlink" title="进程组（process group）"></a>进程组（process group）</h2><p>每个进程都属于一个进程组，每个进程组包含一个或多个进程。进程组有一个进程领导进程组（process group leader），领导进程的PID成为进程组的ID（process group ID，PGID），以识别进程组。<br>程序创建了一个进程，该进程又创建了子进程，于是父进程和子进程构成了一个进程组，进程组的组长为父进程。<br>引入的原因：用于控制向多个进程进行信号的分发，发给一个进程组是信号会发生给进程组中每一个进程</p>
+<h2 id="作业（job）"><a href="#作业（job）" class="headerlink" title="作业（job）"></a>作业（job）</h2><p>作业（job）是shell的内部概念。通常shell中的每个作业对应于内核中的一个进程组。所有作业都是进程组，而不是左右的进程组都是作业。</p>
+<h2 id="会话（session）"><a href="#会话（session）" class="headerlink" title="会话（session）"></a>会话（session）</h2><p>通常，会话主要是针对一个终端建立的。一个会话开始于用户登录，终止于用户退出，在此期间该用户运行的所有进程都属于这个会话期。<br>当我们打开多个终端窗口时，实际上就创建了多个终端会话。每个会话都会有自己的前台工作和后台工作。这样，我们就为进程增加了管理和运行的层次。在没有图形化界面的时代，会话允许用户通过shell进行多层次的进程发起和管理。<br>多个进程组可以构成一个会话（session），会话由其中一个进程建立，该进程叫做会话的领导进程（session leader），该领导进程的PID成为识别会话的SID（session ID），会话中的每个进程组成为一个工作（job）。<br>会话的意义在于将多个工作囊括在一个终端，并取其中的一个工作作为前台，来直接接收该终端的输入输出以及终端信号。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.quora.com/What-is-the-difference-between-jobs-and-processes-on-Unix" target="_blank" rel="noopener">https://www.quora.com/What-is-the-difference-between-jobs-and-processes-on-Unix</a></li>
+<li><a href="https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job</a></li>
+<li><a href="https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job</a></li>
 </ol>
-<h2 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h2><p>格式：</p>
-<p>command-line1 [1-n] &gt; file或文件操作符或设备</p>
-<p>上面命令意思是：将一条命令执行结果（标准输出，或者错误输出，本来都要打印到屏幕上面的）  重定向其它输出设备（文件，打开文件操作符，或打印机等等）1,2分别是标准输出，错误输出。</p>
-<h2 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a>输入重定向</h2><p>格式：</p>
-<p>command-line [n] &lt;file或文件描述符&amp;设备</p>
-<p>将然有，命令默认从键盘获得的输入，改成从文件，或者其它打开文件以及设备输入。执行这个命令，将标准输入0，与文件或设备绑定。将由它进行输入。</p>
-<h2 id="常用解释"><a href="#常用解释" class="headerlink" title="常用解释"></a>常用解释</h2><ul>
-<li><code>&gt;</code> 表示定向输出到文件，覆盖原有内容；</li>
-<li><code>&gt;&gt;</code> 表示定向追加到目标文件，追加到末尾；</li>
-<li><code>&lt;</code> 表示导入；</li>
-<li><code>1&gt;</code> 表示输出重定向，1可以省略；</li>
-<li><code>2&gt;</code> 表示标准错误（stderr）输出重定向；</li>
-<li><code>2&gt;&amp;-</code> 表示将错误输出关闭，&amp;-表示关闭与它绑定的描述符；</li>
-<li><code>1&gt;&amp;-</code> 表示关闭标准输出；</li>
-<li><code>2&gt; /dev/null</code> 表示错误重定向到黑洞，linux 中/dev/null表示黑洞设备，吃掉一切；</li>
-<li><code>&gt;/dev/null 2&gt;&amp;1</code> 将错误输出2绑定给正确输出1，然后将 正确输出 发送给 /dev/null设备</li>
-</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -134,7 +118,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://scoolor.github.io/2018/08/16/linux-redirect/" data-title="Linux重定向 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  <div data-url="https://scoolor.github.io/2018/08/27/linux-session/" data-title="Linux进程组与会话 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -147,19 +131,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/08/27/linux-session/" title="Linux进程组与会话">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Linux进程组与会话</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/04/18/letsencrypt/"  title="使用Certbot开启网站HTTPS">
+<a href="/2018/08/16/linux-redirect/"  title="Linux重定向">
  <strong>下一篇：</strong><br/> 
- <span>使用Certbot开启网站HTTPS
+ <span>Linux重定向
 </span>
 </a>
 </div>
@@ -176,7 +152,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#linux文件描述符："><span class="toc-number">1.</span> <span class="toc-text">linux文件描述符：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出重定向"><span class="toc-number">2.</span> <span class="toc-text">输出重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输入重定向"><span class="toc-number">3.</span> <span class="toc-text">输入重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用解释"><span class="toc-number">4.</span> <span class="toc-text">常用解释</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程组（process-group）"><span class="toc-number">1.</span> <span class="toc-text">进程组（process group）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#作业（job）"><span class="toc-number">2.</span> <span class="toc-text">作业（job）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话（session）"><span class="toc-number">3.</span> <span class="toc-text">会话（session）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
