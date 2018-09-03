@@ -75,6 +75,86 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/09/03/base64/" title="base64简介" itemprop="url">base64简介</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
+		
+  <p class="article-time">
+    <time datetime="2018-09-03T14:26:40.000Z" itemprop="datePublished"> Published 2018-09-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Base64是一种基于64个可打印字符来表示二进制数据的表示方法。由于2的6次方为64，所以每6个位（bit）为一个单元，对应某个可打印字符。3个字节有24个位，对应于4个Base64单元，即3个字节可由4个可打印字符来表示。编码后的数据比原始数据略长，为原来的 1.33倍。Base64是一种可逆的编码方式，从编码的方式即可逆推出解码的方式。</p>
+<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>Base64常用于在通常处理文本数据的场合，表示、传输、存储一些二进制数据，包括MIME的电子邮件及XML的一些复杂数据。</p>
+<h2 id="Base64索引表"><a href="#Base64索引表" class="headerlink" title="Base64索引表"></a>Base64索引表</h2><p>十进制对应表0-63。<br><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986414/1535986368851.jpg" alt="Base64索引表"></p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><ol>
+<li>编码 ‘Man’</li>
+</ol>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986618/1535986568295.jpg" alt="Man编码示例"></p>
+<ol start="2">
+<li>如果要编码的字节数不能被3整除，最后会多出1个或2个字节，那么可以使用下面的方法进行处理：先使用0字节值在末尾补足，使其能够被3整除，然后再进行Base64的编码。在编码后的Base64文本后加上一个或两个=号，代表补足的字节数。也就是说，当最后剩余两个八位字节（2个byte）时，最后一个6位的Base64字节块有四位是0值，最后附加上两个等号；如果最后剩余一个八位字节（1个byte）时，最后一个6位的base字节块有两位是0值，最后附加一个等号。 参考下表：</li>
+</ol>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986619/1535986600489.jpg" alt="Base64编码补齐示例"></p>
+<ol start="3">
+<li>汉字’严’</li>
+</ol>
+<p>汉字”严”如何转化成Base64编码？</p>
+<p>这里需要注意，汉字本身可以有多种编码，比如gb2312、utf-8、gbk等等，每一种编码的Base64对应值都不一样。下面的例子以utf-8为例。</p>
+<p>首先，”严”的utf-8编码为E4B8A5，写成二进制就是三字节的”11100100 10111000 10100101”。将这个24位的二进制字符串，按照第3节中的规则，转换成四组一共32位的二进制值”00111001 00001011 00100010 00100101”，相应的十进制数为57、11、34、37，它们对应的Base64值就为5、L、i、l。</p>
+<p>所以，汉字”严”（utf-8编码）的Base64值就是5Lil。</p>
+<h2 id="在URL中的应用"><a href="#在URL中的应用" class="headerlink" title="在URL中的应用"></a>在URL中的应用</h2><p>标准的Base64并不适合直接放在URL里传输，因为URL编码器会把标准Base64中的/和+字符变为形如%XX的形式。</p>
+<p>为解决此问题，可采用一种用于URL的改进Base64编码，它不在末尾填充=号，并将标准Base64中的+和/分别改成了-和_，称为”url safe”的base64编码，这样就免去了在URL编解码和数据库存储时所要作的转换，避免了编码信息长度在此过程中的增加，并统一了数据库、表单等处对象标识符的格式。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Base64是一种任意二进制到文本字符串的编码方法，常用于在URL、Cookie、网页中传输少量二进制数据。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://zh.wikipedia.org/zh-hans/Base64" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-hans/Base64</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001399413803339f4bbda5c01fc479cbea98b1387390748000" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001399413803339f4bbda5c01fc479cbea98b1387390748000</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2008/06/base64.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2008/06/base64.html</a></li>
+</ul>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/编码/">编码</a><a href="/tags/base64/">base64</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/09/03/https/" title="理解HTTPS" itemprop="url">理解HTTPS</a>
   </h1>
   <p class="article-author">By
@@ -89,7 +169,7 @@
     <div class="article-content">
         
         <p>HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。</p>
-<h2 id="什么是https"><a href="#什么是https" class="headerlink" title="什么是https"></a>什么是https</h2><p>HTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。</p>
+<h2 id="什么是HTTPS"><a href="#什么是HTTPS" class="headerlink" title="什么是HTTPS"></a>什么是HTTPS</h2><p>HTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。</p>
 <h2 id="几个概念简单理解"><a href="#几个概念简单理解" class="headerlink" title="几个概念简单理解"></a>几个概念简单理解</h2><ol>
 <li>对称加密：用同一个秘钥进行加密解密的方法。</li>
 <li>非对称加密：加密和解密使用不用的秘钥，公钥和私钥。公钥和私钥是一对，使用公钥加密则使用对应的私钥可以进行解密，使用私钥加密则使用对应的公钥可以进行解密。</li>
@@ -118,6 +198,11 @@
     <footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/https/">https</a><a href="/tags/http/">http</a>
+  </div>
 
 </div>
 
@@ -410,6 +495,22 @@
 <div class="tagslist">
 	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/base64/" title="base64">base64<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/https/" title="https">https<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
 		
 			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>

@@ -4,24 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Linux重定向 | 为什么这么涛的个人博客</title>
+    <title>base64简介 | 为什么这么涛的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="为什么这么涛">
     
 
     
-    <meta name="description" content="了解linux重定向之前需要先简单介绍一下文件描述符（fd）。 linux文件描述符：文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是">
+    <meta name="description" content="Base64是一种基于64个可打印字符来表示二进制数据的表示方法。由于2的6次方为64，所以每6个位（bit）为一个单元，对应某个可打印字符。3个字节有24个位，对应于4个Base64单元，即3个字节可由4个可打印字符来表示。编码后的数据比原始数据略长，为原来的 1.33倍。Base64是一种可逆的编码方式，从编码的方式即可逆推出解码的方式。 适用场景Base64常用于在通常处理文本数据的场合，表">
+<meta name="keywords" content="编码,base64">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux重定向">
-<meta property="og:url" content="https://scoolor.github.io/2018/08/16/linux-redirect/index.html">
+<meta property="og:title" content="base64简介">
+<meta property="og:url" content="https://scoolor.github.io/2018/09/03/base64/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
-<meta property="og:description" content="了解linux重定向之前需要先简单介绍一下文件描述符（fd）。 linux文件描述符：文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是">
+<meta property="og:description" content="Base64是一种基于64个可打印字符来表示二进制数据的表示方法。由于2的6次方为64，所以每6个位（bit）为一个单元，对应某个可打印字符。3个字节有24个位，对应于4个Base64单元，即3个字节可由4个可打印字符来表示。编码后的数据比原始数据略长，为原来的 1.33倍。Base64是一种可逆的编码方式，从编码的方式即可逆推出解码的方式。 适用场景Base64常用于在通常处理文本数据的场合，表">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-17T01:06:53.731Z">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986414/1535986368851.jpg">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986618/1535986568295.jpg">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986619/1535986600489.jpg">
+<meta property="og:updated_time" content="2018-09-03T15:11:03.331Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux重定向">
-<meta name="twitter:description" content="了解linux重定向之前需要先简单介绍一下文件描述符（fd）。 linux文件描述符：文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是">
+<meta name="twitter:title" content="base64简介">
+<meta name="twitter:description" content="Base64是一种基于64个可打印字符来表示二进制数据的表示方法。由于2的6次方为64，所以每6个位（bit）为一个单元，对应某个可打印字符。3个字节有24个位，对应于4个Base64单元，即3个字节可由4个可打印字符来表示。编码后的数据比原始数据略长，为原来的 1.33倍。Base64是一种可逆的编码方式，从编码的方式即可逆推出解码的方式。 适用场景Base64常用于在通常处理文本数据的场合，表">
+<meta name="twitter:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986414/1535986368851.jpg">
 
     
     <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
@@ -77,14 +82,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/08/16/linux-redirect/" title="Linux重定向" itemprop="url">Linux重定向</a>
+      <a href="/2018/09/03/base64/" title="base64简介" itemprop="url">base64简介</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
 		
   <p class="article-time">
-    <time datetime="2018-08-16T14:09:19.000Z" itemprop="datePublished"> Published 2018-08-16</time>
+    <time datetime="2018-09-03T14:26:40.000Z" itemprop="datePublished"> Published 2018-09-03</time>
     
   </p>
 </header>
@@ -93,34 +98,35 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#linux文件描述符："><span class="toc-number">1.</span> <span class="toc-text">linux文件描述符：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出重定向"><span class="toc-number">2.</span> <span class="toc-text">输出重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输入重定向"><span class="toc-number">3.</span> <span class="toc-text">输入重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用解释"><span class="toc-number">4.</span> <span class="toc-text">常用解释</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#适用场景"><span class="toc-number">1.</span> <span class="toc-text">适用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Base64索引表"><span class="toc-number">2.</span> <span class="toc-text">Base64索引表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-number">3.</span> <span class="toc-text">示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在URL中的应用"><span class="toc-number">4.</span> <span class="toc-text">在URL中的应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
-		<p>了解linux重定向之前需要先简单介绍一下文件描述符（fd）。</p>
-<h2 id="linux文件描述符："><a href="#linux文件描述符：" class="headerlink" title="linux文件描述符："></a>linux文件描述符：</h2><p>文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。<br>一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是 2；文件描述符的有效范围是 0 到 OPEN_MAX。</p>
-<p>linux shell下常用输入输出操作符是：</p>
-<ol>
-<li>标准输入(stdin) ：代码为 0 ，使用 &lt; 或 &lt;&lt; ； /dev/stdin -&gt; /proc/self/fd/0   0代表：/dev/stdin </li>
-<li>标准输出(stdout)：代码为 1 ，使用 &gt; 或 &gt;&gt; ； /dev/stdout -&gt; /proc/self/fd/1  1代表：/dev/stdout</li>
-<li>标准错误输出(stderr)：代码为 2 ，使用 2&gt; 或 2&gt;&gt; ； /dev/stderr -&gt; /proc/self/fd/2 2代表：/dev/stderr</li>
+		<p>Base64是一种基于64个可打印字符来表示二进制数据的表示方法。由于2的6次方为64，所以每6个位（bit）为一个单元，对应某个可打印字符。3个字节有24个位，对应于4个Base64单元，即3个字节可由4个可打印字符来表示。编码后的数据比原始数据略长，为原来的 1.33倍。Base64是一种可逆的编码方式，从编码的方式即可逆推出解码的方式。</p>
+<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>Base64常用于在通常处理文本数据的场合，表示、传输、存储一些二进制数据，包括MIME的电子邮件及XML的一些复杂数据。</p>
+<h2 id="Base64索引表"><a href="#Base64索引表" class="headerlink" title="Base64索引表"></a>Base64索引表</h2><p>十进制对应表0-63。<br><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986414/1535986368851.jpg" alt="Base64索引表"></p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><ol>
+<li>编码 ‘Man’</li>
 </ol>
-<h2 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h2><p>格式：</p>
-<p>command-line1 [1-n] &gt; file或文件操作符或设备</p>
-<p>上面命令意思是：将一条命令执行结果（标准输出，或者错误输出，本来都要打印到屏幕上面的）  重定向其它输出设备（文件，打开文件操作符，或打印机等等）1,2分别是标准输出，错误输出。</p>
-<h2 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a>输入重定向</h2><p>格式：</p>
-<p>command-line [n] &lt;file或文件描述符&amp;设备</p>
-<p>将然有，命令默认从键盘获得的输入，改成从文件，或者其它打开文件以及设备输入。执行这个命令，将标准输入0，与文件或设备绑定。将由它进行输入。</p>
-<h2 id="常用解释"><a href="#常用解释" class="headerlink" title="常用解释"></a>常用解释</h2><ul>
-<li><code>&gt;</code> 表示定向输出到文件，覆盖原有内容；</li>
-<li><code>&gt;&gt;</code> 表示定向追加到目标文件，追加到末尾；</li>
-<li><code>&lt;</code> 表示导入；</li>
-<li><code>1&gt;</code> 表示输出重定向，1可以省略；</li>
-<li><code>2&gt;</code> 表示标准错误（stderr）输出重定向；</li>
-<li><code>2&gt;&amp;-</code> 表示将错误输出关闭，&amp;-表示关闭与它绑定的描述符；</li>
-<li><code>1&gt;&amp;-</code> 表示关闭标准输出；</li>
-<li><code>2&gt; /dev/null</code> 表示错误重定向到黑洞，linux 中/dev/null表示黑洞设备，吃掉一切；</li>
-<li><code>&gt;/dev/null 2&gt;&amp;1</code> 将错误输出2绑定给正确输出1，然后将 正确输出 发送给 /dev/null设备</li>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986618/1535986568295.jpg" alt="Man编码示例"></p>
+<ol start="2">
+<li>如果要编码的字节数不能被3整除，最后会多出1个或2个字节，那么可以使用下面的方法进行处理：先使用0字节值在末尾补足，使其能够被3整除，然后再进行Base64的编码。在编码后的Base64文本后加上一个或两个=号，代表补足的字节数。也就是说，当最后剩余两个八位字节（2个byte）时，最后一个6位的Base64字节块有四位是0值，最后附加上两个等号；如果最后剩余一个八位字节（1个byte）时，最后一个6位的base字节块有两位是0值，最后附加一个等号。 参考下表：</li>
+</ol>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986619/1535986600489.jpg" alt="Base64编码补齐示例"></p>
+<ol start="3">
+<li>汉字’严’</li>
+</ol>
+<p>汉字”严”如何转化成Base64编码？</p>
+<p>这里需要注意，汉字本身可以有多种编码，比如gb2312、utf-8、gbk等等，每一种编码的Base64对应值都不一样。下面的例子以utf-8为例。</p>
+<p>首先，”严”的utf-8编码为E4B8A5，写成二进制就是三字节的”11100100 10111000 10100101”。将这个24位的二进制字符串，按照第3节中的规则，转换成四组一共32位的二进制值”00111001 00001011 00100010 00100101”，相应的十进制数为57、11、34、37，它们对应的Base64值就为5、L、i、l。</p>
+<p>所以，汉字”严”（utf-8编码）的Base64值就是5Lil。</p>
+<h2 id="在URL中的应用"><a href="#在URL中的应用" class="headerlink" title="在URL中的应用"></a>在URL中的应用</h2><p>标准的Base64并不适合直接放在URL里传输，因为URL编码器会把标准Base64中的/和+字符变为形如%XX的形式。</p>
+<p>为解决此问题，可采用一种用于URL的改进Base64编码，它不在末尾填充=号，并将标准Base64中的+和/分别改成了-和_，称为”url safe”的base64编码，这样就免去了在URL编解码和数据库存储时所要作的转换，避免了编码信息长度在此过程中的增加，并统一了数据库、表单等处对象标识符的格式。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Base64是一种任意二进制到文本字符串的编码方法，常用于在URL、Cookie、网页中传输少量二进制数据。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://zh.wikipedia.org/zh-hans/Base64" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-hans/Base64</a></li>
+<li><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001399413803339f4bbda5c01fc479cbea98b1387390748000" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001399413803339f4bbda5c01fc479cbea98b1387390748000</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2008/06/base64.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2008/06/base64.html</a></li>
 </ul>
   
 	</div>
@@ -128,13 +134,18 @@
 <div class="article-catetags">
 
 
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/编码/">编码</a><a href="/tags/base64/">base64</a>
+  </div>
+
 </div>
 
 
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://scoolor.github.io/2018/08/16/linux-redirect/" data-title="Linux重定向 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  <div data-url="https://scoolor.github.io/2018/09/03/base64/" data-title="base64简介 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -147,19 +158,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/08/27/linux-session/" title="Linux进程组与会话">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Linux进程组与会话</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/04/18/letsencrypt/"  title="使用Certbot开启网站HTTPS">
+<a href="/2018/09/03/https/"  title="理解HTTPS">
  <strong>下一篇：</strong><br/> 
- <span>使用Certbot开启网站HTTPS
+ <span>理解HTTPS
 </span>
 </a>
 </div>
@@ -176,7 +179,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#linux文件描述符："><span class="toc-number">1.</span> <span class="toc-text">linux文件描述符：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输出重定向"><span class="toc-number">2.</span> <span class="toc-text">输出重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#输入重定向"><span class="toc-number">3.</span> <span class="toc-text">输入重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用解释"><span class="toc-number">4.</span> <span class="toc-text">常用解释</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#适用场景"><span class="toc-number">1.</span> <span class="toc-text">适用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Base64索引表"><span class="toc-number">2.</span> <span class="toc-text">Base64索引表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#示例"><span class="toc-number">3.</span> <span class="toc-text">示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在URL中的应用"><span class="toc-number">4.</span> <span class="toc-text">在URL中的应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 

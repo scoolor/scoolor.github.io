@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://scoolor.github.io/"/>
-  <updated>2018-09-03T09:36:04.904Z</updated>
+  <updated>2018-09-03T15:11:03.331Z</updated>
   <id>https://scoolor.github.io/</id>
   
   <author>
@@ -17,24 +17,53 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>base64简介</title>
+    <link href="https://scoolor.github.io/2018/09/03/base64/"/>
+    <id>https://scoolor.github.io/2018/09/03/base64/</id>
+    <published>2018-09-03T14:26:40.000Z</published>
+    <updated>2018-09-03T15:11:03.331Z</updated>
+    
+    <content type="html"><![CDATA[<p>Base64是一种基于64个可打印字符来表示二进制数据的表示方法。由于2的6次方为64，所以每6个位（bit）为一个单元，对应某个可打印字符。3个字节有24个位，对应于4个Base64单元，即3个字节可由4个可打印字符来表示。编码后的数据比原始数据略长，为原来的 1.33倍。Base64是一种可逆的编码方式，从编码的方式即可逆推出解码的方式。</p><h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>Base64常用于在通常处理文本数据的场合，表示、传输、存储一些二进制数据，包括MIME的电子邮件及XML的一些复杂数据。</p><h2 id="Base64索引表"><a href="#Base64索引表" class="headerlink" title="Base64索引表"></a>Base64索引表</h2><p>十进制对应表0-63。<br><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986414/1535986368851.jpg" alt="Base64索引表"></p><h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><ol><li>编码 ‘Man’</li></ol><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986618/1535986568295.jpg" alt="Man编码示例"></p><ol start="2"><li>如果要编码的字节数不能被3整除，最后会多出1个或2个字节，那么可以使用下面的方法进行处理：先使用0字节值在末尾补足，使其能够被3整除，然后再进行Base64的编码。在编码后的Base64文本后加上一个或两个=号，代表补足的字节数。也就是说，当最后剩余两个八位字节（2个byte）时，最后一个6位的Base64字节块有四位是0值，最后附加上两个等号；如果最后剩余一个八位字节（1个byte）时，最后一个6位的base字节块有两位是0值，最后附加一个等号。 参考下表：</li></ol><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535986619/1535986600489.jpg" alt="Base64编码补齐示例"></p><ol start="3"><li>汉字’严’</li></ol><p>汉字”严”如何转化成Base64编码？</p><p>这里需要注意，汉字本身可以有多种编码，比如gb2312、utf-8、gbk等等，每一种编码的Base64对应值都不一样。下面的例子以utf-8为例。</p><p>首先，”严”的utf-8编码为E4B8A5，写成二进制就是三字节的”11100100 10111000 10100101”。将这个24位的二进制字符串，按照第3节中的规则，转换成四组一共32位的二进制值”00111001 00001011 00100010 00100101”，相应的十进制数为57、11、34、37，它们对应的Base64值就为5、L、i、l。</p><p>所以，汉字”严”（utf-8编码）的Base64值就是5Lil。</p><h2 id="在URL中的应用"><a href="#在URL中的应用" class="headerlink" title="在URL中的应用"></a>在URL中的应用</h2><p>标准的Base64并不适合直接放在URL里传输，因为URL编码器会把标准Base64中的/和+字符变为形如%XX的形式。</p><p>为解决此问题，可采用一种用于URL的改进Base64编码，它不在末尾填充=号，并将标准Base64中的+和/分别改成了-和_，称为”url safe”的base64编码，这样就免去了在URL编解码和数据库存储时所要作的转换，避免了编码信息长度在此过程中的增加，并统一了数据库、表单等处对象标识符的格式。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Base64是一种任意二进制到文本字符串的编码方法，常用于在URL、Cookie、网页中传输少量二进制数据。</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul><li><a href="https://zh.wikipedia.org/zh-hans/Base64" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-hans/Base64</a></li><li><a href="https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001399413803339f4bbda5c01fc479cbea98b1387390748000" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001399413803339f4bbda5c01fc479cbea98b1387390748000</a></li><li><a href="http://www.ruanyifeng.com/blog/2008/06/base64.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2008/06/base64.html</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Base64是一种基于64个可打印字符来表示二进制数据的表示方法。由于2的6次方为64，所以每6个位（bit）为一个单元，对应某个可打印字符。3个字节有24个位，对应于4个Base64单元，即3个字节可由4个可打印字符来表示。编码后的数据比原始数据略长，为原来的 1.33倍
+      
+    
+    </summary>
+    
+    
+      <category term="编码" scheme="https://scoolor.github.io/tags/%E7%BC%96%E7%A0%81/"/>
+    
+      <category term="base64" scheme="https://scoolor.github.io/tags/base64/"/>
+    
+  </entry>
+  
+  <entry>
     <title>理解HTTPS</title>
     <link href="https://scoolor.github.io/2018/09/03/https/"/>
     <id>https://scoolor.github.io/2018/09/03/https/</id>
     <published>2018-09-03T09:10:08.000Z</published>
-    <updated>2018-09-03T09:36:04.904Z</updated>
+    <updated>2018-09-03T14:25:38.542Z</updated>
     
-    <content type="html"><![CDATA[<p>HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。</p><h2 id="什么是https"><a href="#什么是https" class="headerlink" title="什么是https"></a>什么是https</h2><p>HTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。</p><h2 id="几个概念简单理解"><a href="#几个概念简单理解" class="headerlink" title="几个概念简单理解"></a>几个概念简单理解</h2><ol><li>对称加密：用同一个秘钥进行加密解密的方法。</li><li>非对称加密：加密和解密使用不用的秘钥，公钥和私钥。公钥和私钥是一对，使用公钥加密则使用对应的私钥可以进行解密，使用私钥加密则使用对应的公钥可以进行解密。</li><li>证书：这里指数字证书，具有权威性，就像企业公司合同上的印章一样，代表这个是企业授权的合同，包含了由某个受信任组织担保的用户或公司的相关信息。</li><li>CA：Certificate Authority，第三方证书颁发机构。</li><li>TLS：传输层安全(Transport Layer Security，TLS)，SSL 和 TLS 非常类似，一般统称为TLS/SSL。</li></ol><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/3765534683-59ed8581c94b2_articlex.png" alt="数字证书"></p><h2 id="会话秘钥"><a href="#会话秘钥" class="headerlink" title="会话秘钥"></a>会话秘钥</h2><p>非对称加密的计算很慢，实际情况下混合使用了对称加密和非对称加密技术。比较常见的做法是在两节点间通过便捷的公开密钥加密技术建立起安全通信， 然后再用那条安全的通道产生并发送临时的随机对称密钥，通过更快的对称加密技术对其余的数据进行加密。SSH和HTTPS都是这样的。</p><h2 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h2><p>非对称加密除了可以用于加密解密外，还可以对报文进行签名（sign），以说明是谁编写的报文，同时证明报文没有被篡改过。这种技术被称为数字签名(digital signing)。</p><h2 id="通信过程"><a href="#通信过程" class="headerlink" title="通信过程"></a>通信过程</h2><ol><li>客户端：向服务端发送一个通信请求，包括随机数PK1、支持的加密协议版本、加密算法、压缩算法等加密套件；</li><li>服务端：发送随机数PK2，确认使用的加密协议版本、加密算法、压缩算法等，以及证书；</li><li>客户端：校验服务端的证书是否合法（包括对域名、有效期、证书颁发机构等），使用证书的公钥加密随机数PK3、加密声明、发送内容的摘要信息，验证服务器身份后，生成一个对称加密算法和对称秘钥；秘钥使用公钥加密发送给服务端；</li><li>服务端：使用私钥解密后，拿到对称秘钥和对称加密算法；</li><li>通信：建立安全通信后，使用协商的对称加密算法及其对应的秘钥进行加密通信。</li></ol><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/350869942-57c53781ada55_articlex.png" alt="通信过程"></p>]]></content>
+    <content type="html"><![CDATA[<p>HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。</p><h2 id="什么是HTTPS"><a href="#什么是HTTPS" class="headerlink" title="什么是HTTPS"></a>什么是HTTPS</h2><p>HTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。</p><h2 id="几个概念简单理解"><a href="#几个概念简单理解" class="headerlink" title="几个概念简单理解"></a>几个概念简单理解</h2><ol><li>对称加密：用同一个秘钥进行加密解密的方法。</li><li>非对称加密：加密和解密使用不用的秘钥，公钥和私钥。公钥和私钥是一对，使用公钥加密则使用对应的私钥可以进行解密，使用私钥加密则使用对应的公钥可以进行解密。</li><li>证书：这里指数字证书，具有权威性，就像企业公司合同上的印章一样，代表这个是企业授权的合同，包含了由某个受信任组织担保的用户或公司的相关信息。</li><li>CA：Certificate Authority，第三方证书颁发机构。</li><li>TLS：传输层安全(Transport Layer Security，TLS)，SSL 和 TLS 非常类似，一般统称为TLS/SSL。</li></ol><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/3765534683-59ed8581c94b2_articlex.png" alt="数字证书"></p><h2 id="会话秘钥"><a href="#会话秘钥" class="headerlink" title="会话秘钥"></a>会话秘钥</h2><p>非对称加密的计算很慢，实际情况下混合使用了对称加密和非对称加密技术。比较常见的做法是在两节点间通过便捷的公开密钥加密技术建立起安全通信， 然后再用那条安全的通道产生并发送临时的随机对称密钥，通过更快的对称加密技术对其余的数据进行加密。SSH和HTTPS都是这样的。</p><h2 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h2><p>非对称加密除了可以用于加密解密外，还可以对报文进行签名（sign），以说明是谁编写的报文，同时证明报文没有被篡改过。这种技术被称为数字签名(digital signing)。</p><h2 id="通信过程"><a href="#通信过程" class="headerlink" title="通信过程"></a>通信过程</h2><ol><li>客户端：向服务端发送一个通信请求，包括随机数PK1、支持的加密协议版本、加密算法、压缩算法等加密套件；</li><li>服务端：发送随机数PK2，确认使用的加密协议版本、加密算法、压缩算法等，以及证书；</li><li>客户端：校验服务端的证书是否合法（包括对域名、有效期、证书颁发机构等），使用证书的公钥加密随机数PK3、加密声明、发送内容的摘要信息，验证服务器身份后，生成一个对称加密算法和对称秘钥；秘钥使用公钥加密发送给服务端；</li><li>服务端：使用私钥解密后，拿到对称秘钥和对称加密算法；</li><li>通信：建立安全通信后，使用协商的对称加密算法及其对应的秘钥进行加密通信。</li></ol><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/350869942-57c53781ada55_articlex.png" alt="通信过程"></p>]]></content>
     
     <summary type="html">
     
       
       
         &lt;p&gt;HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。&lt;/p&gt;
-&lt;h2 id=&quot;什么是https&quot;&gt;&lt;a href=&quot;#什么是https&quot; class=&quot;headerlink&quot; title=&quot;什么是htt
+&lt;h2 id=&quot;什么是HTTPS&quot;&gt;&lt;a href=&quot;#什么是HTTPS&quot; class=&quot;headerlink&quot; title=&quot;什么是HTT
       
     
     </summary>
     
+    
+      <category term="https" scheme="https://scoolor.github.io/tags/https/"/>
+    
+      <category term="http" scheme="https://scoolor.github.io/tags/http/"/>
     
   </entry>
   
@@ -87,7 +116,7 @@
     <link href="https://scoolor.github.io/2018/04/18/letsencrypt/"/>
     <id>https://scoolor.github.io/2018/04/18/letsencrypt/</id>
     <published>2018-04-18T13:25:25.000Z</published>
-    <updated>2018-08-01T08:53:38.634Z</updated>
+    <updated>2018-09-03T14:25:46.085Z</updated>
     
     <content type="html"><![CDATA[<p>Let’s Encrypt 是一个免费开源的SSL项目，由Mozilla、Cisco、Akamai、IdenTrust、EFF等组织人员发起。在一定程度上Let’s Encrypt推进了国内HTTPS的进程。<br>CertBot 是基于Let’s Encrypt 的简化部署解决方案。另外<a href="https://github.com/Neilpang/acme.sh" target="_blank" rel="noopener">acme</a>也是也不不错的解决方案。<br>下面简单介绍一下使用Certbot部署Let’s Encrypt。</p><h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>debian 8 X64<br>nginx</p><p>本文以nginx为例介绍。</p><h1 id="安装Certbot客户端"><a href="#安装Certbot客户端" class="headerlink" title="安装Certbot客户端"></a>安装Certbot客户端</h1><p>Certbot官网：<a href="https://certbot.eff.org/" target="_blank" rel="noopener">https://certbot.eff.org/</a></p><p>debian 8 的默认仓库是没有Certbot的，需要依赖第三方仓库Jessie backports；执行以下命令安装仓库；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;deb http://ftp.debian.org/debian jessie-backports main&apos;\</span><br><span class="line">| sudo tee /etc/apt/sources.list.d/backports.list</span><br></pre></td></tr></table></figure></p><p>执行完后，更新apt包管理工具<br><code>sudo apt-get update</code><br>接下来就可以安装certbot了，执行以下命令<br><code>sudo apt-get install certbot -t jessie-backports</code></p><h1 id="获取SSL证书"><a href="#获取SSL证书" class="headerlink" title="获取SSL证书"></a>获取SSL证书</h1><p>let’S Encrypt 支持两种获取证书的方式，Webroot和Standalone，Standalone需要80或443端口没有占用，往往需要暂停nginx服务，所以我们一般使用Webroot方式。<br>首先需要配置一个nginx服务，添加以下配置，重启nginx：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /.well-known &#123;</span><br><span class="line">    allow all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>然后执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo certbot certonly -a webroot \</span><br><span class="line">--webroot-path=/var/www/html -d example.com -d www.example.com</span><br></pre></td></tr></table></figure></p><p>根据提示填写即可。<br>在<code>/etc/letsencrypt/live/</code>目录下就已经生成了你的证书文件。<br>为了进一步提高安全性，需要dhparam.pem文件，生成命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048</span><br></pre></td></tr></table></figure></p><h1 id="配置Nginx"><a href="#配置Nginx" class="headerlink" title="配置Nginx"></a>配置Nginx</h1><p>SSL部分nginx 配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ssl_certificate      /etc/letsencrypt/live/example.com/fullchain.pem;</span><br><span class="line">ssl_certificate_key  /etc/letsencrypt/live/example.com/privkey.pem;</span><br><span class="line">ssl_dhparam /etc/ssl/certs/dhparams.pem;</span><br><span class="line"></span><br><span class="line">ssl_session_cache shared:SSL:1m;</span><br><span class="line">ssl_session_timeout  10m;</span><br><span class="line">ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br></pre></td></tr></table></figure></p><p>80端口配置自动Https</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return 301 https://$server_name$request_uri;</span><br></pre></td></tr></table></figure><p>最后，测试证书更新：<code>certbot renew --dry-run</code><br>如果没有返回错误信息，则说明配置正常，可以配置自动更新了。</p><p>配置自动更新：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">30 2 * * * /usr/bin/certbot renew --noninteractive \</span><br><span class="line">--renew-hook &quot;/bin/systemctl reload nginx&quot; &gt;&gt; /var/log/le-renew.log</span><br></pre></td></tr></table></figure></p>]]></content>
     

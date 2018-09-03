@@ -11,19 +11,20 @@
     
 
     
-    <meta name="description" content="HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。 什么是httpsHTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。 几个概念简单理解">
+    <meta name="description" content="HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。 什么是HTTPSHTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。 几个概念简单理解">
+<meta name="keywords" content="https,http">
 <meta property="og:type" content="article">
 <meta property="og:title" content="理解HTTPS">
 <meta property="og:url" content="https://scoolor.github.io/2018/09/03/https/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
-<meta property="og:description" content="HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。 什么是httpsHTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。 几个概念简单理解">
+<meta property="og:description" content="HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。 什么是HTTPSHTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。 几个概念简单理解">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/3765534683-59ed8581c94b2_articlex.png">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/350869942-57c53781ada55_articlex.png">
-<meta property="og:updated_time" content="2018-09-03T09:36:04.904Z">
+<meta property="og:updated_time" content="2018-09-03T14:25:38.542Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="理解HTTPS">
-<meta name="twitter:description" content="HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。 什么是httpsHTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。 几个概念简单理解">
+<meta name="twitter:description" content="HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。 什么是HTTPSHTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。 几个概念简单理解">
 <meta name="twitter:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/3765534683-59ed8581c94b2_articlex.png">
 
     
@@ -96,12 +97,12 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是https"><span class="toc-number">1.</span> <span class="toc-text">什么是https</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#几个概念简单理解"><span class="toc-number">2.</span> <span class="toc-text">几个概念简单理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话秘钥"><span class="toc-number">3.</span> <span class="toc-text">会话秘钥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数字签名"><span class="toc-number">4.</span> <span class="toc-text">数字签名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通信过程"><span class="toc-number">5.</span> <span class="toc-text">通信过程</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是HTTPS"><span class="toc-number">1.</span> <span class="toc-text">什么是HTTPS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#几个概念简单理解"><span class="toc-number">2.</span> <span class="toc-text">几个概念简单理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话秘钥"><span class="toc-number">3.</span> <span class="toc-text">会话秘钥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数字签名"><span class="toc-number">4.</span> <span class="toc-text">数字签名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通信过程"><span class="toc-number">5.</span> <span class="toc-text">通信过程</span></a></li></ol>
 		
 		</div>
 		
 		<p>HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。</p>
-<h2 id="什么是https"><a href="#什么是https" class="headerlink" title="什么是https"></a>什么是https</h2><p>HTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。</p>
+<h2 id="什么是HTTPS"><a href="#什么是HTTPS" class="headerlink" title="什么是HTTPS"></a>什么是HTTPS</h2><p>HTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。</p>
 <h2 id="几个概念简单理解"><a href="#几个概念简单理解" class="headerlink" title="几个概念简单理解"></a>几个概念简单理解</h2><ol>
 <li>对称加密：用同一个秘钥进行加密解密的方法。</li>
 <li>非对称加密：加密和解密使用不用的秘钥，公钥和私钥。公钥和私钥是一对，使用公钥加密则使用对应的私钥可以进行解密，使用私钥加密则使用对应的公钥可以进行解密。</li>
@@ -126,6 +127,11 @@
 <div class="article-catetags">
 
 
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/https/">https</a><a href="/tags/http/">http</a>
+  </div>
+
 </div>
 
 
@@ -145,6 +151,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2018/09/03/base64/" title="base64简介">
+  <strong>上一篇：</strong><br/>
+  <span>
+  base64简介</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2018/08/27/linux-session/"  title="Linux进程组与会话">
@@ -166,7 +180,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是https"><span class="toc-number">1.</span> <span class="toc-text">什么是https</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#几个概念简单理解"><span class="toc-number">2.</span> <span class="toc-text">几个概念简单理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话秘钥"><span class="toc-number">3.</span> <span class="toc-text">会话秘钥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数字签名"><span class="toc-number">4.</span> <span class="toc-text">数字签名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通信过程"><span class="toc-number">5.</span> <span class="toc-text">通信过程</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是HTTPS"><span class="toc-number">1.</span> <span class="toc-text">什么是HTTPS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#几个概念简单理解"><span class="toc-number">2.</span> <span class="toc-text">几个概念简单理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#会话秘钥"><span class="toc-number">3.</span> <span class="toc-text">会话秘钥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数字签名"><span class="toc-number">4.</span> <span class="toc-text">数字签名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通信过程"><span class="toc-number">5.</span> <span class="toc-text">通信过程</span></a></li></ol>
  
   </div>
 
@@ -180,6 +194,22 @@
 <div class="tagslist">
 	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/base64/" title="base64">base64<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/https/" title="https">https<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
 		
 			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
