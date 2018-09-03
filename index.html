@@ -99,13 +99,13 @@
 </ol>
 <h2 id="会话秘钥"><a href="#会话秘钥" class="headerlink" title="会话秘钥"></a>会话秘钥</h2><p>非对称加密的计算很慢，实际情况下混合使用了对称加密和非对称加密技术。比较常见的做法是在两节点间通过便捷的公开密钥加密技术建立起安全通信， 然后再用那条安全的通道产生并发送临时的随机对称密钥，通过更快的对称加密技术对其余的数据进行加密。SSH和HTTPS都是这样的。</p>
 <h2 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h2><p>非对称加密除了可以用于加密解密外，还可以对报文进行签名（sign），以说明是谁编写的报文，同时证明报文没有被篡改过。这种技术被称为数字签名(digital signing)。</p>
-<p>[image:<a href="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/3765534683-59ed8581c94b2_articlex.png]" target="_blank" rel="noopener">https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/3765534683-59ed8581c94b2_articlex.png]</a></p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/3765534683-59ed8581c94b2_articlex.png" alt="image"></p>
 <h2 id="通信过程"><a href="#通信过程" class="headerlink" title="通信过程"></a>通信过程</h2><ol>
 <li>客户端：向服务端发送一个通信请求，包括随机数PK1、支持的加密协议版本、加密算法、压缩算法等加密套件；</li>
 <li>服务端：发送随机数PK2，确认使用的加密协议版本、加密算法、压缩算法等，以及证书；</li>
 <li>客户端：校验服务端的证书是否合法（包括对域名、有效期、证书颁发机构等），使用证书的公钥加密随机数PK3、加密声明、发送内容的摘要信息，验证服务器身份后，生成一个对称加密算法和对称秘钥；秘钥使用公钥加密发送给服务端；</li>
 <li>服务端：使用私钥解密后，拿到对称秘钥和对称加密算法；</li>
-<li>通信：建立安全通信后，使用协商的对称加密算法及其对应的秘钥进行加密通信。<br>[image:<a href="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/350869942-57c53781ada55_articlex.png]" target="_blank" rel="noopener">https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/350869942-57c53781ada55_articlex.png]</a></li>
+<li>通信：建立安全通信后，使用协商的对称加密算法及其对应的秘钥进行加密通信。<br><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/350869942-57c53781ada55_articlex.png" alt="image"></li>
 </ol>
 
         
