@@ -20,7 +20,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/3765534683-59ed8581c94b2_articlex.png">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/350869942-57c53781ada55_articlex.png">
-<meta property="og:updated_time" content="2018-09-03T09:28:16.959Z">
+<meta property="og:updated_time" content="2018-09-03T09:36:04.904Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="理解HTTPS">
 <meta name="twitter:description" content="HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。 什么是httpsHTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。 几个概念简单理解">
@@ -117,8 +117,9 @@
 <li>服务端：发送随机数PK2，确认使用的加密协议版本、加密算法、压缩算法等，以及证书；</li>
 <li>客户端：校验服务端的证书是否合法（包括对域名、有效期、证书颁发机构等），使用证书的公钥加密随机数PK3、加密声明、发送内容的摘要信息，验证服务器身份后，生成一个对称加密算法和对称秘钥；秘钥使用公钥加密发送给服务端；</li>
 <li>服务端：使用私钥解密后，拿到对称秘钥和对称加密算法；</li>
-<li>通信：建立安全通信后，使用协商的对称加密算法及其对应的秘钥进行加密通信。<br><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/350869942-57c53781ada55_articlex.png" alt="通信过程"></li>
+<li>通信：建立安全通信后，使用协商的对称加密算法及其对应的秘钥进行加密通信。</li>
 </ol>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/350869942-57c53781ada55_articlex.png" alt="通信过程"></p>
   
 	</div>
 		<footer class="article-footer clearfix">
