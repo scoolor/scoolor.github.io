@@ -11,17 +11,18 @@
     
 
     
-    <meta name="description" content="Linux中设备分为：字符设备、块设备、网络设备、伪设备。 字符设备字符设备是指每次与系统传输1个字符的设备。这些设备节点通常为传真、虚拟终端和串口调制解调器之类设备提供流通信服务，它通常不支持随机存取数据。字符设备在实现时，大多不使用缓存器。系统直接从设备读取／写入每一个字符。 块设备块设备是指与系统间用块的方式移动数据的设备。这些设备节点通常代表可寻址设备。块设备的数据可以随机地被访问，而且从">
+    <meta name="description" content="Linux中设备分为：字符设备、块设备、网络设备、伪设备。 字符设备字符设备是指每次与系统传输1个字符的设备。这些设备节点通常为传真、虚拟终端和串口调制解调器之类设备提供流通信服务，它通常不支持随机存取数据。 字符设备在实现时，大多不使用缓存器。系统直接从设备读取／写入每一个字符。 块设备块设备是指与系统间用块的方式移动数据的设备。这些设备节点通常代表可寻址设备。块设备的数据可以随机地被访问，而且">
+<meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux 设备分类">
 <meta property="og:url" content="https://scoolor.github.io/2018/11/07/linux-device/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
-<meta property="og:description" content="Linux中设备分为：字符设备、块设备、网络设备、伪设备。 字符设备字符设备是指每次与系统传输1个字符的设备。这些设备节点通常为传真、虚拟终端和串口调制解调器之类设备提供流通信服务，它通常不支持随机存取数据。字符设备在实现时，大多不使用缓存器。系统直接从设备读取／写入每一个字符。 块设备块设备是指与系统间用块的方式移动数据的设备。这些设备节点通常代表可寻址设备。块设备的数据可以随机地被访问，而且从">
+<meta property="og:description" content="Linux中设备分为：字符设备、块设备、网络设备、伪设备。 字符设备字符设备是指每次与系统传输1个字符的设备。这些设备节点通常为传真、虚拟终端和串口调制解调器之类设备提供流通信服务，它通常不支持随机存取数据。 字符设备在实现时，大多不使用缓存器。系统直接从设备读取／写入每一个字符。 块设备块设备是指与系统间用块的方式移动数据的设备。这些设备节点通常代表可寻址设备。块设备的数据可以随机地被访问，而且">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-07T15:10:20.023Z">
+<meta property="og:updated_time" content="2018-11-07T15:47:02.477Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux 设备分类">
-<meta name="twitter:description" content="Linux中设备分为：字符设备、块设备、网络设备、伪设备。 字符设备字符设备是指每次与系统传输1个字符的设备。这些设备节点通常为传真、虚拟终端和串口调制解调器之类设备提供流通信服务，它通常不支持随机存取数据。字符设备在实现时，大多不使用缓存器。系统直接从设备读取／写入每一个字符。 块设备块设备是指与系统间用块的方式移动数据的设备。这些设备节点通常代表可寻址设备。块设备的数据可以随机地被访问，而且从">
+<meta name="twitter:description" content="Linux中设备分为：字符设备、块设备、网络设备、伪设备。 字符设备字符设备是指每次与系统传输1个字符的设备。这些设备节点通常为传真、虚拟终端和串口调制解调器之类设备提供流通信服务，它通常不支持随机存取数据。 字符设备在实现时，大多不使用缓存器。系统直接从设备读取／写入每一个字符。 块设备块设备是指与系统间用块的方式移动数据的设备。这些设备节点通常代表可寻址设备。块设备的数据可以随机地被访问，而且">
 
     
     <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
@@ -98,8 +99,10 @@
 		</div>
 		
 		<p>Linux中设备分为：字符设备、块设备、网络设备、伪设备。</p>
-<h2 id="字符设备"><a href="#字符设备" class="headerlink" title="字符设备"></a>字符设备</h2><p>字符设备是指每次与系统传输1个字符的设备。这些设备节点通常为传真、虚拟终端和串口调制解调器之类设备提供流通信服务，它通常不支持随机存取数据。<br>字符设备在实现时，大多不使用缓存器。系统直接从设备读取／写入每一个字符。</p>
-<h2 id="块设备"><a href="#块设备" class="headerlink" title="块设备"></a>块设备</h2><p>块设备是指与系统间用块的方式移动数据的设备。这些设备节点通常代表可寻址设备。块设备的数据可以随机地被访问，而且从人类用户的观点看，传送任何数据块所需的时间都是较少而且是大致相同的。块设备的典型例子是硬盘、软盘。块设备一般情况下是带缓冲区的。<br>当程序向设备发送了读取或者写入数据的请求时，系统把数据中的每一个字符存储在适当的缓存中。当缓存被填满时，会采取适当的操作（把数据传走），而后系统清空缓存。</p>
+<h2 id="字符设备"><a href="#字符设备" class="headerlink" title="字符设备"></a>字符设备</h2><p>字符设备是指每次与系统传输1个字符的设备。这些设备节点通常为传真、虚拟终端和串口调制解调器之类设备提供流通信服务，它通常不支持随机存取数据。</p>
+<p>字符设备在实现时，大多不使用缓存器。系统直接从设备读取／写入每一个字符。</p>
+<h2 id="块设备"><a href="#块设备" class="headerlink" title="块设备"></a>块设备</h2><p>块设备是指与系统间用块的方式移动数据的设备。这些设备节点通常代表可寻址设备。块设备的数据可以随机地被访问，而且从人类用户的观点看，传送任何数据块所需的时间都是较少而且是大致相同的。块设备的典型例子是硬盘、软盘。块设备一般情况下是带缓冲区的。</p>
+<p>当程序向设备发送了读取或者写入数据的请求时，系统把数据中的每一个字符存储在适当的缓存中。当缓存被填满时，会采取适当的操作（把数据传走），而后系统清空缓存。</p>
 <h2 id="网络设备"><a href="#网络设备" class="headerlink" title="网络设备"></a>网络设备</h2><p>网络设备是特殊设备的驱动，它负责接收和发送帧数据，可能是物理帧，也可能是ip数据包，这些特性都有网络驱动决定。它并不存在于/dev下面，所以与一般的设备不同。网络设备是一个net_device结构，并通过register_netdev注册到系统里，最后通过ifconfig -a的命令就能看到。</p>
 <h1 id="伪设备"><a href="#伪设备" class="headerlink" title="伪设备"></a>伪设备</h1><p>在类Unix操作系统中，设备节点并不一定要对应物理设备，没有这种对应关系的设备是伪设备，经常用到的伪设备如下：</p>
 <ul>
@@ -115,6 +118,11 @@
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/linux/">linux</a>
+  </div>
 
 </div>
 
@@ -135,6 +143,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2018/11/07/linux-inode/" title="理解 Linux inode">
+  <strong>上一篇：</strong><br/>
+  <span>
+  理解 Linux inode</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2018/09/03/base64/"  title="base64简介">
@@ -170,6 +186,10 @@
 <div class="tagslist">
 	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>2</sup></a></li>
+			
 		
 			
 				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
