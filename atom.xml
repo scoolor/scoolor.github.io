@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://scoolor.github.io/"/>
-  <updated>2018-09-03T15:12:40.728Z</updated>
+  <updated>2018-11-07T14:54:21.505Z</updated>
   <id>https://scoolor.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux 设备分类</title>
+    <link href="https://scoolor.github.io/2018/11/07/linux-device/"/>
+    <id>https://scoolor.github.io/2018/11/07/linux-device/</id>
+    <published>2018-11-07T14:18:33.000Z</published>
+    <updated>2018-11-07T14:54:21.505Z</updated>
+    
+    <content type="html"><![CDATA[<p>Linux中设备分为：字符设备、块设备、网络设备、伪设备。</p><h2 id="字符设备"><a href="#字符设备" class="headerlink" title="字符设备"></a>字符设备</h2><p>字符设备是指每次与系统传输1个字符的设备。这些设备节点通常为传真、虚拟终端和串口调制解调器之类设备提供流通信服务，它通常不支持随机存取数据。<br>字符设备在实现时，大多不使用缓存器。系统直接从设备读取／写入每一个字符。</p><h2 id="块设备"><a href="#块设备" class="headerlink" title="块设备"></a>块设备</h2><p>块设备是指与系统间用块的方式移动数据的设备。这些设备节点通常代表可寻址设备。块设备的数据可以随机地被访问，而且从人类用户的观点看，传送任何数据块所需的时间都是较少而且是大致相同的。块设备的典型例子是硬盘、软盘。块设备一般情况下是带缓冲区的。<br>当程序向设备发送了读取或者写入数据的请求时，系统把数据中的每一个字符存储在适当的缓存中。当缓存被填满时，会采取适当的操作（把数据传走），而后系统清空缓存。</p><h2 id="网络设备"><a href="#网络设备" class="headerlink" title="网络设备"></a>网络设备</h2><p>在类Unix操作系统中，设备节点并不一定要对应物理设备，没有这种对应关系的设备是伪设备，经常用到的伪设备如下：</p><ul><li>/dev/null<br>接受并丢弃所有输入；即不产生任何输出。</li><li>/dev/full<br>永远在被填满状态的设备。</li><li>/dev/loop<br>Loop设备</li><li>/dev/zero<br>产生连续的NUL字元的串流(数值为0)。</li><li>/dev/random<br>产生一个虚假随机的任意长度字元串流(Blocking)。</li><li>/dev/urandom<br>产生一个虚假随机的任意长度字元串流(Non-Blocking)。</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Linux中设备分为：字符设备、块设备、网络设备、伪设备。&lt;/p&gt;
+&lt;h2 id=&quot;字符设备&quot;&gt;&lt;a href=&quot;#字符设备&quot; class=&quot;headerlink&quot; title=&quot;字符设备&quot;&gt;&lt;/a&gt;字符设备&lt;/h2&gt;&lt;p&gt;字符设备是指每次与系统传输1个字符的设备。这些设备
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>base64简介</title>
