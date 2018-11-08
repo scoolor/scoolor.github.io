@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="为什么这么涛的个人博客">
 <meta property="og:description" content="linux/unix下的哲学核心思想是‘一切皆文件’。“一切皆文件”，指的是，对所有文件（目录、字符设备、块设备、套接字、打印机、进程、线程、管道等）操作，读写都可用fopen()/fclose()/fwrite()/fread()等函数进行处理。屏蔽了硬件的区别，所有设备都抽象成文件，提供统一的接口给用户。虽然类型各不相同，但是对其提供的却是同一套操作界面。更进一步，对文件的操作也可以跨文件系统">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-08T00:57:15.900Z">
+<meta property="og:updated_time" content="2018-11-08T01:01:01.080Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux理解-一切皆文件">
 <meta name="twitter:description" content="linux/unix下的哲学核心思想是‘一切皆文件’。“一切皆文件”，指的是，对所有文件（目录、字符设备、块设备、套接字、打印机、进程、线程、管道等）操作，读写都可用fopen()/fclose()/fwrite()/fread()等函数进行处理。屏蔽了硬件的区别，所有设备都抽象成文件，提供统一的接口给用户。虽然类型各不相同，但是对其提供的却是同一套操作界面。更进一步，对文件的操作也可以跨文件系统">
@@ -116,37 +116,37 @@
 </tr>
 <tr>
 <td>目录文件</td>
-<td>d，directory file</td>
+<td>d,directory file</td>
 <td>/usr/ /home/ <br>目录文件包含了各自目录下的文件名和指向这些文件的指针，打开目录事实上就是打开目录文件，只要有访问权限，就可以随意访问这些目录下的文件。能用#cd命令进入的。第一个属性为[d]，例如 [drwxrwxrwx]</td>
 </tr>
 <tr>
 <td>硬链接</td>
-<td>- ,hard links</td>
+<td>-,hard links</td>
 <td>若一个inode号对应多个文件名，则称这些文件为硬链接。硬链接就是同一个文件使用了多个别名删除时,只会删除链接, 不会删除文件;<br>硬链接的局限性:1.不能引用自身文件系统以外的文件,即不能引用其他分区的文件;2.无法引用目录;</td>
 </tr>
 <tr>
 <td>符号链接（软链接）</td>
-<td>l，symbolic link</td>
+<td>l,symbolic link</td>
 <td>若文件用户数据块中存放的内容是另一文件的路径名的指向，则该文件就是软连接，克服硬链接的局限性, 类似于快捷方式,使用与硬链接相同。</td>
 </tr>
 <tr>
 <td>字符设备文件</td>
-<td>c，char</td>
+<td>c,char</td>
 <td>文件一般隐藏在/dev目录下，在进行设备读取和外设交互时会被使用到<br>即串行端口的接口设备，例如键盘、鼠标等等。第一个属性为 [c]。<br>#/dev/tty的属性是 crw-rw-rw-，注意前面第一个字 c，这表示字符设备文件</td>
 </tr>
 <tr>
 <td>块设备文件</td>
-<td>b，block</td>
+<td>b,block</td>
 <td>存储数据以供系统存取的接口设备，简单而言就是硬盘。<br># /dev/hda1 的属性是 brw-r—– ，注意前面的第一个字符是b，这表示块设备，比如硬盘，光驱等设备<br>系统中的所有设备要么是块设备文件，要么是字符设备文件，无一例外</td>
 </tr>
 <tr>
 <td>FIFO管道文件</td>
-<td>p，pipe</td>
+<td>p,pipe</td>
 <td>管道文件主要用于进程间通讯。FIFO解决多个程序同时存取一个文件所造成的错误。比如使用mkfifo命令可以创建一个FIFO文件，启用一个进程A从FIFO文件里读数据，启动进程B往FIFO里写数据，先进先出，随写随读。<br># pipe</td>
 </tr>
 <tr>
 <td>套接字</td>
-<td>s，socket</td>
+<td>s,socket</td>
 <td>以启动一个程序来监听客户端的要求，客户端就可以通过套接字来进行数据通信。用于进程间的网络通信，也可以用于本机之间的非网络通信，第一个属性为 [s]，这些文件一般隐藏在/var/run目录下，证明着相关进程的存在</td>
 </tr>
 </tbody>
