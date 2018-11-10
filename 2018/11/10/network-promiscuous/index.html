@@ -4,24 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hello World | 为什么这么涛的个人博客</title>
+    <title>网卡混杂模式介绍 | 为什么这么涛的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="为什么这么涛">
     
 
     
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+    <meta name="description" content="网卡有多种工作模式，默认情况下网卡只把本机的包（包括广播包）传递给上层程序，其他的包一律丢弃。混杂模式是指网卡能接受所有通过它的数据流，不管什么格式，什么地址(即不校验mac地址)。 一般来说，混杂模式不会影响网卡的正常工作，多在网络监听工具上使用。 网卡的工作模式网卡具有如下几种工作模式：  广播模式（Broad Cast Model）：它的物理地址（MAC）地址是 0Xffffff 的帧为广播">
+<meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="https://scoolor.github.io/2018/04/17/hello-world/index.html">
+<meta property="og:title" content="网卡混杂模式介绍">
+<meta property="og:url" content="https://scoolor.github.io/2018/11/10/network-promiscuous/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="网卡有多种工作模式，默认情况下网卡只把本机的包（包括广播包）传递给上层程序，其他的包一律丢弃。混杂模式是指网卡能接受所有通过它的数据流，不管什么格式，什么地址(即不校验mac地址)。 一般来说，混杂模式不会影响网卡的正常工作，多在网络监听工具上使用。 网卡的工作模式网卡具有如下几种工作模式：  广播模式（Broad Cast Model）：它的物理地址（MAC）地址是 0Xffffff 的帧为广播">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-04-17T14:56:28.000Z">
+<meta property="og:updated_time" content="2018-11-10T13:08:55.280Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="网卡混杂模式介绍">
+<meta name="twitter:description" content="网卡有多种工作模式，默认情况下网卡只把本机的包（包括广播包）传递给上层程序，其他的包一律丢弃。混杂模式是指网卡能接受所有通过它的数据流，不管什么格式，什么地址(即不校验mac地址)。 一般来说，混杂模式不会影响网卡的正常工作，多在网络监听工具上使用。 网卡的工作模式网卡具有如下几种工作模式：  广播模式（Broad Cast Model）：它的物理地址（MAC）地址是 0Xffffff 的帧为广播">
 
     
     <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
@@ -77,14 +78,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/04/17/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2018/11/10/network-promiscuous/" title="网卡混杂模式介绍" itemprop="url">网卡混杂模式介绍</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
 		
   <p class="article-time">
-    <time datetime="2018-04-17T14:56:28.000Z" itemprop="datePublished"> Published 2018-04-17</time>
+    <time datetime="2018-11-10T12:52:37.000Z" itemprop="datePublished"> Published 2018-11-10</time>
     
   </p>
 </header>
@@ -93,24 +94,34 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#网卡的工作模式"><span class="toc-number">1.</span> <span class="toc-text">网卡的工作模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux下网卡混杂模式设置方法"><span class="toc-number">2.</span> <span class="toc-text">Linux下网卡混杂模式设置方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#命令实现"><span class="toc-number">2.1.</span> <span class="toc-text">命令实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-number">2.2.</span> <span class="toc-text">参考链接</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+		<p>网卡有多种工作模式，默认情况下网卡只把本机的包（包括广播包）传递给上层程序，其他的包一律丢弃。混杂模式是指网卡能接受所有通过它的数据流，不管什么格式，什么地址(即不校验mac地址)。</p>
+<p>一般来说，混杂模式不会影响网卡的正常工作，多在网络监听工具上使用。</p>
+<h2 id="网卡的工作模式"><a href="#网卡的工作模式" class="headerlink" title="网卡的工作模式"></a>网卡的工作模式</h2><p>网卡具有如下几种工作模式：</p>
+<ol>
+<li>广播模式（Broad Cast Model）：它的物理地址（MAC）地址是 0Xffffff 的帧为广播帧，工作在广播模式的网卡接收广播帧；</li>
+<li>多播传送（MultiCast Model）：多播传送地址作为目的物理地址的帧可以被组内的其它主机同时接收，而组外主机却接收不到。但是，如果将网卡设置为多播传送模式，它可以接收所有的多播传送帧，而不论它是不是组内成员；</li>
+<li>直接模式（Direct Model）：工作在直接模式下的网卡只接收目地址是自己 Mac地址的帧；</li>
+<li>混杂模式（Promiscuous Model）：工作在混杂模式下的网卡接收所有的流过网卡的帧，信包捕获程序就是在这种模式下运行的。</li>
+</ol>
+<p>网卡的缺省工作模式包含广播模式和直接模式，即它只接收广播帧和发给自己的帧。如果采用混杂模式，一个站点的网卡将接受同一网络内所有站点所发送的数据包这样就可以到达对于网络信息监视捕获的目的。</p>
+<h2 id="Linux下网卡混杂模式设置方法"><a href="#Linux下网卡混杂模式设置方法" class="headerlink" title="Linux下网卡混杂模式设置方法"></a>Linux下网卡混杂模式设置方法</h2><h3 id="命令实现"><a href="#命令实现" class="headerlink" title="命令实现"></a>命令实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ifconfig eth0 promisc #set</span><br><span class="line">ifconfig eth0 -promisc #unset</span><br></pre></td></tr></table></figure>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><ol>
+<li><a href="https://blog.csdn.net/JAZZSOLDIER/article/details/52368020" target="_blank" rel="noopener">https://blog.csdn.net/JAZZSOLDIER/article/details/52368020</a></li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a>
+  </div>
 
 </div>
 
@@ -118,7 +129,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://scoolor.github.io/2018/04/17/hello-world/" data-title="Hello World | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  <div data-url="https://scoolor.github.io/2018/11/10/network-promiscuous/" data-title="网卡混杂模式介绍 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -131,14 +142,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/04/18/letsencrypt/" title="使用Certbot开启网站HTTPS">
-  <strong>上一篇：</strong><br/>
-  <span>
-  使用Certbot开启网站HTTPS</span>
+
+<div class="next">
+<a href="/2018/11/10/charles-https/"  title="为什么charles/fiddler可以明文抓取https">
+ <strong>下一篇：</strong><br/> 
+ <span>为什么charles/fiddler可以明文抓取https
+</span>
 </a>
 </div>
-
 
 </nav>
 
@@ -152,7 +163,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#网卡的工作模式"><span class="toc-number">1.</span> <span class="toc-text">网卡的工作模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux下网卡混杂模式设置方法"><span class="toc-number">2.</span> <span class="toc-text">Linux下网卡混杂模式设置方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#命令实现"><span class="toc-number">2.1.</span> <span class="toc-text">命令实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-number">2.2.</span> <span class="toc-text">参考链接</span></a></li></ol></li></ol>
  
   </div>
 
