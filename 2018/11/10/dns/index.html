@@ -4,25 +4,21 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Linux理解-一切皆文件 | 为什么这么涛的个人博客</title>
+    <title>dns | 为什么这么涛的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="为什么这么涛">
     
 
     
-    <meta name="description" content="linux/unix下的哲学核心思想是‘一切皆文件’。“一切皆文件”，指的是，对所有文件（目录、字符设备、块设备、套接字、打印机、进程、线程、管道等）操作，读写都可用fopen()/fclose()/fwrite()/fread()等函数进行处理。屏蔽了硬件的区别，所有设备都抽象成文件，提供统一的接口给用户。虽然类型各不相同，但是对其提供的却是同一套操作界面。更进一步，对文件的操作也可以跨文件系统">
-<meta name="keywords" content="Linux">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Linux理解-一切皆文件">
-<meta property="og:url" content="https://scoolor.github.io/2018/11/08/linux-everything-is-file/index.html">
+    <meta property="og:type" content="article">
+<meta property="og:title" content="dns">
+<meta property="og:url" content="https://scoolor.github.io/2018/11/10/dns/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
-<meta property="og:description" content="linux/unix下的哲学核心思想是‘一切皆文件’。“一切皆文件”，指的是，对所有文件（目录、字符设备、块设备、套接字、打印机、进程、线程、管道等）操作，读写都可用fopen()/fclose()/fwrite()/fread()等函数进行处理。屏蔽了硬件的区别，所有设备都抽象成文件，提供统一的接口给用户。虽然类型各不相同，但是对其提供的却是同一套操作界面。更进一步，对文件的操作也可以跨文件系统">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-08T01:01:01.080Z">
+<meta property="og:updated_time" content="2018-11-10T03:30:11.372Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux理解-一切皆文件">
-<meta name="twitter:description" content="linux/unix下的哲学核心思想是‘一切皆文件’。“一切皆文件”，指的是，对所有文件（目录、字符设备、块设备、套接字、打印机、进程、线程、管道等）操作，读写都可用fopen()/fclose()/fwrite()/fread()等函数进行处理。屏蔽了硬件的区别，所有设备都抽象成文件，提供统一的接口给用户。虽然类型各不相同，但是对其提供的却是同一套操作界面。更进一步，对文件的操作也可以跨文件系统">
+<meta name="twitter:title" content="dns">
 
     
     <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
@@ -78,14 +74,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/11/08/linux-everything-is-file/" title="Linux理解-一切皆文件" itemprop="url">Linux理解-一切皆文件</a>
+      <a href="/2018/11/10/dns/" title="dns" itemprop="url">dns</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
 		
   <p class="article-time">
-    <time datetime="2018-11-08T00:34:42.000Z" itemprop="datePublished"> Published 2018-11-08</time>
+    <time datetime="2018-11-10T03:30:11.000Z" itemprop="datePublished"> Published 2018-11-10</time>
     
   </p>
 </header>
@@ -94,73 +90,15 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#文件类型"><span class="toc-number">1.</span> <span class="toc-text">文件类型</span></a></li></ol>
+			
 		
 		</div>
 		
-		<p>linux/unix下的哲学核心思想是‘一切皆文件’。<br>“一切皆文件”，指的是，对所有文件（目录、字符设备、块设备、套接字、打印机、进程、线程、管道等）操作，读写都可用fopen()/fclose()/fwrite()/fread()等函数进行处理。屏蔽了硬件的区别，所有设备都抽象成文件，提供统一的接口给用户。虽然类型各不相同，但是对其提供的却是同一套操作界面。更进一步，对文件的操作也可以跨文件系统执行。</p>
-<p>那么如何操作一个已经打开的文件？<br>文件描述符（file descriptor），简称fd。这里就使用到了“文件描述符”，它是一个对应某个已经打开的文件的索引（非负整数）。</p>
-<h2 id="文件类型"><a href="#文件类型" class="headerlink" title="文件类型"></a>文件类型</h2><table>
-<thead>
-<tr>
-<th>类型</th>
-<th>简称</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>普通文件</td>
-<td>-,Normal File</td>
-<td>如mp4、pdf、html log；<br>用户可以根据访问权限对普通文件进行查看、更改和删除，包括 纯文本文件(ASCII)；二进制文件(binary)；数据格式的文件(data);各种压缩文件.第一个属性为 [-]</td>
-</tr>
-<tr>
-<td>目录文件</td>
-<td>d,directory file</td>
-<td>/usr/ /home/ <br>目录文件包含了各自目录下的文件名和指向这些文件的指针，打开目录事实上就是打开目录文件，只要有访问权限，就可以随意访问这些目录下的文件。能用#cd命令进入的。第一个属性为[d]，例如 [drwxrwxrwx]</td>
-</tr>
-<tr>
-<td>硬链接</td>
-<td>-,hard links</td>
-<td>若一个inode号对应多个文件名，则称这些文件为硬链接。硬链接就是同一个文件使用了多个别名删除时,只会删除链接, 不会删除文件;<br>硬链接的局限性:1.不能引用自身文件系统以外的文件,即不能引用其他分区的文件;2.无法引用目录;</td>
-</tr>
-<tr>
-<td>符号链接（软链接）</td>
-<td>l,symbolic link</td>
-<td>若文件用户数据块中存放的内容是另一文件的路径名的指向，则该文件就是软连接，克服硬链接的局限性, 类似于快捷方式,使用与硬链接相同。</td>
-</tr>
-<tr>
-<td>字符设备文件</td>
-<td>c,char</td>
-<td>文件一般隐藏在/dev目录下，在进行设备读取和外设交互时会被使用到<br>即串行端口的接口设备，例如键盘、鼠标等等。第一个属性为 [c]。<br>#/dev/tty的属性是 crw-rw-rw-，注意前面第一个字 c，这表示字符设备文件</td>
-</tr>
-<tr>
-<td>块设备文件</td>
-<td>b,block</td>
-<td>存储数据以供系统存取的接口设备，简单而言就是硬盘。<br># /dev/hda1 的属性是 brw-r—– ，注意前面的第一个字符是b，这表示块设备，比如硬盘，光驱等设备<br>系统中的所有设备要么是块设备文件，要么是字符设备文件，无一例外</td>
-</tr>
-<tr>
-<td>FIFO管道文件</td>
-<td>p,pipe</td>
-<td>管道文件主要用于进程间通讯。FIFO解决多个程序同时存取一个文件所造成的错误。比如使用mkfifo命令可以创建一个FIFO文件，启用一个进程A从FIFO文件里读数据，启动进程B往FIFO里写数据，先进先出，随写随读。<br># pipe</td>
-</tr>
-<tr>
-<td>套接字</td>
-<td>s,socket</td>
-<td>以启动一个程序来监听客户端的要求，客户端就可以通过套接字来进行数据通信。用于进程间的网络通信，也可以用于本机之间的非网络通信，第一个属性为 [s]，这些文件一般隐藏在/var/run目录下，证明着相关进程的存在</td>
-</tr>
-</tbody>
-</table>
-  
+		  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a>
-  </div>
 
 </div>
 
@@ -168,7 +106,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://scoolor.github.io/2018/11/08/linux-everything-is-file/" data-title="Linux理解-一切皆文件 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  <div data-url="https://scoolor.github.io/2018/11/10/dns/" data-title="dns | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -181,19 +119,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/11/10/charles-https/" title="为什么charles/fiddler可以明文抓取https">
-  <strong>上一篇：</strong><br/>
-  <span>
-  为什么charles/fiddler可以明文抓取https</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/11/07/linux-inode/"  title="理解 Linux inode">
+<a href="/2018/11/10/icmp/"  title="icmp">
  <strong>下一篇：</strong><br/> 
- <span>理解 Linux inode
+ <span>icmp
 </span>
 </a>
 </div>
@@ -210,7 +140,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#文件类型"><span class="toc-number">1.</span> <span class="toc-text">文件类型</span></a></li></ol>
+ 
  
   </div>
 
