@@ -4,21 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>dns | 为什么这么涛的个人博客</title>
+    <title>dns域名系统 | 为什么这么涛的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="为什么这么涛">
     
 
     
-    <meta property="og:type" content="article">
-<meta property="og:title" content="dns">
+    <meta name="description" content="域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。 它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。 DNS使用TCP和UDP端口53。 查询过程虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。 linux命令行工具可以显示整个查询过程。 1dig math.stac">
+<meta name="keywords" content="dns">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dns域名系统">
 <meta property="og:url" content="https://scoolor.github.io/2018/11/10/dns/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
+<meta property="og:description" content="域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。 它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。 DNS使用TCP和UDP端口53。 查询过程虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。 linux命令行工具可以显示整个查询过程。 1dig math.stac">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-10T03:30:11.372Z">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863423326.jpg">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863294628.jpg">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863343065.jpg">
+<meta property="og:updated_time" content="2018-11-10T15:30:29.469Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="dns">
+<meta name="twitter:title" content="dns域名系统">
+<meta name="twitter:description" content="域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。 它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。 DNS使用TCP和UDP端口53。 查询过程虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。 linux命令行工具可以显示整个查询过程。 1dig math.stac">
+<meta name="twitter:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863423326.jpg">
 
     
     <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
@@ -74,14 +82,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/11/10/dns/" title="dns" itemprop="url">dns</a>
+      <a href="/2018/11/10/dns/" title="dns域名系统" itemprop="url">dns域名系统</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
 		
   <p class="article-time">
-    <time datetime="2018-11-10T03:30:11.000Z" itemprop="datePublished"> Published 2018-11-10</time>
+    <time datetime="2018-11-10T13:48:02.000Z" itemprop="datePublished"> Published 2018-11-10</time>
     
   </p>
 </header>
@@ -90,15 +98,73 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#查询过程"><span class="toc-number">1.</span> <span class="toc-text">查询过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS服务器"><span class="toc-number">2.</span> <span class="toc-text">DNS服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#域名的层级"><span class="toc-number">3.</span> <span class="toc-text">域名的层级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-的记录类型"><span class="toc-number">4.</span> <span class="toc-text">DNS 的记录类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS协议报文"><span class="toc-number">5.</span> <span class="toc-text">DNS协议报文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例"><span class="toc-number">6.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">7.</span> <span class="toc-text">参考链接</span></a></li></ol>
 		
 		</div>
 		
-		  
+		<p>域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。</p>
+<p>它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。</p>
+<p>DNS使用TCP和UDP端口53。</p>
+<h2 id="查询过程"><a href="#查询过程" class="headerlink" title="查询过程"></a>查询过程</h2><p>虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。</p>
+<p>linux命令行工具可以显示整个查询过程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig math.stackexchange.com</span><br></pre></td></tr></table></figure>
+<p>输出内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">; &lt;&lt;&gt;&gt; DiG 9.9.5-9+deb8u16-Debian &lt;&lt;&gt;&gt; math.stackexchange.com</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 19662</span><br><span class="line">;; flags: qr rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 1</span><br><span class="line"></span><br><span class="line">;; OPT PSEUDOSECTION:</span><br><span class="line">; EDNS: version: 0, flags:; udp: 512</span><br><span class="line">;; QUESTION SECTION:</span><br><span class="line">;math.stackexchange.com.		IN	A</span><br><span class="line"></span><br><span class="line">;; ANSWER SECTION:</span><br><span class="line">math.stackexchange.com.	68	IN	A	151.101.1.69</span><br><span class="line">math.stackexchange.com.	68	IN	A	151.101.65.69</span><br><span class="line">math.stackexchange.com.	68	IN	A	151.101.129.69</span><br><span class="line">math.stackexchange.com.	68	IN	A	151.101.193.69</span><br><span class="line"></span><br><span class="line">;; Query time: 227 msec</span><br><span class="line">;; SERVER: 10.0.2.3#53(10.0.2.3)</span><br><span class="line">;; WHEN: Sat Nov 10 22:03:00 CST 2018</span><br><span class="line">;; MSG SIZE  rcvd: 115</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一段是查询参数和统计;</li>
+<li>第二段是查询内容，查询域名math.stackexchange.com的A记录，A是address的缩写;</li>
+<li>第三段是DNS服务器的答复；上面结果显示，math.stackexchange.com有四个A记录，即四个IP地址。68是TTL值（Time to live 的缩写），表示缓存时间，即68秒之内不用重新查询;</li>
+<li>第四段是DNS服务器的一些传输信息。</li>
+</ul>
+<h2 id="DNS服务器"><a href="#DNS服务器" class="headerlink" title="DNS服务器"></a>DNS服务器</h2><p>DNS服务器的IP地址，有可能是动态的，每次上网时由网关分配，这叫做DHCP机制。</p>
+<p>也有可能是事先指定的固定地址。Linux系统里面，DNS服务器的IP地址保存在/etc/resolv.conf文件。</p>
+<p>上例的DNS服务器是10.0.2.3，这是一个内网地址。有一些公网的DNS服务器，也可以使用，其中最有名的就是Google的8.8.8.8和Level 3的4.2.2.2。</p>
+<p>dig命令有一个@参数，显示向指定DNS服务器查询的结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dig @4.2.2.2 math.stackexchange.com</span><br></pre></td></tr></table></figure>
+<h2 id="域名的层级"><a href="#域名的层级" class="headerlink" title="域名的层级"></a>域名的层级</h2><p>DNS查询有两种方式：递归和迭代。DNS客户端设置使用的DNS服务器一般都是递归服务器，它负责全权处理客户端的DNS查询请求，直到返回最终结果。而DNS服务器之间一般采用迭代查询方式。</p>
+<p>DNS服务器怎么会知道每个域名的IP地址呢？答案是分级查询。</p>
+<p>请仔细看前面的例子，每个域名的尾部都多了一个点。</p>
+<p>比如，域名<code>math.stackexchange.com</code>显示为<code>math.stackexchange.com.</code>。这不是疏忽，而是所有域名的尾部，实际上都有一个根域名。</p>
+<p>举例来说，<code>www.example.com</code>真正的域名是<code>www.example.com.root</code>，简写为<code>www.example.com.</code>。因为，根域名.root对于所有域名都是一样的，所以平时是省略的。</p>
+<p>根域名的下一级，叫做”顶级域名”（top-level domain，缩写为TLD），比如.com、.net；再下一级叫做”次级域名”（second-level domain，缩写为SLD），比如<a href="http://www.example.com里面的.example，这一级域名是用户可以注册的；再下一级是主机名（host），比如www.example.com里面的www，又称为&quot;三级域名&quot;，这是用户在自己的域里面为服务器分配的名称，是用户可以任意分配的。" target="_blank" rel="noopener">www.example.com里面的.example，这一级域名是用户可以注册的；再下一级是主机名（host），比如www.example.com里面的www，又称为&quot;三级域名&quot;，这是用户在自己的域里面为服务器分配的名称，是用户可以任意分配的。</a></p>
+<p>总结一下，域名的层级结构如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">主机名.次级域名.顶级域名.根域名</span><br><span class="line"># 即</span><br><span class="line">host.sld.tld.root</span><br></pre></td></tr></table></figure>
+<h2 id="DNS-的记录类型"><a href="#DNS-的记录类型" class="headerlink" title="DNS 的记录类型"></a>DNS 的记录类型</h2><p>域名与IP之间的对应关系，称为”记录”（record）。根据使用场景，”记录”可以分成不同的类型（type），前面已经看到了有A记录和NS记录。</p>
+<p>常见的DNS记录类型如下。</p>
+<ol>
+<li>A：主机记录（Address），返回域名指向的IP地址。</li>
+<li>NS：名字服务器，本域的服务器名，域名服务器记录（Name Server），返回保存下一级域名信息的服务器地址。该记录只能设置为域名，不能设置为IP地址。</li>
+<li>MX：邮件记录（Mail eXchange），返回接收电子邮件的服务器地址。</li>
+<li>CNAME：别名记录,规范名称记录（Canonical Name），返回另一个域名，即当前查询的域名是另一个域名的跳转。</li>
+<li>PTR：逆向查询记录（Pointer Record），只用于从IP地址查询域名。</li>
+<li>IPv6主机记录（AAAA记录）: RFC 3596定义，与A记录对应，用于将特定的主机名映射到一个主机的IPv6地址。</li>
+</ol>
+<p>CNAME 记录主要用于域名的内部跳转，为服务器配置提供灵活性，用户感知不到。<br>由于CNAME记录就是一个替换，所以域名一旦设置CNAME记录以后，就不能再设置其他记录了（比如A记录和MX记录）。</p>
+<p>NS记录（Name Server的缩写），即哪些服务器负责管理域名的DNS记录。</p>
+<h2 id="DNS协议报文"><a href="#DNS协议报文" class="headerlink" title="DNS协议报文"></a>DNS协议报文</h2><p>dns请求和应答都是用相同的报文格式，分成5个段（有的报文段在不同的情况下可能为空），如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+---------------------+</span><br><span class="line">|        Header       | 报文头</span><br><span class="line">+---------------------+</span><br><span class="line">|       Question      | 查询的问题</span><br><span class="line">+---------------------+</span><br><span class="line">|        Answer       | 应答</span><br><span class="line">+---------------------+</span><br><span class="line">|      Authority      | 授权应答</span><br><span class="line">+---------------------+</span><br><span class="line">|      Additional     | 附加信息</span><br><span class="line">+---------------------+</span><br></pre></td></tr></table></figure>
+<p>Header段是必须存在的，它定义了报文是请求还是应答，也定义了其他段是否需要存在，以及是标准查询还是其他。 </p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>执行 <code>dig baidu.com</code>，使用wireshark抓包，查看请求与响应报文,看到使用的是UDP协议。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig baidu.com</span><br></pre></td></tr></table></figure>
+<p>返回解决如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">; &lt;&lt;&gt;&gt; DiG 9.9.5-9+deb8u16-Debian &lt;&lt;&gt;&gt; baidu.com</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 26178</span><br><span class="line">;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1</span><br><span class="line"></span><br><span class="line">;; OPT PSEUDOSECTION:</span><br><span class="line">; EDNS: version: 0, flags:; udp: 512</span><br><span class="line">;; QUESTION SECTION:</span><br><span class="line">;baidu.com.			IN	A</span><br><span class="line"></span><br><span class="line">;; ANSWER SECTION:</span><br><span class="line">baidu.com.		195	IN	A	220.181.57.216</span><br><span class="line">baidu.com.		195	IN	A	123.125.115.110</span><br><span class="line"></span><br><span class="line">;; Query time: 226 msec</span><br><span class="line">;; SERVER: 10.0.2.3#53(10.0.2.3)</span><br><span class="line">;; WHEN: Sat Nov 10 23:12:39 CST 2018</span><br><span class="line">;; MSG SIZE  rcvd: 70</span><br></pre></td></tr></table></figure>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863423326.jpg" alt="wireshark"></p>
+<p>请求报文：<br><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863294628.jpg" alt="wireshark请求"></p>
+<p>响应报文：<br><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863343065.jpg" alt="wireshark响应"></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol>
+<li><a href="https://zh.wikipedia.org/zh-hans/%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9F" target="_blank" rel="noopener">https://zh.wikipedia.org/zh-hans/%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9F</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/06/dns.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2016/06/dns.html</a></li>
+</ol>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/dns/">dns</a>
+  </div>
 
 </div>
 
@@ -106,7 +172,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://scoolor.github.io/2018/11/10/dns/" data-title="dns | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  <div data-url="https://scoolor.github.io/2018/11/10/dns/" data-title="dns域名系统 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -121,9 +187,9 @@
  
 
 <div class="next">
-<a href="/2018/11/10/icmp/"  title="icmp">
+<a href="/2018/11/10/network-promiscuous/"  title="网卡混杂模式介绍">
  <strong>下一篇：</strong><br/> 
- <span>icmp
+ <span>网卡混杂模式介绍
 </span>
 </a>
 </div>
@@ -140,7 +206,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#查询过程"><span class="toc-number">1.</span> <span class="toc-text">查询过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS服务器"><span class="toc-number">2.</span> <span class="toc-text">DNS服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#域名的层级"><span class="toc-number">3.</span> <span class="toc-text">域名的层级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-的记录类型"><span class="toc-number">4.</span> <span class="toc-text">DNS 的记录类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS协议报文"><span class="toc-number">5.</span> <span class="toc-text">DNS协议报文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例"><span class="toc-number">6.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">7.</span> <span class="toc-text">参考链接</span></a></li></ol>
  
   </div>
 
@@ -156,11 +222,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
 			
 		
 			
@@ -176,15 +242,19 @@
 			
 		
 			
+				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/dns/" title="dns">dns<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
 			
 		
 		</ul>
