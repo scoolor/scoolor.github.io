@@ -75,6 +75,80 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/11/10/charles-https/" title="为什么charles/fiddler可以明文抓取https" itemprop="url">为什么charles/fiddler可以明文抓取https</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
+		
+  <p class="article-time">
+    <time datetime="2018-11-10T01:06:11.000Z" itemprop="datePublished"> Published 2018-11-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>阅读本文首先需要了解https的基本原理，可以参考 <a href="https://scoolor.github.io/2018/09/03/https/">https://scoolor.github.io/2018/09/03/https/</a></p>
+<p>理解https的抓包原理，首先要理解中间人的概念，也就是MITM。</p>
+<h2 id="MITM介绍"><a href="#MITM介绍" class="headerlink" title="MITM介绍"></a>MITM介绍</h2><p>MITM（Man-In-The-Middle，中间人），能够与网络通信的两端分别创建连接，交换其收到的数据，使得通讯两端都认为自己直接与对方对话，实际上整个会话被中间人控制。</p>
+<p>简而言之，就是在真正的服务端看来，中间人是客户端；而对真正的客户端来说，中间人是服务端。</p>
+<h2 id="主要原理介绍"><a href="#主要原理介绍" class="headerlink" title="主要原理介绍"></a>主要原理介绍</h2><p>常见的http/https抓包工具charles/fiddler的工作原理与中间人一致，都是通过创建本地的proxy服务，然后修改浏览器的proxy配置来达到拦截流量的目的。</p>
+<p>对于https连接来说，中间人要满足以下两点，才能实现真正的明文代理:</p>
+<ol>
+<li>中间人，作为客户端与真实服务端建立连接这一步不会有问题，因为服务端不会校验客户端的身份；</li>
+<li>中间人，作为服务端与真实客户端建立连接，这里会有客户端信任服务端的问题，也就是服务端必须有对应域名的私钥；</li>
+</ol>
+<p>中间人要拿到私钥只能通过如下方式：</p>
+<ol>
+<li>去网站服务端拿到私钥；</li>
+<li>去CA处拿域名签发私钥；</li>
+<li>自己签发证书，切要被浏览器信任；</li>
+</ol>
+<p>不用解释，抓包工具只能使用第三种方式取得中间人的身份。</p>
+<p>使用抓包工具进行https抓包的时候，需要在客户端安装charles/fiddler的根证书，这里实际上起认证中心（CA）的作用。</p>
+<p>charles能够抓包的关键是客户端会往系统受信任的根证书列表中导入charles生成的证书，而这个证书会被浏览器信任，也就是charles给自己创建了一个认证中心CA，客户端拿着中间人签发的证书去中间人自己的CA去认证，当然认为这个证书是有效的。因此代理作为中间人取得了客户端的信任。</p>
+<h2 id="简单总结："><a href="#简单总结：" class="headerlink" title="简单总结："></a>简单总结：</h2><p>charle/fiddler抓包https时，作为中间人，与客户端连接时，中间人自己生成证书，并且使用自己的CA进行签名，取得客户端的信任；与服务端连接时，中间人接受服务端的证书，与服务端不存在信任问题。因此就实现了https的代理。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/charle/">charle</a><a href="/tags/https/">https</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/11/08/linux-everything-is-file/" title="Linux理解-一切皆文件" itemprop="url">Linux理解-一切皆文件</a>
   </h1>
   <p class="article-author">By
@@ -762,6 +836,10 @@
 		<ul class="clearfix">
 		
 			
+				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/linux/" title="linux">linux<sup>2</sup></a></li>
 			
 		
@@ -778,7 +856,7 @@
 			
 		
 			
-				<li><a href="/tags/https/" title="https">https<sup>1</sup></a></li>
+				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
 			
 		
 			

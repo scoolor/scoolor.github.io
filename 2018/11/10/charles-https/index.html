@@ -4,25 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Linux理解-一切皆文件 | 为什么这么涛的个人博客</title>
+    <title>为什么charles/fiddler可以明文抓取https | 为什么这么涛的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="为什么这么涛">
     
 
     
-    <meta name="description" content="linux/unix下的哲学核心思想是‘一切皆文件’。“一切皆文件”，指的是，对所有文件（目录、字符设备、块设备、套接字、打印机、进程、线程、管道等）操作，读写都可用fopen()/fclose()/fwrite()/fread()等函数进行处理。屏蔽了硬件的区别，所有设备都抽象成文件，提供统一的接口给用户。虽然类型各不相同，但是对其提供的却是同一套操作界面。更进一步，对文件的操作也可以跨文件系统">
-<meta name="keywords" content="Linux">
+    <meta name="description" content="阅读本文首先需要了解https的基本原理，可以参考 https://scoolor.github.io/2018/09/03/https/ 理解https的抓包原理，首先要理解中间人的概念，也就是MITM。 MITM介绍MITM（Man-In-The-Middle，中间人），能够与网络通信的两端分别创建连接，交换其收到的数据，使得通讯两端都认为自己直接与对方对话，实际上整个会话被中间人控制。 简而">
+<meta name="keywords" content="charle,https">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux理解-一切皆文件">
-<meta property="og:url" content="https://scoolor.github.io/2018/11/08/linux-everything-is-file/index.html">
+<meta property="og:title" content="为什么charles&#x2F;fiddler可以明文抓取https">
+<meta property="og:url" content="https://scoolor.github.io/2018/11/10/charles-https/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
-<meta property="og:description" content="linux/unix下的哲学核心思想是‘一切皆文件’。“一切皆文件”，指的是，对所有文件（目录、字符设备、块设备、套接字、打印机、进程、线程、管道等）操作，读写都可用fopen()/fclose()/fwrite()/fread()等函数进行处理。屏蔽了硬件的区别，所有设备都抽象成文件，提供统一的接口给用户。虽然类型各不相同，但是对其提供的却是同一套操作界面。更进一步，对文件的操作也可以跨文件系统">
+<meta property="og:description" content="阅读本文首先需要了解https的基本原理，可以参考 https://scoolor.github.io/2018/09/03/https/ 理解https的抓包原理，首先要理解中间人的概念，也就是MITM。 MITM介绍MITM（Man-In-The-Middle，中间人），能够与网络通信的两端分别创建连接，交换其收到的数据，使得通讯两端都认为自己直接与对方对话，实际上整个会话被中间人控制。 简而">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-08T01:01:01.080Z">
+<meta property="og:updated_time" content="2018-11-10T02:31:51.049Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux理解-一切皆文件">
-<meta name="twitter:description" content="linux/unix下的哲学核心思想是‘一切皆文件’。“一切皆文件”，指的是，对所有文件（目录、字符设备、块设备、套接字、打印机、进程、线程、管道等）操作，读写都可用fopen()/fclose()/fwrite()/fread()等函数进行处理。屏蔽了硬件的区别，所有设备都抽象成文件，提供统一的接口给用户。虽然类型各不相同，但是对其提供的却是同一套操作界面。更进一步，对文件的操作也可以跨文件系统">
+<meta name="twitter:title" content="为什么charles&#x2F;fiddler可以明文抓取https">
+<meta name="twitter:description" content="阅读本文首先需要了解https的基本原理，可以参考 https://scoolor.github.io/2018/09/03/https/ 理解https的抓包原理，首先要理解中间人的概念，也就是MITM。 MITM介绍MITM（Man-In-The-Middle，中间人），能够与网络通信的两端分别创建连接，交换其收到的数据，使得通讯两端都认为自己直接与对方对话，实际上整个会话被中间人控制。 简而">
 
     
     <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
@@ -78,14 +78,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/11/08/linux-everything-is-file/" title="Linux理解-一切皆文件" itemprop="url">Linux理解-一切皆文件</a>
+      <a href="/2018/11/10/charles-https/" title="为什么charles/fiddler可以明文抓取https" itemprop="url">为什么charles/fiddler可以明文抓取https</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
 		
   <p class="article-time">
-    <time datetime="2018-11-08T00:34:42.000Z" itemprop="datePublished"> Published 2018-11-08</time>
+    <time datetime="2018-11-10T01:06:11.000Z" itemprop="datePublished"> Published 2018-11-10</time>
     
   </p>
 </header>
@@ -94,63 +94,30 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#文件类型"><span class="toc-number">1.</span> <span class="toc-text">文件类型</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MITM介绍"><span class="toc-number">1.</span> <span class="toc-text">MITM介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#主要原理介绍"><span class="toc-number">2.</span> <span class="toc-text">主要原理介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单总结："><span class="toc-number">3.</span> <span class="toc-text">简单总结：</span></a></li></ol>
 		
 		</div>
 		
-		<p>linux/unix下的哲学核心思想是‘一切皆文件’。<br>“一切皆文件”，指的是，对所有文件（目录、字符设备、块设备、套接字、打印机、进程、线程、管道等）操作，读写都可用fopen()/fclose()/fwrite()/fread()等函数进行处理。屏蔽了硬件的区别，所有设备都抽象成文件，提供统一的接口给用户。虽然类型各不相同，但是对其提供的却是同一套操作界面。更进一步，对文件的操作也可以跨文件系统执行。</p>
-<p>那么如何操作一个已经打开的文件？<br>文件描述符（file descriptor），简称fd。这里就使用到了“文件描述符”，它是一个对应某个已经打开的文件的索引（非负整数）。</p>
-<h2 id="文件类型"><a href="#文件类型" class="headerlink" title="文件类型"></a>文件类型</h2><table>
-<thead>
-<tr>
-<th>类型</th>
-<th>简称</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>普通文件</td>
-<td>-,Normal File</td>
-<td>如mp4、pdf、html log；<br>用户可以根据访问权限对普通文件进行查看、更改和删除，包括 纯文本文件(ASCII)；二进制文件(binary)；数据格式的文件(data);各种压缩文件.第一个属性为 [-]</td>
-</tr>
-<tr>
-<td>目录文件</td>
-<td>d,directory file</td>
-<td>/usr/ /home/ <br>目录文件包含了各自目录下的文件名和指向这些文件的指针，打开目录事实上就是打开目录文件，只要有访问权限，就可以随意访问这些目录下的文件。能用#cd命令进入的。第一个属性为[d]，例如 [drwxrwxrwx]</td>
-</tr>
-<tr>
-<td>硬链接</td>
-<td>-,hard links</td>
-<td>若一个inode号对应多个文件名，则称这些文件为硬链接。硬链接就是同一个文件使用了多个别名删除时,只会删除链接, 不会删除文件;<br>硬链接的局限性:1.不能引用自身文件系统以外的文件,即不能引用其他分区的文件;2.无法引用目录;</td>
-</tr>
-<tr>
-<td>符号链接（软链接）</td>
-<td>l,symbolic link</td>
-<td>若文件用户数据块中存放的内容是另一文件的路径名的指向，则该文件就是软连接，克服硬链接的局限性, 类似于快捷方式,使用与硬链接相同。</td>
-</tr>
-<tr>
-<td>字符设备文件</td>
-<td>c,char</td>
-<td>文件一般隐藏在/dev目录下，在进行设备读取和外设交互时会被使用到<br>即串行端口的接口设备，例如键盘、鼠标等等。第一个属性为 [c]。<br>#/dev/tty的属性是 crw-rw-rw-，注意前面第一个字 c，这表示字符设备文件</td>
-</tr>
-<tr>
-<td>块设备文件</td>
-<td>b,block</td>
-<td>存储数据以供系统存取的接口设备，简单而言就是硬盘。<br># /dev/hda1 的属性是 brw-r—– ，注意前面的第一个字符是b，这表示块设备，比如硬盘，光驱等设备<br>系统中的所有设备要么是块设备文件，要么是字符设备文件，无一例外</td>
-</tr>
-<tr>
-<td>FIFO管道文件</td>
-<td>p,pipe</td>
-<td>管道文件主要用于进程间通讯。FIFO解决多个程序同时存取一个文件所造成的错误。比如使用mkfifo命令可以创建一个FIFO文件，启用一个进程A从FIFO文件里读数据，启动进程B往FIFO里写数据，先进先出，随写随读。<br># pipe</td>
-</tr>
-<tr>
-<td>套接字</td>
-<td>s,socket</td>
-<td>以启动一个程序来监听客户端的要求，客户端就可以通过套接字来进行数据通信。用于进程间的网络通信，也可以用于本机之间的非网络通信，第一个属性为 [s]，这些文件一般隐藏在/var/run目录下，证明着相关进程的存在</td>
-</tr>
-</tbody>
-</table>
+		<p>阅读本文首先需要了解https的基本原理，可以参考 <a href="https://scoolor.github.io/2018/09/03/https/">https://scoolor.github.io/2018/09/03/https/</a></p>
+<p>理解https的抓包原理，首先要理解中间人的概念，也就是MITM。</p>
+<h2 id="MITM介绍"><a href="#MITM介绍" class="headerlink" title="MITM介绍"></a>MITM介绍</h2><p>MITM（Man-In-The-Middle，中间人），能够与网络通信的两端分别创建连接，交换其收到的数据，使得通讯两端都认为自己直接与对方对话，实际上整个会话被中间人控制。</p>
+<p>简而言之，就是在真正的服务端看来，中间人是客户端；而对真正的客户端来说，中间人是服务端。</p>
+<h2 id="主要原理介绍"><a href="#主要原理介绍" class="headerlink" title="主要原理介绍"></a>主要原理介绍</h2><p>常见的http/https抓包工具charles/fiddler的工作原理与中间人一致，都是通过创建本地的proxy服务，然后修改浏览器的proxy配置来达到拦截流量的目的。</p>
+<p>对于https连接来说，中间人要满足以下两点，才能实现真正的明文代理:</p>
+<ol>
+<li>中间人，作为客户端与真实服务端建立连接这一步不会有问题，因为服务端不会校验客户端的身份；</li>
+<li>中间人，作为服务端与真实客户端建立连接，这里会有客户端信任服务端的问题，也就是服务端必须有对应域名的私钥；</li>
+</ol>
+<p>中间人要拿到私钥只能通过如下方式：</p>
+<ol>
+<li>去网站服务端拿到私钥；</li>
+<li>去CA处拿域名签发私钥；</li>
+<li>自己签发证书，切要被浏览器信任；</li>
+</ol>
+<p>不用解释，抓包工具只能使用第三种方式取得中间人的身份。</p>
+<p>使用抓包工具进行https抓包的时候，需要在客户端安装charles/fiddler的根证书，这里实际上起认证中心（CA）的作用。</p>
+<p>charles能够抓包的关键是客户端会往系统受信任的根证书列表中导入charles生成的证书，而这个证书会被浏览器信任，也就是charles给自己创建了一个认证中心CA，客户端拿着中间人签发的证书去中间人自己的CA去认证，当然认为这个证书是有效的。因此代理作为中间人取得了客户端的信任。</p>
+<h2 id="简单总结："><a href="#简单总结：" class="headerlink" title="简单总结："></a>简单总结：</h2><p>charle/fiddler抓包https时，作为中间人，与客户端连接时，中间人自己生成证书，并且使用自己的CA进行签名，取得客户端的信任；与服务端连接时，中间人接受服务端的证书，与服务端不存在信任问题。因此就实现了https的代理。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -159,7 +126,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a>
+  <span></span> <a href="/tags/charle/">charle</a><a href="/tags/https/">https</a>
   </div>
 
 </div>
@@ -168,7 +135,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://scoolor.github.io/2018/11/08/linux-everything-is-file/" data-title="Linux理解-一切皆文件 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  <div data-url="https://scoolor.github.io/2018/11/10/charles-https/" data-title="为什么charles/fiddler可以明文抓取https | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -181,19 +148,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/11/10/charles-https/" title="为什么charles/fiddler可以明文抓取https">
-  <strong>上一篇：</strong><br/>
-  <span>
-  为什么charles/fiddler可以明文抓取https</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/11/07/linux-inode/"  title="理解 Linux inode">
+<a href="/2018/11/08/linux-everything-is-file/"  title="Linux理解-一切皆文件">
  <strong>下一篇：</strong><br/> 
- <span>理解 Linux inode
+ <span>Linux理解-一切皆文件
 </span>
 </a>
 </div>
@@ -210,7 +169,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#文件类型"><span class="toc-number">1.</span> <span class="toc-text">文件类型</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MITM介绍"><span class="toc-number">1.</span> <span class="toc-text">MITM介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#主要原理介绍"><span class="toc-number">2.</span> <span class="toc-text">主要原理介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单总结："><span class="toc-number">3.</span> <span class="toc-text">简单总结：</span></a></li></ol>
  
   </div>
 
