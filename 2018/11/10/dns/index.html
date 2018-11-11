@@ -11,21 +11,21 @@
     
 
     
-    <meta name="description" content="域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。 它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。 DNS使用TCP和UDP端口53。 查询过程虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。 linux命令行工具可以显示整个查询过程。 1dig math.stac">
+    <meta name="description" content="域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。 它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。 DNS同时使用TCP和UDP协议，端口53。 查询过程虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。 linux命令行工具可以显示整个查询过程。 1dig math">
 <meta name="keywords" content="dns">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DNS域名系统">
 <meta property="og:url" content="https://scoolor.github.io/2018/11/10/dns/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
-<meta property="og:description" content="域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。 它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。 DNS使用TCP和UDP端口53。 查询过程虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。 linux命令行工具可以显示整个查询过程。 1dig math.stac">
+<meta property="og:description" content="域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。 它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。 DNS同时使用TCP和UDP协议，端口53。 查询过程虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。 linux命令行工具可以显示整个查询过程。 1dig math">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863423326.jpg">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863294628.jpg">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863343065.jpg">
-<meta property="og:updated_time" content="2018-11-10T15:38:07.305Z">
+<meta property="og:updated_time" content="2018-11-10T15:41:34.677Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DNS域名系统">
-<meta name="twitter:description" content="域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。 它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。 DNS使用TCP和UDP端口53。 查询过程虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。 linux命令行工具可以显示整个查询过程。 1dig math.stac">
+<meta name="twitter:description" content="域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。 它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。 DNS同时使用TCP和UDP协议，端口53。 查询过程虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。 linux命令行工具可以显示整个查询过程。 1dig math">
 <meta name="twitter:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541863705/1541863423326.jpg">
 
     
@@ -104,7 +104,7 @@
 		
 		<p>域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。</p>
 <p>它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。</p>
-<p>DNS使用TCP和UDP端口53。</p>
+<p>DNS同时使用TCP和UDP协议，端口53。</p>
 <h2 id="查询过程"><a href="#查询过程" class="headerlink" title="查询过程"></a>查询过程</h2><p>虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。</p>
 <p>linux命令行工具可以显示整个查询过程。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig math.stackexchange.com</span><br></pre></td></tr></table></figure>
@@ -144,7 +144,7 @@
 <h2 id="DNS协议报文"><a href="#DNS协议报文" class="headerlink" title="DNS协议报文"></a>DNS协议报文</h2><p>dns请求和应答都是用相同的报文格式，分成5个段（有的报文段在不同的情况下可能为空），如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+---------------------+</span><br><span class="line">|        Header       | 报文头</span><br><span class="line">+---------------------+</span><br><span class="line">|       Question      | 查询的问题</span><br><span class="line">+---------------------+</span><br><span class="line">|        Answer       | 应答</span><br><span class="line">+---------------------+</span><br><span class="line">|      Authority      | 授权应答</span><br><span class="line">+---------------------+</span><br><span class="line">|      Additional     | 附加信息</span><br><span class="line">+---------------------+</span><br></pre></td></tr></table></figure>
 <p>Header段是必须存在的，它定义了报文是请求还是应答，也定义了其他段是否需要存在，以及是标准查询还是其他。 </p>
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>执行 <code>dig baidu.com</code>，使用wireshark抓包，查看请求与响应报文,看到使用的是UDP协议。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>执行 <code>dig baidu.com</code>，使用wireshark抓包，查看请求与响应报文,本次请求抓包看到使用的是UDP协议。那么为什么只是用了UDP协议呢？留个悬念。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig baidu.com</span><br></pre></td></tr></table></figure>
 <p>返回解决如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">; &lt;&lt;&gt;&gt; DiG 9.9.5-9+deb8u16-Debian &lt;&lt;&gt;&gt; baidu.com</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 26178</span><br><span class="line">;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1</span><br><span class="line"></span><br><span class="line">;; OPT PSEUDOSECTION:</span><br><span class="line">; EDNS: version: 0, flags:; udp: 512</span><br><span class="line">;; QUESTION SECTION:</span><br><span class="line">;baidu.com.			IN	A</span><br><span class="line"></span><br><span class="line">;; ANSWER SECTION:</span><br><span class="line">baidu.com.		195	IN	A	220.181.57.216</span><br><span class="line">baidu.com.		195	IN	A	123.125.115.110</span><br><span class="line"></span><br><span class="line">;; Query time: 226 msec</span><br><span class="line">;; SERVER: 10.0.2.3#53(10.0.2.3)</span><br><span class="line">;; WHEN: Sat Nov 10 23:12:39 CST 2018</span><br><span class="line">;; MSG SIZE  rcvd: 70</span><br></pre></td></tr></table></figure>
@@ -185,6 +185,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2018/11/10/dns-udp-tcp/" title="DNS为什么既使用TCP又使用UDP？">
+  <strong>上一篇：</strong><br/>
+  <span>
+  DNS为什么既使用TCP又使用UDP？</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2018/11/10/network-promiscuous/"  title="网卡混杂模式介绍">
@@ -226,6 +234,10 @@
 			
 		
 			
+				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
 			
 		
@@ -234,11 +246,11 @@
 			
 		
 			
-				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
+				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/base64/" title="base64">base64<sup>1</sup></a></li>
+				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
 			
 		
 			
@@ -246,7 +258,11 @@
 			
 		
 			
-				<li><a href="/tags/dns/" title="dns">dns<sup>1</sup></a></li>
+				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/base64/" title="base64">base64<sup>1</sup></a></li>
 			
 		
 			

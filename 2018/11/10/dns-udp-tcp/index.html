@@ -1,0 +1,510 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>DNS为什么既使用TCP又使用UDP？ | 为什么这么涛的个人博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="为什么这么涛">
+    
+
+    
+    <meta name="description" content="在 https://scoolor.github.io/2018/11/10/dns/ 一文中简单整理了DNS协议的一些知识，其中涉及到DNS协议同时会占用53端口，且同时使用UDP和TCP协议，我们使用Wireshark抓包，看到在解析时仅仅使用了UDP协议，这是为什么呢？本文简要说明一下。 TCP与UDP协议首先简要介绍一下TCP和UDP协议。 TCP（Transmission Control">
+<meta name="keywords" content="dns,tcp,udp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DNS为什么既使用TCP又使用UDP？">
+<meta property="og:url" content="https://scoolor.github.io/2018/11/10/dns-udp-tcp/index.html">
+<meta property="og:site_name" content="为什么这么涛的个人博客">
+<meta property="og:description" content="在 https://scoolor.github.io/2018/11/10/dns/ 一文中简单整理了DNS协议的一些知识，其中涉及到DNS协议同时会占用53端口，且同时使用UDP和TCP协议，我们使用Wireshark抓包，看到在解析时仅仅使用了UDP协议，这是为什么呢？本文简要说明一下。 TCP与UDP协议首先简要介绍一下TCP和UDP协议。 TCP（Transmission Control">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-11T01:14:16.313Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DNS为什么既使用TCP又使用UDP？">
+<meta name="twitter:description" content="在 https://scoolor.github.io/2018/11/10/dns/ 一文中简单整理了DNS协议的一些知识，其中涉及到DNS协议同时会占用53端口，且同时使用UDP和TCP协议，我们使用Wireshark抓包，看到在解析时仅仅使用了UDP协议，这是为什么呢？本文简要说明一下。 TCP与UDP协议首先简要介绍一下TCP和UDP协议。 TCP（Transmission Control">
+
+    
+    <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="为什么这么涛的个人博客">为什么这么涛的个人博客</a></h1>
+				<h2 class="blog-motto">做一件事最好的时机是十年前，其次就是现在</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:scoolor.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/11/10/dns-udp-tcp/" title="DNS为什么既使用TCP又使用UDP？" itemprop="url">DNS为什么既使用TCP又使用UDP？</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
+		
+  <p class="article-time">
+    <time datetime="2018-11-10T15:43:46.000Z" itemprop="datePublished"> Published 2018-11-10</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP与UDP协议"><span class="toc-number">1.</span> <span class="toc-text">TCP与UDP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#区别如下"><span class="toc-number">1.1.</span> <span class="toc-text">区别如下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简要总结"><span class="toc-number">1.2.</span> <span class="toc-text">简要总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么DNS既使用TCP又使用UDP？"><span class="toc-number">2.</span> <span class="toc-text">为什么DNS既使用TCP又使用UDP？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；"><span class="toc-number">2.1.</span> <span class="toc-text">DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么既使用TCP又使用UDP？"><span class="toc-number">2.2.</span> <span class="toc-text">为什么既使用TCP又使用UDP？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#区域传送时使用TCP，主要有一下两点考虑"><span class="toc-number">2.3.</span> <span class="toc-text">区域传送时使用TCP，主要有一下两点考虑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#域名解析时使用UDP协议"><span class="toc-number">2.4.</span> <span class="toc-text">域名解析时使用UDP协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">4.</span> <span class="toc-text">参考链接</span></a></li></ol>
+		
+		</div>
+		
+		<p>在 <a href="https://scoolor.github.io/2018/11/10/dns/">https://scoolor.github.io/2018/11/10/dns/</a> 一文中简单整理了DNS协议的一些知识，其中涉及到DNS协议同时会占用53端口，且同时使用UDP和TCP协议，我们使用Wireshark抓包，看到在解析时仅仅使用了UDP协议，这是为什么呢？本文简要说明一下。</p>
+<h2 id="TCP与UDP协议"><a href="#TCP与UDP协议" class="headerlink" title="TCP与UDP协议"></a>TCP与UDP协议</h2><p>首先简要介绍一下TCP和UDP协议。</p>
+<p>TCP（Transmission Control Protocol，传输控制协议）是一种<em>面向连接的协议</em>，提供可靠的数据传输，一般服务质量要求比较高的情况，使用这个协议。</p>
+<p>UDP(User Datagram Protocol，用户数据报协议）是用户数据报协议，是一种<em>无连接的传输层协议</em>，提供面向事务的简单不可靠信息传送服务。 </p>
+<h3 id="区别如下"><a href="#区别如下" class="headerlink" title="区别如下"></a>区别如下</h3><p>TCP 是面向连接的传输控制协议，而UDP提供了无链接的数据报服务，类似电话与短信；</p>
+<p>TCP 面向连接，提供可靠的数据服务；</p>
+<p>TCP首部开销20字节,UDP首部开销8字节；</p>
+<p>TCP逻辑通信信道是全双工的可靠信道，UDP则是不可靠信道；</p>
+<p>UDP没有拥塞机制，因此网络出现拥堵不会使源主机的发送效率降低（有利于实时会议视频等）；</p>
+<p>TCP的连接只能是点到点的,UDP支持一对一，多对一，多对多的交互通信；</p>
+<p>UDP适用于一次只传送少量数据、对可靠性要求不高的应用环境；</p>
+<h3 id="简要总结"><a href="#简要总结" class="headerlink" title="简要总结"></a>简要总结</h3><p>TCP：面向连接、传输可靠(保证数据正确性,保证数据顺序)、用于传输大量数据(流模式)、速度慢，建立连接需要开销较多(时间，系统资源)。</p>
+<p>UDP：面向非连接、传输不可靠、用于传输少量数据(数据包模式)、速度快。</p>
+<p>既然UDP是一种不可靠的网络协议，那么还有什么使用价值或必要呢？</p>
+<p>其实不然，在有些情况下UDP协议可能会变得非常有用。</p>
+<p>因为UDP具有TCP所望尘莫及的速度优势。虽然TCP协议中植入了各种安全保障功能，但是在实际执行的过程中会占用大量的系统开销，无疑使速度受到严重的影响。反观UDP由于排除了信息可靠传递机制，将安全和排序等功能移交给上层应用来完成，极大降低了执行时间，使速度得到了保证。 </p>
+<h2 id="为什么DNS既使用TCP又使用UDP？"><a href="#为什么DNS既使用TCP又使用UDP？" class="headerlink" title="为什么DNS既使用TCP又使用UDP？"></a>为什么DNS既使用TCP又使用UDP？</h2><h3 id="DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；"><a href="#DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；" class="headerlink" title="DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；"></a>DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；</h3><p>DNS的规范规定了2种类型的DNS服务器，一个叫主DNS服务器，一个叫辅助DNS服务器。在一个区中主DNS服务器从自己本机的数据文件中读取该区的DNS数据信息，而辅助DNS服务器则从区的主DNS服务器中读取该区的DNS数据信息。当一个辅助DNS服务器启动时，它需要与主DNS服务器通信，并加载数据信息，这就叫做区传送（zone transfer）。 </p>
+<p>区域传输是DNS的事务，对准确性要求比较高，而且会产生大于512字节的数据包，因此使用TCP协议。</p>
+<h3 id="为什么既使用TCP又使用UDP？"><a href="#为什么既使用TCP又使用UDP？" class="headerlink" title="为什么既使用TCP又使用UDP？"></a>为什么既使用TCP又使用UDP？</h3><p>首先了解一下TCP与UDP传送字节的长度限制。</p>
+<p><em>UDP报文的最大长度为512字节，而TCP则允许报文长度超过512字节</em>。当DNS查询超过512字节时，协议的TC标志出现删除标志，这时则使用TCP发送。通常传统的UDP报文一般不会大于512字节。</p>
+<h3 id="区域传送时使用TCP，主要有一下两点考虑"><a href="#区域传送时使用TCP，主要有一下两点考虑" class="headerlink" title="区域传送时使用TCP，主要有一下两点考虑"></a>区域传送时使用TCP，主要有一下两点考虑</h3><ol>
+<li>辅域名服务器会定时（一般时3小时）向主域名服务器进行查询以便了解数据是否有变动。如有变动，则会执行一次区域传送，进行数据同步。区域传送将使用TCP而不是UDP，因为数据同步传送的数据量比一个请求和应答的数据量要多得多。 </li>
+<li>TCP是一种可靠的连接，保证了数据的准确性。  </li>
+</ol>
+<h3 id="域名解析时使用UDP协议"><a href="#域名解析时使用UDP协议" class="headerlink" title="域名解析时使用UDP协议"></a>域名解析时使用UDP协议</h3><p>客户端向DNS服务器查询域名，一般返回的内容都不超过512字节，用UDP传输即可。不用经过TCP三次握手，这样DNS服务器负载更低，响应更快。虽然从理论上说，客户端也可以指定向DNS服务器查询的时候使用TCP，但事实上，很多DNS服务器进行配置的时候，仅支持UDP查询包。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>大多数情况下，DNS解析请求和响应都很小，使用UDP协议更加高效，虽然没有TCP可靠，但是速度快，消耗的系统资源更少，非常适合少量数据包的传输。<br>一些DNS事务，比如区域传输或其他附加查询，可能会产生大于512字节的数据包，因此使用TCP更加可靠，使用TCP会减少丢包和重新发包的情况，因此更加可靠与高效。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol>
+<li><a href="http://benbenxiongyuan.iteye.com/blog/1088085" target="_blank" rel="noopener">http://benbenxiongyuan.iteye.com/blog/1088085</a></li>
+<li><a href="https://www.cnblogs.com/549294286/p/5172435.html" target="_blank" rel="noopener">https://www.cnblogs.com/549294286/p/5172435.html</a></li>
+<li><a href="https://www.quora.com/When-does-DNS-use-TCP-instead-of-UDP-Why" target="_blank" rel="noopener">https://www.quora.com/When-does-DNS-use-TCP-instead-of-UDP-Why</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/dns/">dns</a><a href="/tags/tcp/">tcp</a><a href="/tags/udp/">udp</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://scoolor.github.io/2018/11/10/dns-udp-tcp/" data-title="DNS为什么既使用TCP又使用UDP？ | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/11/10/dns/"  title="DNS域名系统">
+ <strong>下一篇：</strong><br/> 
+ <span>DNS域名系统
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP与UDP协议"><span class="toc-number">1.</span> <span class="toc-text">TCP与UDP协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#区别如下"><span class="toc-number">1.1.</span> <span class="toc-text">区别如下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简要总结"><span class="toc-number">1.2.</span> <span class="toc-text">简要总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么DNS既使用TCP又使用UDP？"><span class="toc-number">2.</span> <span class="toc-text">为什么DNS既使用TCP又使用UDP？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；"><span class="toc-number">2.1.</span> <span class="toc-text">DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么既使用TCP又使用UDP？"><span class="toc-number">2.2.</span> <span class="toc-text">为什么既使用TCP又使用UDP？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#区域传送时使用TCP，主要有一下两点考虑"><span class="toc-number">2.3.</span> <span class="toc-text">区域传送时使用TCP，主要有一下两点考虑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#域名解析时使用UDP协议"><span class="toc-number">2.4.</span> <span class="toc-text">域名解析时使用UDP协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">4.</span> <span class="toc-text">参考链接</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/base64/" title="base64">base64<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://scoolor.com" target="_blank" title="Scoolor">Scoolor</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Scoolor, a coder. <br/>
+			This is my blog, just do it!</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/scoolor" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/mu-yi-xiao-jiang" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:scoolor@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="为什么这么涛">为什么这么涛</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-92081918-2', 'scoolor.github.io');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

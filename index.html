@@ -75,6 +75,91 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/11/10/dns-udp-tcp/" title="DNS为什么既使用TCP又使用UDP？" itemprop="url">DNS为什么既使用TCP又使用UDP？</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
+		
+  <p class="article-time">
+    <time datetime="2018-11-10T15:43:46.000Z" itemprop="datePublished"> Published 2018-11-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>在 <a href="https://scoolor.github.io/2018/11/10/dns/">https://scoolor.github.io/2018/11/10/dns/</a> 一文中简单整理了DNS协议的一些知识，其中涉及到DNS协议同时会占用53端口，且同时使用UDP和TCP协议，我们使用Wireshark抓包，看到在解析时仅仅使用了UDP协议，这是为什么呢？本文简要说明一下。</p>
+<h2 id="TCP与UDP协议"><a href="#TCP与UDP协议" class="headerlink" title="TCP与UDP协议"></a>TCP与UDP协议</h2><p>首先简要介绍一下TCP和UDP协议。</p>
+<p>TCP（Transmission Control Protocol，传输控制协议）是一种<em>面向连接的协议</em>，提供可靠的数据传输，一般服务质量要求比较高的情况，使用这个协议。</p>
+<p>UDP(User Datagram Protocol，用户数据报协议）是用户数据报协议，是一种<em>无连接的传输层协议</em>，提供面向事务的简单不可靠信息传送服务。 </p>
+<h3 id="区别如下"><a href="#区别如下" class="headerlink" title="区别如下"></a>区别如下</h3><p>TCP 是面向连接的传输控制协议，而UDP提供了无链接的数据报服务，类似电话与短信；</p>
+<p>TCP 面向连接，提供可靠的数据服务；</p>
+<p>TCP首部开销20字节,UDP首部开销8字节；</p>
+<p>TCP逻辑通信信道是全双工的可靠信道，UDP则是不可靠信道；</p>
+<p>UDP没有拥塞机制，因此网络出现拥堵不会使源主机的发送效率降低（有利于实时会议视频等）；</p>
+<p>TCP的连接只能是点到点的,UDP支持一对一，多对一，多对多的交互通信；</p>
+<p>UDP适用于一次只传送少量数据、对可靠性要求不高的应用环境；</p>
+<h3 id="简要总结"><a href="#简要总结" class="headerlink" title="简要总结"></a>简要总结</h3><p>TCP：面向连接、传输可靠(保证数据正确性,保证数据顺序)、用于传输大量数据(流模式)、速度慢，建立连接需要开销较多(时间，系统资源)。</p>
+<p>UDP：面向非连接、传输不可靠、用于传输少量数据(数据包模式)、速度快。</p>
+<p>既然UDP是一种不可靠的网络协议，那么还有什么使用价值或必要呢？</p>
+<p>其实不然，在有些情况下UDP协议可能会变得非常有用。</p>
+<p>因为UDP具有TCP所望尘莫及的速度优势。虽然TCP协议中植入了各种安全保障功能，但是在实际执行的过程中会占用大量的系统开销，无疑使速度受到严重的影响。反观UDP由于排除了信息可靠传递机制，将安全和排序等功能移交给上层应用来完成，极大降低了执行时间，使速度得到了保证。 </p>
+<h2 id="为什么DNS既使用TCP又使用UDP？"><a href="#为什么DNS既使用TCP又使用UDP？" class="headerlink" title="为什么DNS既使用TCP又使用UDP？"></a>为什么DNS既使用TCP又使用UDP？</h2><h3 id="DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；"><a href="#DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；" class="headerlink" title="DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；"></a>DNS在进行区域传输的时候使用TCP协议，其它时候则使用UDP协议；</h3><p>DNS的规范规定了2种类型的DNS服务器，一个叫主DNS服务器，一个叫辅助DNS服务器。在一个区中主DNS服务器从自己本机的数据文件中读取该区的DNS数据信息，而辅助DNS服务器则从区的主DNS服务器中读取该区的DNS数据信息。当一个辅助DNS服务器启动时，它需要与主DNS服务器通信，并加载数据信息，这就叫做区传送（zone transfer）。 </p>
+<p>区域传输是DNS的事务，对准确性要求比较高，而且会产生大于512字节的数据包，因此使用TCP协议。</p>
+<h3 id="为什么既使用TCP又使用UDP？"><a href="#为什么既使用TCP又使用UDP？" class="headerlink" title="为什么既使用TCP又使用UDP？"></a>为什么既使用TCP又使用UDP？</h3><p>首先了解一下TCP与UDP传送字节的长度限制。</p>
+<p><em>UDP报文的最大长度为512字节，而TCP则允许报文长度超过512字节</em>。当DNS查询超过512字节时，协议的TC标志出现删除标志，这时则使用TCP发送。通常传统的UDP报文一般不会大于512字节。</p>
+<h3 id="区域传送时使用TCP，主要有一下两点考虑"><a href="#区域传送时使用TCP，主要有一下两点考虑" class="headerlink" title="区域传送时使用TCP，主要有一下两点考虑"></a>区域传送时使用TCP，主要有一下两点考虑</h3><ol>
+<li>辅域名服务器会定时（一般时3小时）向主域名服务器进行查询以便了解数据是否有变动。如有变动，则会执行一次区域传送，进行数据同步。区域传送将使用TCP而不是UDP，因为数据同步传送的数据量比一个请求和应答的数据量要多得多。 </li>
+<li>TCP是一种可靠的连接，保证了数据的准确性。  </li>
+</ol>
+<h3 id="域名解析时使用UDP协议"><a href="#域名解析时使用UDP协议" class="headerlink" title="域名解析时使用UDP协议"></a>域名解析时使用UDP协议</h3><p>客户端向DNS服务器查询域名，一般返回的内容都不超过512字节，用UDP传输即可。不用经过TCP三次握手，这样DNS服务器负载更低，响应更快。虽然从理论上说，客户端也可以指定向DNS服务器查询的时候使用TCP，但事实上，很多DNS服务器进行配置的时候，仅支持UDP查询包。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>大多数情况下，DNS解析请求和响应都很小，使用UDP协议更加高效，虽然没有TCP可靠，但是速度快，消耗的系统资源更少，非常适合少量数据包的传输。<br>一些DNS事务，比如区域传输或其他附加查询，可能会产生大于512字节的数据包，因此使用TCP更加可靠，使用TCP会减少丢包和重新发包的情况，因此更加可靠与高效。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol>
+<li><a href="http://benbenxiongyuan.iteye.com/blog/1088085" target="_blank" rel="noopener">http://benbenxiongyuan.iteye.com/blog/1088085</a></li>
+<li><a href="https://www.cnblogs.com/549294286/p/5172435.html" target="_blank" rel="noopener">https://www.cnblogs.com/549294286/p/5172435.html</a></li>
+<li><a href="https://www.quora.com/When-does-DNS-use-TCP-instead-of-UDP-Why" target="_blank" rel="noopener">https://www.quora.com/When-does-DNS-use-TCP-instead-of-UDP-Why</a></li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/dns/">dns</a><a href="/tags/tcp/">tcp</a><a href="/tags/udp/">udp</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/11/10/dns/" title="DNS域名系统" itemprop="url">DNS域名系统</a>
   </h1>
   <p class="article-author">By
@@ -90,7 +175,7 @@
         
         <p>域名系统（英文：Domain Name System，缩写：DNS），是互联网的重要基础协议，作用就是根据域名查出对应的IP地址。</p>
 <p>它作为将域名和IP地址相互映射的一个分布式数据库，能够使人更方便地访问互联网。</p>
-<p>DNS使用TCP和UDP端口53。</p>
+<p>DNS同时使用TCP和UDP协议，端口53。</p>
 <h2 id="查询过程"><a href="#查询过程" class="headerlink" title="查询过程"></a>查询过程</h2><p>虽然dns只返回一个ip地址，但是查询过程非常复杂，一般分为多个步骤。</p>
 <p>linux命令行工具可以显示整个查询过程。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig math.stackexchange.com</span><br></pre></td></tr></table></figure>
@@ -130,7 +215,7 @@
 <h2 id="DNS协议报文"><a href="#DNS协议报文" class="headerlink" title="DNS协议报文"></a>DNS协议报文</h2><p>dns请求和应答都是用相同的报文格式，分成5个段（有的报文段在不同的情况下可能为空），如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+---------------------+</span><br><span class="line">|        Header       | 报文头</span><br><span class="line">+---------------------+</span><br><span class="line">|       Question      | 查询的问题</span><br><span class="line">+---------------------+</span><br><span class="line">|        Answer       | 应答</span><br><span class="line">+---------------------+</span><br><span class="line">|      Authority      | 授权应答</span><br><span class="line">+---------------------+</span><br><span class="line">|      Additional     | 附加信息</span><br><span class="line">+---------------------+</span><br></pre></td></tr></table></figure>
 <p>Header段是必须存在的，它定义了报文是请求还是应答，也定义了其他段是否需要存在，以及是标准查询还是其他。 </p>
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>执行 <code>dig baidu.com</code>，使用wireshark抓包，查看请求与响应报文,看到使用的是UDP协议。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>执行 <code>dig baidu.com</code>，使用wireshark抓包，查看请求与响应报文,本次请求抓包看到使用的是UDP协议。那么为什么只是用了UDP协议呢？留个悬念。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dig baidu.com</span><br></pre></td></tr></table></figure>
 <p>返回解决如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">; &lt;&lt;&gt;&gt; DiG 9.9.5-9+deb8u16-Debian &lt;&lt;&gt;&gt; baidu.com</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 26178</span><br><span class="line">;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1</span><br><span class="line"></span><br><span class="line">;; OPT PSEUDOSECTION:</span><br><span class="line">; EDNS: version: 0, flags:; udp: 512</span><br><span class="line">;; QUESTION SECTION:</span><br><span class="line">;baidu.com.			IN	A</span><br><span class="line"></span><br><span class="line">;; ANSWER SECTION:</span><br><span class="line">baidu.com.		195	IN	A	220.181.57.216</span><br><span class="line">baidu.com.		195	IN	A	123.125.115.110</span><br><span class="line"></span><br><span class="line">;; Query time: 226 msec</span><br><span class="line">;; SERVER: 10.0.2.3#53(10.0.2.3)</span><br><span class="line">;; WHEN: Sat Nov 10 23:12:39 CST 2018</span><br><span class="line">;; MSG SIZE  rcvd: 70</span><br></pre></td></tr></table></figure>
@@ -795,80 +880,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2018/08/16/linux-redirect/" title="Linux重定向" itemprop="url">Linux重定向</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
-		
-  <p class="article-time">
-    <time datetime="2018-08-16T14:09:19.000Z" itemprop="datePublished"> Published 2018-08-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>了解linux重定向之前需要先简单介绍一下文件描述符（fd）。</p>
-<h2 id="linux文件描述符："><a href="#linux文件描述符：" class="headerlink" title="linux文件描述符："></a>linux文件描述符：</h2><p>文件描述符是一个非负整数，是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开或者创建一个新文件时，内核向进程返回一个文件描述符。<br>一般，标准输入（standard input）的文件描述符是 0，标准输出（standard output）是 1，标准错误（standard error）是 2；文件描述符的有效范围是 0 到 OPEN_MAX。</p>
-<p>linux shell下常用输入输出操作符是：</p>
-<ol>
-<li>标准输入(stdin) ：代码为 0 ，使用 &lt; 或 &lt;&lt; ； /dev/stdin -&gt; /proc/self/fd/0   0代表：/dev/stdin </li>
-<li>标准输出(stdout)：代码为 1 ，使用 &gt; 或 &gt;&gt; ； /dev/stdout -&gt; /proc/self/fd/1  1代表：/dev/stdout</li>
-<li>标准错误输出(stderr)：代码为 2 ，使用 2&gt; 或 2&gt;&gt; ； /dev/stderr -&gt; /proc/self/fd/2 2代表：/dev/stderr</li>
-</ol>
-<h2 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h2><p>格式：</p>
-<p>command-line1 [1-n] &gt; file或文件操作符或设备</p>
-<p>上面命令意思是：将一条命令执行结果（标准输出，或者错误输出，本来都要打印到屏幕上面的）  重定向其它输出设备（文件，打开文件操作符，或打印机等等）1,2分别是标准输出，错误输出。</p>
-<h2 id="输入重定向"><a href="#输入重定向" class="headerlink" title="输入重定向"></a>输入重定向</h2><p>格式：</p>
-<p>command-line [n] &lt;file或文件描述符&amp;设备</p>
-<p>将然有，命令默认从键盘获得的输入，改成从文件，或者其它打开文件以及设备输入。执行这个命令，将标准输入0，与文件或设备绑定。将由它进行输入。</p>
-<h2 id="常用解释"><a href="#常用解释" class="headerlink" title="常用解释"></a>常用解释</h2><ul>
-<li><code>&gt;</code> 表示定向输出到文件，覆盖原有内容；</li>
-<li><code>&gt;&gt;</code> 表示定向追加到目标文件，追加到末尾；</li>
-<li><code>&lt;</code> 表示导入；</li>
-<li><code>1&gt;</code> 表示输出重定向，1可以省略；</li>
-<li><code>2&gt;</code> 表示标准错误（stderr）输出重定向；</li>
-<li><code>2&gt;&amp;-</code> 表示将错误输出关闭，&amp;-表示关闭与它绑定的描述符；</li>
-<li><code>1&gt;&amp;-</code> 表示关闭标准输出；</li>
-<li><code>2&gt; /dev/null</code> 表示错误重定向到黑洞，linux 中/dev/null表示黑洞设备，吃掉一切；</li>
-<li><code>&gt;/dev/null 2&gt;&amp;1</code> 将错误输出2绑定给正确输出1，然后将 正确输出 发送给 /dev/null设备</li>
-</ul>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -893,6 +904,10 @@
 			
 		
 			
+				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
 			
 		
@@ -901,11 +916,11 @@
 			
 		
 			
-				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
+				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/base64/" title="base64">base64<sup>1</sup></a></li>
+				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
 			
 		
 			
@@ -913,7 +928,11 @@
 			
 		
 			
-				<li><a href="/tags/dns/" title="dns">dns<sup>1</sup></a></li>
+				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/base64/" title="base64">base64<sup>1</sup></a></li>
 			
 		
 			
