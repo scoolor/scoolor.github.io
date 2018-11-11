@@ -1,0 +1,524 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>网络协议简介 | 为什么这么涛的个人博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="为什么这么涛">
+    
+
+    
+    <meta name="description" content="互联网协议分为好几层，每一层都有自己的功能定位，一般分为5层比较容易理解。 应用层（Application Layer）应用层直接面向用户，规定了应用程序的数据格式，数据格式放入UDP或TCP的Data中，文件传输，电子邮件，文件服务，虚拟终端。常见协议：TFTP，HTTP，SNMP，FTP，SMTP，DNS，Telnet；  传输层（Transport Layer）提供端对端的接口；有了mac地">
+<meta name="keywords" content="网络协议,Internet Protocol">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络协议简介">
+<meta property="og:url" content="https://scoolor.github.io/2018/11/11/internet-protocol/index.html">
+<meta property="og:site_name" content="为什么这么涛的个人博客">
+<meta property="og:description" content="互联网协议分为好几层，每一层都有自己的功能定位，一般分为5层比较容易理解。 应用层（Application Layer）应用层直接面向用户，规定了应用程序的数据格式，数据格式放入UDP或TCP的Data中，文件传输，电子邮件，文件服务，虚拟终端。常见协议：TFTP，HTTP，SNMP，FTP，SMTP，DNS，Telnet；  传输层（Transport Layer）提供端对端的接口；有了mac地">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541909824/WX20181111-121645_2x.png">
+<meta property="og:updated_time" content="2018-11-11T06:52:57.173Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网络协议简介">
+<meta name="twitter:description" content="互联网协议分为好几层，每一层都有自己的功能定位，一般分为5层比较容易理解。 应用层（Application Layer）应用层直接面向用户，规定了应用程序的数据格式，数据格式放入UDP或TCP的Data中，文件传输，电子邮件，文件服务，虚拟终端。常见协议：TFTP，HTTP，SNMP，FTP，SMTP，DNS，Telnet；  传输层（Transport Layer）提供端对端的接口；有了mac地">
+<meta name="twitter:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541909824/WX20181111-121645_2x.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="为什么这么涛的个人博客">为什么这么涛的个人博客</a></h1>
+				<h2 class="blog-motto">做一件事最好的时机是十年前，其次就是现在</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:scoolor.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/11/11/internet-protocol/" title="网络协议简介" itemprop="url">网络协议简介</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
+		
+  <p class="article-time">
+    <time datetime="2018-11-11T01:54:37.000Z" itemprop="datePublished"> Published 2018-11-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#应用层（Application-Layer）"><span class="toc-number">1.</span> <span class="toc-text">应用层（Application Layer）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#传输层（Transport-Layer）"><span class="toc-number">2.</span> <span class="toc-text">传输层（Transport Layer）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络层（Network-Layer）"><span class="toc-number">3.</span> <span class="toc-text">网络层（Network Layer）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IP协议"><span class="toc-number">3.1.</span> <span class="toc-text">IP协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ICMP"><span class="toc-number">3.2.</span> <span class="toc-text">ICMP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP数据包"><span class="toc-number">3.3.</span> <span class="toc-text">IP数据包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ARP协议"><span class="toc-number">3.4.</span> <span class="toc-text">ARP协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT"><span class="toc-number">3.5.</span> <span class="toc-text">NAT</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据连接层（数据链路层）（Data-Link-Layer）"><span class="toc-number">4.</span> <span class="toc-text">数据连接层（数据链路层）（Data Link Layer）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#以太网"><span class="toc-number">4.1.</span> <span class="toc-text">以太网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MAC地址"><span class="toc-number">4.2.</span> <span class="toc-text">MAC地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#广播"><span class="toc-number">4.3.</span> <span class="toc-text">广播</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#物理层（Physical-Layer）"><span class="toc-number">5.</span> <span class="toc-text">物理层（Physical Layer）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据处理流程"><span class="toc-number">6.</span> <span class="toc-text">数据处理流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">7.</span> <span class="toc-text">参考链接</span></a></li></ol>
+		
+		</div>
+		
+		<p>互联网协议分为好几层，每一层都有自己的功能定位，一般分为5层比较容易理解。</p>
+<h2 id="应用层（Application-Layer）"><a href="#应用层（Application-Layer）" class="headerlink" title="应用层（Application Layer）"></a>应用层（Application Layer）</h2><p>应用层直接面向用户，规定了应用程序的数据格式，数据格式放入UDP或TCP的Data中，文件传输，电子邮件，文件服务，虚拟终端。常见协议：TFTP，HTTP，SNMP，FTP，SMTP，DNS，Telnet； </p>
+<h2 id="传输层（Transport-Layer）"><a href="#传输层（Transport-Layer）" class="headerlink" title="传输层（Transport Layer）"></a>传输层（Transport Layer）</h2><p>提供端对端的接口；有了mac地址和IP协议，两台机器就可以建立连接了，但是每台主机上有很多不同的应用程序，需要建立端口到端口的通信，Unix系统把“主机+端口”称为Socket，基于Socket，可以产生TCP和UDP协议。对应协议：TCP，UDP；</p>
+<p>“端口”是0到65535之间的一个整数，正好16个二进制位。0到1023的端口被系统占用，用户只能选用大于1023的端口。不管是浏览网页还是在线聊天，应用程序会随机选用一个端口，然后与服务器的相应端口联系。</p>
+<h2 id="网络层（Network-Layer）"><a href="#网络层（Network-Layer）" class="headerlink" title="网络层（Network Layer）"></a>网络层（Network Layer）</h2><p>为数据包选择路由，由于数据链路层的以太网协议依靠mac地址在网络上以广播的形式发送数据包，但是总不能在全世界范围内广播吧，网络层的主要任务就是为了<em>选择合适的路由和交换节点</em>，使传输层传下来的分组信息能够准确无误的找到目的地址，并交付给相应的传输层。即完成网络寻址功能。对应协议：IP，ICMP，RIP，OSPF，BGP，IGMP；</p>
+<h3 id="IP协议"><a href="#IP协议" class="headerlink" title="IP协议"></a>IP协议</h3><p>IP协议的两个主要作用，为每台计算机分配IP地址；确定哪些地址在同一个子网；IP协议在以太网的数据内部，如果IP数据包超过1500个字节需要分开发送；</p>
+<h3 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h3><p>主要功能包括，确认 IP 包是否成功送达目标地址，通知在发送过程当中 IP 包被废弃的具体原因，改善网络设置等。<br>IPv4 中 ICMP 仅作为一个辅助作用支持 IPv4。也就是说，在 IPv4 时期，即使没有 ICMP，仍然可以实现 IP 通信。然而，在 IPv6 中，ICMP 的作用被扩大，如果没有 ICMPv6，IPv6 就无法进行正常通信；</p>
+<h3 id="IP数据包"><a href="#IP数据包" class="headerlink" title="IP数据包"></a>IP数据包</h3><p>根据IP协议发送的数据，就叫做IP数据包，其中必定包括IP地址信息；</p>
+<h3 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h3><p>用来在子网内从IP地址得到MAC地址，不在同一个子网需要交给网关处理；</p>
+<h3 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h3><p>NAT（Network Address Translator）是用于在本地网络中使用私有地址，在连接互联网时转而使用全局 IP 地址的技术；</p>
+<ol>
+<li>源NAT（Source NAT，SNAT）：修改数据包的源地址。</li>
+<li>目的NAT（Destination NAT，DNAT）：修改数据包的目的地址。</li>
+</ol>
+<h2 id="数据连接层（数据链路层）（Data-Link-Layer）"><a href="#数据连接层（数据链路层）（Data-Link-Layer）" class="headerlink" title="数据连接层（数据链路层）（Data Link Layer）"></a>数据连接层（数据链路层）（Data Link Layer）</h2><p>连接层用来解读0和1的电信号，确定0/1的分组方式。</p>
+<p>在两个网络实体之间提供数据链路连接的创建、维持和释放管理。构成数据链路数据单元（frame：数据帧或讯框），并对帧定界、同步、收发顺序的控制。传输过程中的网络流量控制、差错检测和差错控制等方面。在物理层的基础上向网络层提供服务，其最基本的职责是将源自网络层的数据可靠的传输到相邻节点的目标网络层。主要以以太网为主。</p>
+<h3 id="以太网"><a href="#以太网" class="headerlink" title="以太网"></a>以太网</h3><p>以太网规定，一组电信号构成一个数据包，叫做”帧”（Frame）。每一帧分成两个部分：标头（Head）和数据（Data）。</p>
+<p>“标头”包含数据包的一些说明项，比如发送者、接受者、数据类型等等；”数据”则是数据包的具体内容。</p>
+<p>“标头”的长度，固定为18字节。”数据”的长度，最短为46字节，最长为1500字节。因此，整个”帧”最短为64字节，最长为1518字节。如果数据很长，就必须分割成多个帧进行发送。</p>
+<h3 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h3><p>以太网数据包的”标头”，包含了发送者和接受者的信息。那么，发送者和接受者是如何标识呢？</p>
+<p>以太网规定，连入网络的所有设备，都必须具有”网卡”接口。数据包必须是从一块网卡，传送到另一块网卡。网卡的地址，就是数据包的发送地址和接收地址，这叫做MAC地址。</p>
+<h3 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h3><p>首先，一块网卡怎么会知道另一块网卡的MAC地址？</p>
+<p>回答是有一种ARP协议，可以解决这个问题。这个留到后面介绍，这里只需要知道，以太网数据包必须知道接收方的MAC地址，然后才能发送。</p>
+<p>其次，就算有了MAC地址，系统怎样才能把数据包准确送到接收方？</p>
+<p>回答是以太网采用了一种很”原始”的方式，它不是把数据包准确送到接收方，而是向本网络内所有计算机发送，让每台计算机自己判断，是否为接收方。</p>
+<h2 id="物理层（Physical-Layer）"><a href="#物理层（Physical-Layer）" class="headerlink" title="物理层（Physical Layer）"></a>物理层（Physical Layer）</h2><p>就是实际上电脑间连接的介质，比如网线、光纤、电缆等，主要规定了网络的电气特性，负责传输二进制形式的数据。对应协议：ISO2110，IEEE802，IEEE802.2；</p>
+<h2 id="数据处理流程"><a href="#数据处理流程" class="headerlink" title="数据处理流程"></a>数据处理流程</h2><p>下图以用户 a 向用户 b 发送邮件为例子：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541909824/WX20181111-121645_2x.png" alt="数据处理流程"></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol>
+<li><a href="https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82" target="_blank" rel="noopener">https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82</a></li>
+<li><a href="https://blog.csdn.net/zhshulin/article/details/62888061" target="_blank" rel="noopener">https://blog.csdn.net/zhshulin/article/details/62888061</a></li>
+<li><a href="https://juejin.im/post/5a069b6d51882509e5432656" target="_blank" rel="noopener">https://juejin.im/post/5a069b6d51882509e5432656</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/网络协议/">网络协议</a><a href="/tags/Internet-Protocol/">Internet Protocol</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://scoolor.github.io/2018/11/11/internet-protocol/" data-title="网络协议简介 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/11/10/dns-udp-tcp/"  title="DNS为什么既使用TCP又使用UDP？">
+ <strong>下一篇：</strong><br/> 
+ <span>DNS为什么既使用TCP又使用UDP？
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#应用层（Application-Layer）"><span class="toc-number">1.</span> <span class="toc-text">应用层（Application Layer）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#传输层（Transport-Layer）"><span class="toc-number">2.</span> <span class="toc-text">传输层（Transport Layer）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络层（Network-Layer）"><span class="toc-number">3.</span> <span class="toc-text">网络层（Network Layer）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IP协议"><span class="toc-number">3.1.</span> <span class="toc-text">IP协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ICMP"><span class="toc-number">3.2.</span> <span class="toc-text">ICMP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP数据包"><span class="toc-number">3.3.</span> <span class="toc-text">IP数据包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ARP协议"><span class="toc-number">3.4.</span> <span class="toc-text">ARP协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NAT"><span class="toc-number">3.5.</span> <span class="toc-text">NAT</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据连接层（数据链路层）（Data-Link-Layer）"><span class="toc-number">4.</span> <span class="toc-text">数据连接层（数据链路层）（Data Link Layer）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#以太网"><span class="toc-number">4.1.</span> <span class="toc-text">以太网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MAC地址"><span class="toc-number">4.2.</span> <span class="toc-text">MAC地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#广播"><span class="toc-number">4.3.</span> <span class="toc-text">广播</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#物理层（Physical-Layer）"><span class="toc-number">5.</span> <span class="toc-text">物理层（Physical Layer）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据处理流程"><span class="toc-number">6.</span> <span class="toc-text">数据处理流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">7.</span> <span class="toc-text">参考链接</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/base64/" title="base64">base64<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络协议/" title="网络协议">网络协议<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Internet-Protocol/" title="Internet Protocol">Internet Protocol<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://scoolor.com" target="_blank" title="Scoolor">Scoolor</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Scoolor, a coder. <br/>
+			This is my blog, just do it!</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/scoolor" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/mu-yi-xiao-jiang" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:scoolor@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="为什么这么涛">为什么这么涛</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-92081918-2', 'scoolor.github.io');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -75,6 +75,64 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/08/27/linux-session/" title="Linux进程组与会话" itemprop="url">Linux进程组与会话</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
+		
+  <p class="article-time">
+    <time datetime="2018-08-27T15:16:08.000Z" itemprop="datePublished"> Published 2018-08-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Linux的进程之间有一定的关系,多个进程可以组成进程组，多个进程组又可以构成会话。由于概念比较抽象，这里简单总结一下。</p>
+<h2 id="进程组（process-group）"><a href="#进程组（process-group）" class="headerlink" title="进程组（process group）"></a>进程组（process group）</h2><p>每个进程都属于一个进程组，每个进程组包含一个或多个进程。进程组有一个进程领导进程组（process group leader），领导进程的PID成为进程组的ID（process group ID，PGID），以识别进程组。<br>程序创建了一个进程，该进程又创建了子进程，于是父进程和子进程构成了一个进程组，进程组的组长为父进程。<br>引入的原因：用于控制向多个进程进行信号的分发，发给一个进程组是信号会发生给进程组中每一个进程</p>
+<h2 id="作业（job）"><a href="#作业（job）" class="headerlink" title="作业（job）"></a>作业（job）</h2><p>作业（job）是shell的内部概念。通常shell中的每个作业对应于内核中的一个进程组。所有作业都是进程组，而不是左右的进程组都是作业。</p>
+<h2 id="会话（session）"><a href="#会话（session）" class="headerlink" title="会话（session）"></a>会话（session）</h2><p>通常，会话主要是针对一个终端建立的。一个会话开始于用户登录，终止于用户退出，在此期间该用户运行的所有进程都属于这个会话期。<br>当我们打开多个终端窗口时，实际上就创建了多个终端会话。每个会话都会有自己的前台工作和后台工作。这样，我们就为进程增加了管理和运行的层次。在没有图形化界面的时代，会话允许用户通过shell进行多层次的进程发起和管理。<br>多个进程组可以构成一个会话（session），会话由其中一个进程建立，该进程叫做会话的领导进程（session leader），该领导进程的PID成为识别会话的SID（session ID），会话中的每个进程组成为一个工作（job）。<br>会话的意义在于将多个工作囊括在一个终端，并取其中的一个工作作为前台，来直接接收该终端的输入输出以及终端信号。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.quora.com/What-is-the-difference-between-jobs-and-processes-on-Unix" target="_blank" rel="noopener">https://www.quora.com/What-is-the-difference-between-jobs-and-processes-on-Unix</a></li>
+<li><a href="https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job</a></li>
+<li><a href="https://www.jianshu.com/p/f64cd61d196c" target="_blank" rel="noopener">https://www.jianshu.com/p/f64cd61d196c</a></li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/08/16/linux-redirect/" title="Linux重定向" itemprop="url">Linux重定向</a>
   </h1>
   <p class="article-author">By
@@ -293,27 +351,15 @@
 			
 		
 			
-				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
 			
 		
 			
+				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/linux/" title="linux">linux<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
 			
 		
 			
@@ -325,11 +371,31 @@
 			
 		
 			
+				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络协议/" title="网络协议">网络协议<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Internet-Protocol/" title="Internet Protocol">Internet Protocol<sup>1</sup></a></li>
 			
 		
 		</ul>

@@ -75,6 +75,95 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/11/11/internet-protocol/" title="网络协议简介" itemprop="url">网络协议简介</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
+		
+  <p class="article-time">
+    <time datetime="2018-11-11T01:54:37.000Z" itemprop="datePublished"> Published 2018-11-11</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>互联网协议分为好几层，每一层都有自己的功能定位，一般分为5层比较容易理解。</p>
+<h2 id="应用层（Application-Layer）"><a href="#应用层（Application-Layer）" class="headerlink" title="应用层（Application Layer）"></a>应用层（Application Layer）</h2><p>应用层直接面向用户，规定了应用程序的数据格式，数据格式放入UDP或TCP的Data中，文件传输，电子邮件，文件服务，虚拟终端。常见协议：TFTP，HTTP，SNMP，FTP，SMTP，DNS，Telnet； </p>
+<h2 id="传输层（Transport-Layer）"><a href="#传输层（Transport-Layer）" class="headerlink" title="传输层（Transport Layer）"></a>传输层（Transport Layer）</h2><p>提供端对端的接口；有了mac地址和IP协议，两台机器就可以建立连接了，但是每台主机上有很多不同的应用程序，需要建立端口到端口的通信，Unix系统把“主机+端口”称为Socket，基于Socket，可以产生TCP和UDP协议。对应协议：TCP，UDP；</p>
+<p>“端口”是0到65535之间的一个整数，正好16个二进制位。0到1023的端口被系统占用，用户只能选用大于1023的端口。不管是浏览网页还是在线聊天，应用程序会随机选用一个端口，然后与服务器的相应端口联系。</p>
+<h2 id="网络层（Network-Layer）"><a href="#网络层（Network-Layer）" class="headerlink" title="网络层（Network Layer）"></a>网络层（Network Layer）</h2><p>为数据包选择路由，由于数据链路层的以太网协议依靠mac地址在网络上以广播的形式发送数据包，但是总不能在全世界范围内广播吧，网络层的主要任务就是为了<em>选择合适的路由和交换节点</em>，使传输层传下来的分组信息能够准确无误的找到目的地址，并交付给相应的传输层。即完成网络寻址功能。对应协议：IP，ICMP，RIP，OSPF，BGP，IGMP；</p>
+<h3 id="IP协议"><a href="#IP协议" class="headerlink" title="IP协议"></a>IP协议</h3><p>IP协议的两个主要作用，为每台计算机分配IP地址；确定哪些地址在同一个子网；IP协议在以太网的数据内部，如果IP数据包超过1500个字节需要分开发送；</p>
+<h3 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h3><p>主要功能包括，确认 IP 包是否成功送达目标地址，通知在发送过程当中 IP 包被废弃的具体原因，改善网络设置等。<br>IPv4 中 ICMP 仅作为一个辅助作用支持 IPv4。也就是说，在 IPv4 时期，即使没有 ICMP，仍然可以实现 IP 通信。然而，在 IPv6 中，ICMP 的作用被扩大，如果没有 ICMPv6，IPv6 就无法进行正常通信；</p>
+<h3 id="IP数据包"><a href="#IP数据包" class="headerlink" title="IP数据包"></a>IP数据包</h3><p>根据IP协议发送的数据，就叫做IP数据包，其中必定包括IP地址信息；</p>
+<h3 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h3><p>用来在子网内从IP地址得到MAC地址，不在同一个子网需要交给网关处理；</p>
+<h3 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h3><p>NAT（Network Address Translator）是用于在本地网络中使用私有地址，在连接互联网时转而使用全局 IP 地址的技术；</p>
+<ol>
+<li>源NAT（Source NAT，SNAT）：修改数据包的源地址。</li>
+<li>目的NAT（Destination NAT，DNAT）：修改数据包的目的地址。</li>
+</ol>
+<h2 id="数据连接层（数据链路层）（Data-Link-Layer）"><a href="#数据连接层（数据链路层）（Data-Link-Layer）" class="headerlink" title="数据连接层（数据链路层）（Data Link Layer）"></a>数据连接层（数据链路层）（Data Link Layer）</h2><p>连接层用来解读0和1的电信号，确定0/1的分组方式。</p>
+<p>在两个网络实体之间提供数据链路连接的创建、维持和释放管理。构成数据链路数据单元（frame：数据帧或讯框），并对帧定界、同步、收发顺序的控制。传输过程中的网络流量控制、差错检测和差错控制等方面。在物理层的基础上向网络层提供服务，其最基本的职责是将源自网络层的数据可靠的传输到相邻节点的目标网络层。主要以以太网为主。</p>
+<h3 id="以太网"><a href="#以太网" class="headerlink" title="以太网"></a>以太网</h3><p>以太网规定，一组电信号构成一个数据包，叫做”帧”（Frame）。每一帧分成两个部分：标头（Head）和数据（Data）。</p>
+<p>“标头”包含数据包的一些说明项，比如发送者、接受者、数据类型等等；”数据”则是数据包的具体内容。</p>
+<p>“标头”的长度，固定为18字节。”数据”的长度，最短为46字节，最长为1500字节。因此，整个”帧”最短为64字节，最长为1518字节。如果数据很长，就必须分割成多个帧进行发送。</p>
+<h3 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h3><p>以太网数据包的”标头”，包含了发送者和接受者的信息。那么，发送者和接受者是如何标识呢？</p>
+<p>以太网规定，连入网络的所有设备，都必须具有”网卡”接口。数据包必须是从一块网卡，传送到另一块网卡。网卡的地址，就是数据包的发送地址和接收地址，这叫做MAC地址。</p>
+<h3 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h3><p>首先，一块网卡怎么会知道另一块网卡的MAC地址？</p>
+<p>回答是有一种ARP协议，可以解决这个问题。这个留到后面介绍，这里只需要知道，以太网数据包必须知道接收方的MAC地址，然后才能发送。</p>
+<p>其次，就算有了MAC地址，系统怎样才能把数据包准确送到接收方？</p>
+<p>回答是以太网采用了一种很”原始”的方式，它不是把数据包准确送到接收方，而是向本网络内所有计算机发送，让每台计算机自己判断，是否为接收方。</p>
+<h2 id="物理层（Physical-Layer）"><a href="#物理层（Physical-Layer）" class="headerlink" title="物理层（Physical Layer）"></a>物理层（Physical Layer）</h2><p>就是实际上电脑间连接的介质，比如网线、光纤、电缆等，主要规定了网络的电气特性，负责传输二进制形式的数据。对应协议：ISO2110，IEEE802，IEEE802.2；</p>
+<h2 id="数据处理流程"><a href="#数据处理流程" class="headerlink" title="数据处理流程"></a>数据处理流程</h2><p>下图以用户 a 向用户 b 发送邮件为例子：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541909824/WX20181111-121645_2x.png" alt="数据处理流程"></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ol>
+<li><a href="https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82" target="_blank" rel="noopener">https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82</a></li>
+<li><a href="https://blog.csdn.net/zhshulin/article/details/62888061" target="_blank" rel="noopener">https://blog.csdn.net/zhshulin/article/details/62888061</a></li>
+<li><a href="https://juejin.im/post/5a069b6d51882509e5432656" target="_blank" rel="noopener">https://juejin.im/post/5a069b6d51882509e5432656</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2012/05/internet_protocol_suite_part_i.html</a></li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/网络协议/">网络协议</a><a href="/tags/Internet-Protocol/">Internet Protocol</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/11/10/dns-udp-tcp/" title="DNS为什么既使用TCP又使用UDP？" itemprop="url">DNS为什么既使用TCP又使用UDP？</a>
   </h1>
   <p class="article-author">By
@@ -822,64 +911,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2018/08/27/linux-session/" title="Linux进程组与会话" itemprop="url">Linux进程组与会话</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
-		
-  <p class="article-time">
-    <time datetime="2018-08-27T15:16:08.000Z" itemprop="datePublished"> Published 2018-08-27</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>Linux的进程之间有一定的关系,多个进程可以组成进程组，多个进程组又可以构成会话。由于概念比较抽象，这里简单总结一下。</p>
-<h2 id="进程组（process-group）"><a href="#进程组（process-group）" class="headerlink" title="进程组（process group）"></a>进程组（process group）</h2><p>每个进程都属于一个进程组，每个进程组包含一个或多个进程。进程组有一个进程领导进程组（process group leader），领导进程的PID成为进程组的ID（process group ID，PGID），以识别进程组。<br>程序创建了一个进程，该进程又创建了子进程，于是父进程和子进程构成了一个进程组，进程组的组长为父进程。<br>引入的原因：用于控制向多个进程进行信号的分发，发给一个进程组是信号会发生给进程组中每一个进程</p>
-<h2 id="作业（job）"><a href="#作业（job）" class="headerlink" title="作业（job）"></a>作业（job）</h2><p>作业（job）是shell的内部概念。通常shell中的每个作业对应于内核中的一个进程组。所有作业都是进程组，而不是左右的进程组都是作业。</p>
-<h2 id="会话（session）"><a href="#会话（session）" class="headerlink" title="会话（session）"></a>会话（session）</h2><p>通常，会话主要是针对一个终端建立的。一个会话开始于用户登录，终止于用户退出，在此期间该用户运行的所有进程都属于这个会话期。<br>当我们打开多个终端窗口时，实际上就创建了多个终端会话。每个会话都会有自己的前台工作和后台工作。这样，我们就为进程增加了管理和运行的层次。在没有图形化界面的时代，会话允许用户通过shell进行多层次的进程发起和管理。<br>多个进程组可以构成一个会话（session），会话由其中一个进程建立，该进程叫做会话的领导进程（session leader），该领导进程的PID成为识别会话的SID（session ID），会话中的每个进程组成为一个工作（job）。<br>会话的意义在于将多个工作囊括在一个终端，并取其中的一个工作作为前台，来直接接收该终端的输入输出以及终端信号。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a href="https://www.quora.com/What-is-the-difference-between-jobs-and-processes-on-Unix" target="_blank" rel="noopener">https://www.quora.com/What-is-the-difference-between-jobs-and-processes-on-Unix</a></li>
-<li><a href="https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/9082/difference-between-process-group-and-job</a></li>
-<li><a href="https://www.jianshu.com/p/f64cd61d196c" target="_blank" rel="noopener">https://www.jianshu.com/p/f64cd61d196c</a></li>
-</ol>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -904,27 +935,15 @@
 			
 		
 			
-				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
 			
 		
 			
+				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/linux/" title="linux">linux<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
 			
 		
 			
@@ -936,11 +955,31 @@
 			
 		
 			
+				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络协议/" title="网络协议">网络协议<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Internet-Protocol/" title="Internet Protocol">Internet Protocol<sup>1</sup></a></li>
 			
 		
 		</ul>
