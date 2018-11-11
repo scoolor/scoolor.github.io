@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>分析网页在请求过程中，浏览器刷新这期间发生的事 | 为什么这么涛的个人博客</title>
+    <title>分析网页在请求过程中，浏览器中断请求这期间发生的事 | 为什么这么涛的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="为什么这么涛">
@@ -14,7 +14,7 @@
     <meta name="description" content="事情是这样，公司一个项目，使用浏览器访问时快速刷新页面会遇到问题，页面其中一个ajax请求过程比较长，快速刷新时该请求没有完成，请求会中断，nginx也没有收到该请求的日志，而且chrome（windows和mac）和firefox（windows）下的现象不一致，而在mac平台下firefox却没有问题，实践操作，分析一下这其中发生的事情。 首先模拟类似的场景，在本地虚拟机中创建 lnmp 环境">
 <meta name="keywords" content="TCP,HTTP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分析网页在请求过程中，浏览器刷新这期间发生的事">
+<meta property="og:title" content="分析网页在请求过程中，浏览器中断请求这期间发生的事">
 <meta property="og:url" content="https://scoolor.github.io/2018/11/11/browser-interrupt/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
 <meta property="og:description" content="事情是这样，公司一个项目，使用浏览器访问时快速刷新页面会遇到问题，页面其中一个ajax请求过程比较长，快速刷新时该请求没有完成，请求会中断，nginx也没有收到该请求的日志，而且chrome（windows和mac）和firefox（windows）下的现象不一致，而在mac平台下firefox却没有问题，实践操作，分析一下这其中发生的事情。 首先模拟类似的场景，在本地虚拟机中创建 lnmp 环境">
@@ -26,9 +26,9 @@
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953119/WX20181112-001824_2x.png">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953976/WX20181112-003230_2x.png">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541954106/WX20181112-003451_2x.png">
-<meta property="og:updated_time" content="2018-11-11T16:37:23.129Z">
+<meta property="og:updated_time" content="2018-11-11T16:41:37.769Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分析网页在请求过程中，浏览器刷新这期间发生的事">
+<meta name="twitter:title" content="分析网页在请求过程中，浏览器中断请求这期间发生的事">
 <meta name="twitter:description" content="事情是这样，公司一个项目，使用浏览器访问时快速刷新页面会遇到问题，页面其中一个ajax请求过程比较长，快速刷新时该请求没有完成，请求会中断，nginx也没有收到该请求的日志，而且chrome（windows和mac）和firefox（windows）下的现象不一致，而在mac平台下firefox却没有问题，实践操作，分析一下这其中发生的事情。 首先模拟类似的场景，在本地虚拟机中创建 lnmp 环境">
 <meta name="twitter:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541946498/WX20181111-222740_2x.png">
 
@@ -86,7 +86,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/11/11/browser-interrupt/" title="分析网页在请求过程中，浏览器刷新这期间发生的事" itemprop="url">分析网页在请求过程中，浏览器刷新这期间发生的事</a>
+      <a href="/2018/11/11/browser-interrupt/" title="分析网页在请求过程中，浏览器中断请求这期间发生的事" itemprop="url">分析网页在请求过程中，浏览器中断请求这期间发生的事</a>
   </h1>
   <p class="article-author">By
        
@@ -135,7 +135,7 @@
 <p>服务端没有发送RST包，而是由客户端发起的FIN包断开了TCP连接，其他并无太大不同；同样Keep-Alive还是每隔10s一次；具体见下图。</p>
 <h3 id="不中断情况下"><a href="#不中断情况下" class="headerlink" title="不中断情况下"></a>不中断情况下</h3><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953976/WX20181112-003230_2x.png" alt="wireshark封包记录"></p>
 <h3 id="中断情况下"><a href="#中断情况下" class="headerlink" title="中断情况下"></a>中断情况下</h3><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541954106/WX20181112-003451_2x.png" alt="wireshark封包记录"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由于没有window环境，就暂不进行分析了。由以上分析可见firefox和chrome在处理网络请求的一些细节上还是有很大的不同，</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由于没有window环境，就暂不进行分析了。由以上分析可见firefox和chrome在处理网络请求的一些细节上还是有很大的不同。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -153,7 +153,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://scoolor.github.io/2018/11/11/browser-interrupt/" data-title="分析网页在请求过程中，浏览器刷新这期间发生的事 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  <div data-url="https://scoolor.github.io/2018/11/11/browser-interrupt/" data-title="分析网页在请求过程中，浏览器中断请求这期间发生的事 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -219,19 +219,19 @@
 			
 		
 			
-				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/base64/" title="base64">base64<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/TCP/" title="TCP">TCP<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/base64/" title="base64">base64<sup>1</sup></a></li>
 			
 		
 			
@@ -247,15 +247,15 @@
 			
 		
 			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/网络协议/" title="网络协议">网络协议<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Internet-Protocol/" title="Internet Protocol">Internet Protocol<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
 			
 		
 			
