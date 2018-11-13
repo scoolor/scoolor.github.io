@@ -1,0 +1,381 @@
+
+  
+    <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>分析网页在请求过程中，浏览器中断请求这期间发生的事 | 为什么这么涛的个人博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="为什么这么涛">
+    
+
+    
+    <meta name="description" content="事情是这样，公司一个项目，使用浏览器访问时快速刷新页面会遇到问题，页面其中一个ajax请求过程比较长，快速刷新时该请求没有完成，请求会中断，nginx也没有收到该请求的日志，而且chrome（windows和mac）和firefox（windows）下的现象不一致，而在mac平台下firefox却没有问题，实践操作，分析一下这其中发生的事情。 首先模拟类似的场景，在本地虚拟机中创建 lnmp 环境">
+<meta name="keywords" content="TCP,HTTP">
+<meta property="og:type" content="website">
+<meta property="og:title" content="分析网页在请求过程中，浏览器中断请求这期间发生的事">
+<meta property="og:url" content="https://scoolor.github.io/browser-interrupt.html">
+<meta property="og:site_name" content="为什么这么涛的个人博客">
+<meta property="og:description" content="事情是这样，公司一个项目，使用浏览器访问时快速刷新页面会遇到问题，页面其中一个ajax请求过程比较长，快速刷新时该请求没有完成，请求会中断，nginx也没有收到该请求的日志，而且chrome（windows和mac）和firefox（windows）下的现象不一致，而在mac平台下firefox却没有问题，实践操作，分析一下这其中发生的事情。 首先模拟类似的场景，在本地虚拟机中创建 lnmp 环境">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541946498/WX20181111-222740_2x.png">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541946167/WX20181111-222210_2x.png">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541951553/WX20181111-235214_2x.png">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541952720/WX20181112-001055_2x.png">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953119/WX20181112-001824_2x.png">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953976/WX20181112-003230_2x.png">
+<meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541954106/WX20181112-003451_2x.png">
+<meta property="og:updated_time" content="2018-11-11T16:41:37.769Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分析网页在请求过程中，浏览器中断请求这期间发生的事">
+<meta name="twitter:description" content="事情是这样，公司一个项目，使用浏览器访问时快速刷新页面会遇到问题，页面其中一个ajax请求过程比较长，快速刷新时该请求没有完成，请求会中断，nginx也没有收到该请求的日志，而且chrome（windows和mac）和firefox（windows）下的现象不一致，而在mac平台下firefox却没有问题，实践操作，分析一下这其中发生的事情。 首先模拟类似的场景，在本地虚拟机中创建 lnmp 环境">
+<meta name="twitter:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541946498/WX20181111-222740_2x.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+      <body>
+        <header>
+          
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="为什么这么涛的个人博客">为什么这么涛的个人博客</a></h1>
+				<h2 class="blog-motto">做一件事最好的时机是十年前，其次就是现在</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:scoolor.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/browser-interrupt.html" title="分析网页在请求过程中，浏览器中断请求这期间发生的事" itemprop="url">分析网页在请求过程中，浏览器中断请求这期间发生的事</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
+		
+  <p class="article-time">
+    <time datetime="2018-11-11T12:54:59.000Z" itemprop="datePublished"> Published 2018-11-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<p>事情是这样，公司一个项目，使用浏览器访问时快速刷新页面会遇到问题，页面其中一个ajax请求过程比较长，快速刷新时该请求没有完成，请求会中断，nginx也没有收到该请求的日志，而且chrome（windows和mac）和firefox（windows）下的现象不一致，而在mac平台下firefox却没有问题，实践操作，分析一下这其中发生的事情。</p>
+<p>首先模拟类似的场景，在本地虚拟机中创建 lnmp 环境，请求过程中直接 sleep 20 秒，使用 wireshark 抓包分析，查看 nginx 日志。</p>
+<h2 id="条件1"><a href="#条件1" class="headerlink" title="条件1"></a>条件1</h2><p>在 mac 环境下使用 chrome 访问页面，HTTP 持久性连接，即 connection:keep-alive。</p>
+<h3 id="在不中断请求的情况下"><a href="#在不中断请求的情况下" class="headerlink" title="在不中断请求的情况下"></a>在不中断请求的情况下</h3><p>先进行TCP的三次握手，建立TCP连接（在0.001s内完成），客户端等待服务端响应，在前20s内nginx没有日志记录，在20s时完成http的response，nginx同时记录请求日志，状态码为200。</p>
+<p>约86s时客户端发起了 TCP Keep-Alive，在196秒时，服务端发起了RST，tcp连接断开。</p>
+<p>Nginx默认的Http keep-alive timeout是65s；</p>
+<p>下图为wireshark的封包记录：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541946498/WX20181111-222740_2x.png" alt="wireshark封包记录"></p>
+<h3 id="在中断请求的情况下"><a href="#在中断请求的情况下" class="headerlink" title="在中断请求的情况下"></a>在中断请求的情况下</h3><p>同样先进行TCP的三次握手，建立TCP连接，这时刷新浏览器，nginx记录了日志，日志状态码为499，浏览器的网络状态是<code>canceled</code>,此时TCP连接依然是 <code>ESTABLISHED</code> 状态;等待客户端过程中，TCP出现<code>FIN_WAIT2</code>状态，在150s时服务端发起了RST，TCP连接断开。在等待TCP连接断开过程中，wireshark显示服务器没有发起HTTP响应，这说明服务端收到了浏览器发起的刷新中断请求，没有做出http响应。</p>
+<p>在刷新浏览器后，连接依然会保持，由浏览器维持了这个连接，连接依然是可重用的，不需要重新建立。</p>
+<p>Nginx 499 对应的是 “client has closed connection”，表示服务器返回http响应之前，客户端就提前关闭了http连接。</p>
+<p>下图为wireshark的封包记录：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541946167/WX20181111-222210_2x.png" alt="wireshark封包记录"></p>
+<h2 id="条件2"><a href="#条件2" class="headerlink" title="条件2"></a>条件2</h2><p>在 mac 环境下使用 chrome 访问页面，HTTP 非持久性连接，即 connection:close。</p>
+<p>在非持久连接情况下，客户端不再发起 TCP Keep-Alive包，而是正常经由发送FIN包由服务端time_wait=》close断开TCP连接。在中断请求的情况下，再刷新就是建立新的TCP连接了。</p>
+<p>在中断请求的情况下，nginx记录一条状态码为499的日志记录。</p>
+<p>下图为wireshark的封包记录：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541951553/WX20181111-235214_2x.png" alt="wireshark封包记录"></p>
+<h2 id="条件3"><a href="#条件3" class="headerlink" title="条件3"></a>条件3</h2><p>在mac环境下，使用Firefox访问页面，HTTP非持久连接。</p>
+<h3 id="在不中断请求的情况下-1"><a href="#在不中断请求的情况下-1" class="headerlink" title="在不中断请求的情况下"></a>在不中断请求的情况下</h3><p>Wireshark显示即便在非持久连接的情况下，客户端发起了Keep-Alive包，看来Firefox和Chrome的策略不太一样，不太管服务端的配置，每隔10s中发起一次Keep-Alive包。其他并无太大区别。</p>
+<p>具体情况详见Wireshark抓包详图：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541952720/WX20181112-001055_2x.png" alt="wireshark封包记录"></p>
+<h3 id="在中断请求的情况下-1"><a href="#在中断请求的情况下-1" class="headerlink" title="在中断请求的情况下"></a>在中断请求的情况下</h3><p>没有出现<code>FIN_WAIT2</code>状态，直接由客户端关闭了TCP连接。</p>
+<p>具体情况详见Wireshark抓包详图：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953119/WX20181112-001824_2x.png" alt="wireshark封包记录"></p>
+<h2 id="条件4"><a href="#条件4" class="headerlink" title="条件4"></a>条件4</h2><p>mac环境下，使用Firefox访问页面，HTTP持久连接。</p>
+<p>服务端没有发送RST包，而是由客户端发起的FIN包断开了TCP连接，其他并无太大不同；同样Keep-Alive还是每隔10s一次；具体见下图。</p>
+<h3 id="不中断情况下"><a href="#不中断情况下" class="headerlink" title="不中断情况下"></a>不中断情况下</h3><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953976/WX20181112-003230_2x.png" alt="wireshark封包记录"></p>
+<h3 id="中断情况下"><a href="#中断情况下" class="headerlink" title="中断情况下"></a>中断情况下</h3><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541954106/WX20181112-003451_2x.png" alt="wireshark封包记录"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由于没有window环境，就暂不进行分析了。由以上分析可见firefox和chrome在处理网络请求的一些细节上还是有很大的不同。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/undefined">undefined</a><a href="/undefined">undefined</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://scoolor.github.io/browser-interrupt.html" data-title="分析网页在请求过程中，浏览器中断请求这期间发生的事 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+	
+
+
+
+</div>  
+        </div>
+        <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Scoolor, a coder. <br/>
+			This is my blog, just do it!</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/scoolor" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/mu-yi-xiao-jiang" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:scoolor@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="为什么这么涛">为什么这么涛</a>
+		
+		
+		</p>
+</div>
+</footer>
+        <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-92081918-2', 'scoolor.github.io');  
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+      </body>
+     </html>
+     
