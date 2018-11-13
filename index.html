@@ -75,6 +75,91 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/11/11/browser-interrupt/" title="分析网页在请求过程中，浏览器中断请求这期间发生的事" itemprop="url">分析网页在请求过程中，浏览器中断请求这期间发生的事</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
+		
+  <p class="article-time">
+    <time datetime="2018-11-11T12:54:59.000Z" itemprop="datePublished"> Published 2018-11-11</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>事情是这样，公司一个项目，使用浏览器访问时快速刷新页面会遇到问题，页面其中一个ajax请求过程比较长，快速刷新时该请求没有完成，请求会中断，nginx也没有收到该请求的日志，而且chrome（windows和mac）和firefox（windows）下的现象不一致，而在mac平台下firefox却没有问题，实践操作，分析一下这其中发生的事情。</p>
+<p>首先模拟类似的场景，在本地虚拟机中创建 lnmp 环境，请求过程中直接 sleep 20 秒，使用 wireshark 抓包分析，查看 nginx 日志。</p>
+<p>chrome和firefox默认情况下的请求头都带有<code>Connection:keep-alive</code>的标识，服务端也可以进行<code>Connection</code>的配置，表示了服务端接受或者拒绝<code>keep-alive</code>。</p>
+<h2 id="条件1"><a href="#条件1" class="headerlink" title="条件1"></a>条件1</h2><p>在 mac 环境下使用 chrome 访问页面，服务端配置 持久性连接，即 connection:keep-alive。</p>
+<h3 id="在不中断请求的情况下"><a href="#在不中断请求的情况下" class="headerlink" title="在不中断请求的情况下"></a>在不中断请求的情况下</h3><p>先进行TCP的三次握手，建立TCP连接（在0.001s内完成），客户端等待服务端响应，在前20s内nginx没有日志记录，在20s时完成http的response，nginx同时记录请求日志，状态码为200。</p>
+<p>约86s时客户端发起了 TCP Keep-Alive，在196秒时，服务端发起了RST，tcp连接断开。</p>
+<p>Nginx默认的Http keep-alive timeout是65s；</p>
+<p>下图为wireshark的封包记录：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541946498/WX20181111-222740_2x.png" alt="wireshark封包记录"></p>
+<h3 id="在中断请求的情况下"><a href="#在中断请求的情况下" class="headerlink" title="在中断请求的情况下"></a>在中断请求的情况下</h3><p>同样先进行TCP的三次握手，建立TCP连接，这时刷新浏览器，nginx记录了日志，日志状态码为499，浏览器的网络状态是<code>canceled</code>,此时TCP连接依然是 <code>ESTABLISHED</code> 状态;中断请求时，服务端收到客户端的FIN包，但是连接依然是连接状态。在150s时服务端发起了RST，TCP连接断开。服务端收到FIN请求，自然不会再做出http响应，详见Wireshark封包记录。</p>
+<p>在刷新浏览器后，连接依然会保持，由浏览器维持了这个连接，连接依然是可重用的，不需要重新建立。</p>
+<p>Nginx 499 对应的是 “client has closed connection”，表示服务器返回http响应之前，客户端就提前关闭了http连接。</p>
+<p>下图为wireshark的封包记录：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541946167/WX20181111-222210_2x.png" alt="wireshark封包记录"></p>
+<h2 id="条件2"><a href="#条件2" class="headerlink" title="条件2"></a>条件2</h2><p>在 mac 环境下使用 chrome 访问页面，服务端配置 非持久性连接，即 connection:close。</p>
+<p>在非持久连接情况下，客户端不再发起 TCP Keep-Alive心跳包，而是正常经由发送FIN包由服务端time_wait=》close断开TCP连接。在中断请求的情况下，再刷新就是建立新的TCP连接了。</p>
+<p>在中断请求的情况下，nginx记录一条状态码为499的日志记录。</p>
+<p>下图为wireshark的封包记录：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541951553/WX20181111-235214_2x.png" alt="wireshark封包记录"></p>
+<h2 id="条件3"><a href="#条件3" class="headerlink" title="条件3"></a>条件3</h2><p>在mac环境下，使用Firefox访问页面，服务端配置 非持久连接。</p>
+<h3 id="在不中断请求的情况下-1"><a href="#在不中断请求的情况下-1" class="headerlink" title="在不中断请求的情况下"></a>在不中断请求的情况下</h3><p>Wireshark显示即便在非持久连接的情况下，客户端发起了Keep-Alive心跳包，看来Firefox和Chrome的策略不太一样，不太管服务端的配置，每隔10s中发起一次Keep-Alive包。其他并无太大区别。</p>
+<p>具体情况详见Wireshark抓包详图：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541952720/WX20181112-001055_2x.png" alt="wireshark封包记录"></p>
+<h3 id="在中断请求的情况下-1"><a href="#在中断请求的情况下-1" class="headerlink" title="在中断请求的情况下"></a>在中断请求的情况下</h3><p>没有出现<code>FIN_WAIT2</code>状态，直接由客户端关闭了TCP连接。</p>
+<p>具体情况详见Wireshark抓包详图：</p>
+<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953119/WX20181112-001824_2x.png" alt="wireshark封包记录"></p>
+<h2 id="条件4"><a href="#条件4" class="headerlink" title="条件4"></a>条件4</h2><p>mac环境下，使用Firefox访问页面，服务端配置 持久连接。</p>
+<p>服务端没有发送RST包，而是由客户端发起的FIN包断开了TCP连接，其他并无太大不同；同样Keep-Alive还是每隔10s一次；具体见下图。</p>
+<h3 id="不中断情况下"><a href="#不中断情况下" class="headerlink" title="不中断情况下"></a>不中断情况下</h3><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953976/WX20181112-003230_2x.png" alt="wireshark封包记录"></p>
+<h3 id="中断情况下"><a href="#中断情况下" class="headerlink" title="中断情况下"></a>中断情况下</h3><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541954106/WX20181112-003451_2x.png" alt="wireshark封包记录"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由于没有windows环境，就暂不进行分析了。由以上分析可见firefox和chrome在处理网络请求的一些细节上还是有很大的不同。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/TCP/">TCP</a><a href="/tags/HTTP/">HTTP</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/11/11/internet-protocol/" title="网络协议简介" itemprop="url">网络协议简介</a>
   </h1>
   <p class="article-author">By
@@ -837,80 +922,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2018/09/03/https/" title="理解HTTPS" itemprop="url">理解HTTPS</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
-		
-  <p class="article-time">
-    <time datetime="2018-09-03T09:10:08.000Z" itemprop="datePublished"> Published 2018-09-03</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>HTTP协议是明文形式传输的，传输过程不安全，易被拦截、监听、篡改， HTTPS的诞生正是为了解决HTTP协议不安全的问题。</p>
-<h2 id="什么是HTTPS"><a href="#什么是HTTPS" class="headerlink" title="什么是HTTPS"></a>什么是HTTPS</h2><p>HTTPS协议=HTTP协议+TLS/SSL协议，也就是HTTPS协议是在HTTP协议的基础上加了一层TLS/SSL协议进行数据的加密解密。这样HTTPS协议在网络上传输的数据是加密的密文，拦截后如果没有秘钥进行解密的话拿到的也是一堆乱码。</p>
-<h2 id="几个概念简单理解"><a href="#几个概念简单理解" class="headerlink" title="几个概念简单理解"></a>几个概念简单理解</h2><ol>
-<li>对称加密：用同一个秘钥进行加密解密的方法。</li>
-<li>非对称加密：加密和解密使用不用的秘钥，公钥和私钥。公钥和私钥是一对，使用公钥加密则使用对应的私钥可以进行解密，使用私钥加密则使用对应的公钥可以进行解密。</li>
-<li>证书：这里指数字证书，具有权威性，就像企业公司合同上的印章一样，代表这个是企业授权的合同，包含了由某个受信任组织担保的用户或公司的相关信息。</li>
-<li>CA：Certificate Authority，第三方证书颁发机构。</li>
-<li>TLS：传输层安全(Transport Layer Security，TLS)，SSL 和 TLS 非常类似，一般统称为TLS/SSL。</li>
-</ol>
-<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/3765534683-59ed8581c94b2_articlex.png" alt="数字证书"></p>
-<h2 id="会话秘钥"><a href="#会话秘钥" class="headerlink" title="会话秘钥"></a>会话秘钥</h2><p>非对称加密的计算很慢，实际情况下混合使用了对称加密和非对称加密技术。比较常见的做法是在两节点间通过便捷的公开密钥加密技术建立起安全通信， 然后再用那条安全的通道产生并发送临时的随机对称密钥，通过更快的对称加密技术对其余的数据进行加密。SSH和HTTPS都是这样的。</p>
-<h2 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h2><p>非对称加密除了可以用于加密解密外，还可以对报文进行签名（sign），以说明是谁编写的报文，同时证明报文没有被篡改过。这种技术被称为数字签名(digital signing)。</p>
-<h2 id="通信过程"><a href="#通信过程" class="headerlink" title="通信过程"></a>通信过程</h2><ol>
-<li>客户端：向服务端发送一个通信请求，包括随机数PK1、支持的加密协议版本、加密算法、压缩算法等加密套件；</li>
-<li>服务端：发送随机数PK2，确认使用的加密协议版本、加密算法、压缩算法等，以及证书；</li>
-<li>客户端：校验服务端的证书是否合法（包括对域名、有效期、证书颁发机构等），使用证书的公钥加密随机数PK3、加密声明、发送内容的摘要信息，验证服务器身份后，生成一个对称加密算法和对称秘钥；秘钥使用公钥加密发送给服务端；</li>
-<li>服务端：使用私钥解密后，拿到对称秘钥和对称加密算法；</li>
-<li>通信：建立安全通信后，使用协商的对称加密算法及其对应的秘钥进行加密通信。</li>
-</ol>
-<p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1535966287/350869942-57c53781ada55_articlex.png" alt="通信过程"></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/https/">https</a><a href="/tags/http/">http</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -935,11 +946,11 @@
 			
 		
 			
-				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
+				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
+				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
 			
 		
 			
@@ -955,6 +966,18 @@
 			
 		
 			
+				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/TCP/" title="TCP">TCP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
 			
 		
@@ -963,19 +986,15 @@
 			
 		
 			
-				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/网络协议/" title="网络协议">网络协议<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Internet-Protocol/" title="Internet Protocol">Internet Protocol<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
 			
 		
 			

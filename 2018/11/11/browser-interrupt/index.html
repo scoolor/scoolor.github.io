@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953119/WX20181112-001824_2x.png">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953976/WX20181112-003230_2x.png">
 <meta property="og:image" content="https://res.cloudinary.com/diybk7yr1/image/upload/v1541954106/WX20181112-003451_2x.png">
-<meta property="og:updated_time" content="2018-11-11T16:41:37.769Z">
+<meta property="og:updated_time" content="2018-11-13T09:31:24.015Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分析网页在请求过程中，浏览器中断请求这期间发生的事">
 <meta name="twitter:description" content="事情是这样，公司一个项目，使用浏览器访问时快速刷新页面会遇到问题，页面其中一个ajax请求过程比较长，快速刷新时该请求没有完成，请求会中断，nginx也没有收到该请求的日志，而且chrome（windows和mac）和firefox（windows）下的现象不一致，而在mac平台下firefox却没有问题，实践操作，分析一下这其中发生的事情。 首先模拟类似的场景，在本地虚拟机中创建 lnmp 环境">
@@ -108,34 +108,35 @@
 		
 		<p>事情是这样，公司一个项目，使用浏览器访问时快速刷新页面会遇到问题，页面其中一个ajax请求过程比较长，快速刷新时该请求没有完成，请求会中断，nginx也没有收到该请求的日志，而且chrome（windows和mac）和firefox（windows）下的现象不一致，而在mac平台下firefox却没有问题，实践操作，分析一下这其中发生的事情。</p>
 <p>首先模拟类似的场景，在本地虚拟机中创建 lnmp 环境，请求过程中直接 sleep 20 秒，使用 wireshark 抓包分析，查看 nginx 日志。</p>
-<h2 id="条件1"><a href="#条件1" class="headerlink" title="条件1"></a>条件1</h2><p>在 mac 环境下使用 chrome 访问页面，HTTP 持久性连接，即 connection:keep-alive。</p>
+<p>chrome和firefox默认情况下的请求头都带有<code>Connection:keep-alive</code>的标识，服务端也可以进行<code>Connection</code>的配置，表示了服务端接受或者拒绝<code>keep-alive</code>。</p>
+<h2 id="条件1"><a href="#条件1" class="headerlink" title="条件1"></a>条件1</h2><p>在 mac 环境下使用 chrome 访问页面，服务端配置 持久性连接，即 connection:keep-alive。</p>
 <h3 id="在不中断请求的情况下"><a href="#在不中断请求的情况下" class="headerlink" title="在不中断请求的情况下"></a>在不中断请求的情况下</h3><p>先进行TCP的三次握手，建立TCP连接（在0.001s内完成），客户端等待服务端响应，在前20s内nginx没有日志记录，在20s时完成http的response，nginx同时记录请求日志，状态码为200。</p>
 <p>约86s时客户端发起了 TCP Keep-Alive，在196秒时，服务端发起了RST，tcp连接断开。</p>
 <p>Nginx默认的Http keep-alive timeout是65s；</p>
 <p>下图为wireshark的封包记录：</p>
 <p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541946498/WX20181111-222740_2x.png" alt="wireshark封包记录"></p>
-<h3 id="在中断请求的情况下"><a href="#在中断请求的情况下" class="headerlink" title="在中断请求的情况下"></a>在中断请求的情况下</h3><p>同样先进行TCP的三次握手，建立TCP连接，这时刷新浏览器，nginx记录了日志，日志状态码为499，浏览器的网络状态是<code>canceled</code>,此时TCP连接依然是 <code>ESTABLISHED</code> 状态;等待客户端过程中，TCP出现<code>FIN_WAIT2</code>状态，在150s时服务端发起了RST，TCP连接断开。在等待TCP连接断开过程中，wireshark显示服务器没有发起HTTP响应，这说明服务端收到了浏览器发起的刷新中断请求，没有做出http响应。</p>
+<h3 id="在中断请求的情况下"><a href="#在中断请求的情况下" class="headerlink" title="在中断请求的情况下"></a>在中断请求的情况下</h3><p>同样先进行TCP的三次握手，建立TCP连接，这时刷新浏览器，nginx记录了日志，日志状态码为499，浏览器的网络状态是<code>canceled</code>,此时TCP连接依然是 <code>ESTABLISHED</code> 状态;中断请求时，服务端收到客户端的FIN包，但是连接依然是连接状态。在150s时服务端发起了RST，TCP连接断开。服务端收到FIN请求，自然不会再做出http响应，详见Wireshark封包记录。</p>
 <p>在刷新浏览器后，连接依然会保持，由浏览器维持了这个连接，连接依然是可重用的，不需要重新建立。</p>
 <p>Nginx 499 对应的是 “client has closed connection”，表示服务器返回http响应之前，客户端就提前关闭了http连接。</p>
 <p>下图为wireshark的封包记录：</p>
 <p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541946167/WX20181111-222210_2x.png" alt="wireshark封包记录"></p>
-<h2 id="条件2"><a href="#条件2" class="headerlink" title="条件2"></a>条件2</h2><p>在 mac 环境下使用 chrome 访问页面，HTTP 非持久性连接，即 connection:close。</p>
-<p>在非持久连接情况下，客户端不再发起 TCP Keep-Alive包，而是正常经由发送FIN包由服务端time_wait=》close断开TCP连接。在中断请求的情况下，再刷新就是建立新的TCP连接了。</p>
+<h2 id="条件2"><a href="#条件2" class="headerlink" title="条件2"></a>条件2</h2><p>在 mac 环境下使用 chrome 访问页面，服务端配置 非持久性连接，即 connection:close。</p>
+<p>在非持久连接情况下，客户端不再发起 TCP Keep-Alive心跳包，而是正常经由发送FIN包由服务端time_wait=》close断开TCP连接。在中断请求的情况下，再刷新就是建立新的TCP连接了。</p>
 <p>在中断请求的情况下，nginx记录一条状态码为499的日志记录。</p>
 <p>下图为wireshark的封包记录：</p>
 <p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541951553/WX20181111-235214_2x.png" alt="wireshark封包记录"></p>
-<h2 id="条件3"><a href="#条件3" class="headerlink" title="条件3"></a>条件3</h2><p>在mac环境下，使用Firefox访问页面，HTTP非持久连接。</p>
-<h3 id="在不中断请求的情况下-1"><a href="#在不中断请求的情况下-1" class="headerlink" title="在不中断请求的情况下"></a>在不中断请求的情况下</h3><p>Wireshark显示即便在非持久连接的情况下，客户端发起了Keep-Alive包，看来Firefox和Chrome的策略不太一样，不太管服务端的配置，每隔10s中发起一次Keep-Alive包。其他并无太大区别。</p>
+<h2 id="条件3"><a href="#条件3" class="headerlink" title="条件3"></a>条件3</h2><p>在mac环境下，使用Firefox访问页面，服务端配置 非持久连接。</p>
+<h3 id="在不中断请求的情况下-1"><a href="#在不中断请求的情况下-1" class="headerlink" title="在不中断请求的情况下"></a>在不中断请求的情况下</h3><p>Wireshark显示即便在非持久连接的情况下，客户端发起了Keep-Alive心跳包，看来Firefox和Chrome的策略不太一样，不太管服务端的配置，每隔10s中发起一次Keep-Alive包。其他并无太大区别。</p>
 <p>具体情况详见Wireshark抓包详图：</p>
 <p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541952720/WX20181112-001055_2x.png" alt="wireshark封包记录"></p>
 <h3 id="在中断请求的情况下-1"><a href="#在中断请求的情况下-1" class="headerlink" title="在中断请求的情况下"></a>在中断请求的情况下</h3><p>没有出现<code>FIN_WAIT2</code>状态，直接由客户端关闭了TCP连接。</p>
 <p>具体情况详见Wireshark抓包详图：</p>
 <p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953119/WX20181112-001824_2x.png" alt="wireshark封包记录"></p>
-<h2 id="条件4"><a href="#条件4" class="headerlink" title="条件4"></a>条件4</h2><p>mac环境下，使用Firefox访问页面，HTTP持久连接。</p>
+<h2 id="条件4"><a href="#条件4" class="headerlink" title="条件4"></a>条件4</h2><p>mac环境下，使用Firefox访问页面，服务端配置 持久连接。</p>
 <p>服务端没有发送RST包，而是由客户端发起的FIN包断开了TCP连接，其他并无太大不同；同样Keep-Alive还是每隔10s一次；具体见下图。</p>
 <h3 id="不中断情况下"><a href="#不中断情况下" class="headerlink" title="不中断情况下"></a>不中断情况下</h3><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541953976/WX20181112-003230_2x.png" alt="wireshark封包记录"></p>
 <h3 id="中断情况下"><a href="#中断情况下" class="headerlink" title="中断情况下"></a>中断情况下</h3><p><img src="https://res.cloudinary.com/diybk7yr1/image/upload/v1541954106/WX20181112-003451_2x.png" alt="wireshark封包记录"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由于没有window环境，就暂不进行分析了。由以上分析可见firefox和chrome在处理网络请求的一些细节上还是有很大的不同。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由于没有windows环境，就暂不进行分析了。由以上分析可见firefox和chrome在处理网络请求的一些细节上还是有很大的不同。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -219,14 +220,6 @@
 			
 		
 			
-				<li><a href="/tags/TCP/" title="TCP">TCP<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/编码/" title="编码">编码<sup>1</sup></a></li>
 			
 		
@@ -239,6 +232,14 @@
 			
 		
 			
+				<li><a href="/tags/TCP/" title="TCP">TCP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
 			
 		
@@ -247,15 +248,15 @@
 			
 		
 			
-				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/网络协议/" title="网络协议">网络协议<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Internet-Protocol/" title="Internet Protocol">Internet Protocol<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
 			
 		
 			
