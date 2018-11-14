@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="为什么这么涛的个人博客">
 <meta property="og:description" content="为什么使用cookies?因为HTTP协议是无状态的，对于一个浏览器发出的多次请求，WEB服务器无法区分是不是来源于同一个浏览器。所以，需要额外的数据用于维护会话。 Cookie 正是这样的一段随HTTP请求一起被传递的额外数据。 Cookie的工作原理Cookie 是浏览器提供的功能，用于存储服务器的一段文本信息，每个 Cookie 的大小一般不能超过4KB。浏览器每次向服务器发出 HTTP 请">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-14T02:11:40.372Z">
+<meta property="og:updated_time" content="2018-11-14T03:10:11.727Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="聊聊Cookie那些事">
 <meta name="twitter:description" content="为什么使用cookies?因为HTTP协议是无状态的，对于一个浏览器发出的多次请求，WEB服务器无法区分是不是来源于同一个浏览器。所以，需要额外的数据用于维护会话。 Cookie 正是这样的一段随HTTP请求一起被传递的额外数据。 Cookie的工作原理Cookie 是浏览器提供的功能，用于存储服务器的一段文本信息，每个 Cookie 的大小一般不能超过4KB。浏览器每次向服务器发出 HTTP 请">
@@ -100,6 +100,7 @@
 		
 		<h2 id="为什么使用cookies"><a href="#为什么使用cookies" class="headerlink" title="为什么使用cookies?"></a>为什么使用cookies?</h2><p>因为HTTP协议是无状态的，对于一个浏览器发出的多次请求，WEB服务器无法区分是不是来源于同一个浏览器。所以，需要额外的数据用于维护会话。 Cookie 正是这样的一段随HTTP请求一起被传递的额外数据。</p>
 <h2 id="Cookie的工作原理"><a href="#Cookie的工作原理" class="headerlink" title="Cookie的工作原理"></a>Cookie的工作原理</h2><p>Cookie 是浏览器提供的功能，用于存储服务器的一段文本信息，每个 Cookie 的大小一般不能超过4KB。浏览器每次向服务器发出 HTTP 请求，浏览器就会检查是否有域名相应的Cookie，如果有就会在 request header 中添加 Cookie 信息。</p>
+<p>Cookie 本质上是浏览器存储数据的方式，只不过，这部分数据会自动携带到 Http 的请求头中。</p>
 <h2 id="创建-Cookie"><a href="#创建-Cookie" class="headerlink" title="创建 Cookie"></a>创建 Cookie</h2><p>Web 服务器通过发送一个称为 Set-Cookie 的 HTTP 消息头来创建一个 cookie，Set-Cookie 消息头是一个字符串，其格式如下（中括号中的部分是可选的）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: value[; expires=date][; domain=domain][; path=path][; secure]</span><br></pre></td></tr></table></figure>
 <h2 id="Cookie的属性"><a href="#Cookie的属性" class="headerlink" title="Cookie的属性"></a>Cookie的属性</h2><p>每个cookie都有一定的属性，如什么时候失效，要发送到哪个域名，哪个路径等等。这些属性是通过cookie选项来设置的，cookie选项包括：expires、domain、path、secure、HttpOnly。在设置任一个cookie时都可以设置相关的这些属性，当然也可以不设置，这时会使用这些属性的默认值。在设置这些属性时，属性之间由一个分号和一个空格隔开。</p>
