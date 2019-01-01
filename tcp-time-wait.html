@@ -5,24 +5,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>关于我 | 为什么这么涛的个人博客</title>
+    <title>tcp time wait | 为什么这么涛的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="为什么这么涛">
     
 
     
-    <meta name="description" content="做一件事最好的时机是十年前，其次就是现在  Hello,我是为什么这么涛（scoolor），我是一名web开发者，致力于成为全栈开发者，热爱产品，热爱开源技术，现在在北京工作。 Talks Github Weibo">
+    <meta name="description" content="什么是 TCP 连接TCP 为什么需要 TIME-WAIT维持 TCP 连接理论上不占用网络资源（会占用两头程序的系统资源） 页表的作用 由于每个进程都有3G的私有进程空间，所以系统的物理内存无法对这些地址空间进行一一映射，因此kernel需要一种机制，把进程地址空间映射到物理内存上。当一个进程请求访问内存时，操作系统通过存储在kernel中的进程页表把这个虚拟地址映射到物理地址，如果还没有为这个">
 <meta property="og:type" content="website">
-<meta property="og:title" content="关于我">
-<meta property="og:url" content="https://scoolor.github.io/about/index.html">
+<meta property="og:title" content="tcp time wait">
+<meta property="og:url" content="https://scoolor.github.io/tcp-time-wait.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
-<meta property="og:description" content="做一件事最好的时机是十年前，其次就是现在  Hello,我是为什么这么涛（scoolor），我是一名web开发者，致力于成为全栈开发者，热爱产品，热爱开源技术，现在在北京工作。 Talks Github Weibo">
+<meta property="og:description" content="什么是 TCP 连接TCP 为什么需要 TIME-WAIT维持 TCP 连接理论上不占用网络资源（会占用两头程序的系统资源） 页表的作用 由于每个进程都有3G的私有进程空间，所以系统的物理内存无法对这些地址空间进行一一映射，因此kernel需要一种机制，把进程地址空间映射到物理内存上。当一个进程请求访问内存时，操作系统通过存储在kernel中的进程页表把这个虚拟地址映射到物理地址，如果还没有为这个">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-25T15:34:25.773Z">
+<meta property="og:updated_time" content="2019-01-01T01:25:01.916Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于我">
-<meta name="twitter:description" content="做一件事最好的时机是十年前，其次就是现在  Hello,我是为什么这么涛（scoolor），我是一名web开发者，致力于成为全栈开发者，热爱产品，热爱开源技术，现在在北京工作。 Talks Github Weibo">
+<meta name="twitter:title" content="tcp time wait">
+<meta name="twitter:description" content="什么是 TCP 连接TCP 为什么需要 TIME-WAIT维持 TCP 连接理论上不占用网络资源（会占用两头程序的系统资源） 页表的作用 由于每个进程都有3G的私有进程空间，所以系统的物理内存无法对这些地址空间进行一一映射，因此kernel需要一种机制，把进程地址空间映射到物理内存上。当一个进程请求访问内存时，操作系统通过存储在kernel中的进程页表把这个虚拟地址映射到物理地址，如果还没有为这个">
 
     
     <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
@@ -78,27 +78,55 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/about/index.html" title="关于我" itemprop="url">关于我</a>
+      <a href="/tcp-time-wait.html" title="tcp time wait" itemprop="url">tcp time wait</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
 		
   <p class="article-time">
-    <time datetime="2018-07-25T15:28:36.000Z" itemprop="datePublished"> Published 2018-07-25</time>
+    <time datetime="2018-12-30T05:13:41.000Z" itemprop="datePublished"> Published 2018-12-30</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<blockquote>
-<p>做一件事最好的时机是十年前，其次就是现在</p>
-</blockquote>
-<p>Hello,我是为什么这么涛（scoolor），我是一名web开发者，致力于成为全栈开发者，热爱产品，热爱开源技术，现在在北京工作。</p>
-<h2 id="Talks"><a href="#Talks" class="headerlink" title="Talks"></a>Talks</h2><ul>
-<li><a href="https://github.com/scoolor" target="_blank" rel="noopener">Github</a></li>
-<li><a href="https://weibo.com/u/1960075520" target="_blank" rel="noopener">Weibo</a></li>
-</ul>
+		<h2 id="什么是-TCP-连接"><a href="#什么是-TCP-连接" class="headerlink" title="什么是 TCP 连接"></a>什么是 TCP 连接</h2><p>TCP</p>
+<h2 id="为什么需要-TIME-WAIT"><a href="#为什么需要-TIME-WAIT" class="headerlink" title="为什么需要 TIME-WAIT"></a>为什么需要 TIME-WAIT</h2><p>维持 TCP 连接理论上不占用网络资源（会占用两头程序的系统资源）</p>
+<p>页表的作用</p>
+<p>由于每个进程都有3G的私有进程空间，所以系统的物理内存无法对这些地址空间进行一一映射，因此kernel需要一种机制，把进程地址空间映射到物理内存上。当一个进程请求访问内存时，操作系统通过存储在kernel中的进程页表把这个虚拟地址映射到物理地址，如果还没有为这个地址建立页表项，那么操作系统就为这个访问的地址建立页表项。最基本的映射单位是page，对应的是页表项PTE</p>
+<p>页表项和物理地址是多对一的关系，即多个页表项可以对应一个物理页面，因而支持共享内存的实现（几个进程同时共享物理内存）。</p>
+<p>用户态和内核态切换</p>
+<p>​​上下文切换的性能消耗在哪里呢？</p>
+<pre><code>​    ​context switch过高，会导致CPU像个搬运工，频繁在寄存器和运行队列直接奔波  ，更多的时间花在了线程切换，而不是真正工作的线程上。直接的消耗包括CPU寄存器需要保存和加载，系统调度器的代码需要执行。间接消耗在于多核cache之间的共享数据。 
+
+​
+
+​    ​引起上下文切换的原因有哪些？
+
+​    ​对于抢占式操作系统而言， 大体有几种：
+
+​    ​1、当前任务的时间片用完之后，系统CPU正常调度下一个任务；
+
+​    ​2、当前任务碰到IO阻塞，调度线程将挂起此任务，继续下一个任务；
+
+​    ​3、多个任务抢占锁资源，当前任务没有抢到，被调度器挂起，继续下一个任务；
+
+​    ​4、用户代码挂起当前任务，让出CPU时间；
+
+​    ​5、硬件中断；
+</code></pre><p>Load这个东西确实表现为当前有多少个线程在等待运行，最优的值是你的核数（或者超线程数）</p>
+<p>Interrupt Rate包括内核由于进程的时间片中断。（在 Linux 2.6 中，系统时钟每 1 毫秒中断一次时钟频率，用 HZ 宏表示，定义为 1000，即每秒中断 1000 次。系统不一样，内核不一样配置100、250的都有。）</p>
+<p>内核的时钟频率可以通过如下命令知道</p>
+<p>cat /boot/config-<code>uname -r</code> | grep ‘^CONFIG_HZ=’</p>
+<p>CONFIG_HZ=100</p>
+<p>每秒总的时钟中断数就是 = cpu个数 <em> 核数 </em> CONFIG_HZ</p>
+<h2 id="系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现"><a href="#系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现" class="headerlink" title="系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现"></a>系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现</h2><p>pidstat监控指定进程的Context Switch上下文切换：</p>
+<p>首先安装sysstat：yum install sysstat  //使用的是fedora，ubuntu/debian使用apg-get</p>
+<p>pidstat -w -G testp 1 10       //根据进程名监控上下文切换<br>pidstat -w -p 48863 1 10     //根据PID监控上下文切换</p>
+<p>平均时间: UID    PID       cswch/s     nvcswch/s   Command<br>平均时间: 0         48770     2.53          2.78               testp</p>
+<p>cswch/s: 每秒任务主动(自愿的)切换上下文的次数，当某一任务处于阻塞等待时，将主动让出自己的CPU资源。</p>
+<p>nvcswch/s: 每秒任务被动(不自愿的)切换上下文的次数，CPU分配给某一任务的时间片已经用完，因此将强迫该进程让出CPU的执行权。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -111,7 +139,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://scoolor.github.io/about/index.html" data-title="关于我 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  <div data-url="https://scoolor.github.io/tcp-time-wait.html" data-title="tcp time wait | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
