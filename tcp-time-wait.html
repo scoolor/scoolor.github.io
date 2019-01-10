@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="为什么这么涛的个人博客">
 <meta property="og:description" content="什么是 TCP 连接TCP 为什么需要 TIME-WAIT维持 TCP 连接理论上不占用网络资源（会占用两头程序的系统资源） 页表的作用 由于每个进程都有3G的私有进程空间，所以系统的物理内存无法对这些地址空间进行一一映射，因此kernel需要一种机制，把进程地址空间映射到物理内存上。当一个进程请求访问内存时，操作系统通过存储在kernel中的进程页表把这个虚拟地址映射到物理地址，如果还没有为这个">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-01T01:25:01.916Z">
+<meta property="og:updated_time" content="2019-01-01T16:17:07.416Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tcp time wait">
 <meta name="twitter:description" content="什么是 TCP 连接TCP 为什么需要 TIME-WAIT维持 TCP 连接理论上不占用网络资源（会占用两头程序的系统资源） 页表的作用 由于每个进程都有3G的私有进程空间，所以系统的物理内存无法对这些地址空间进行一一映射，因此kernel需要一种机制，把进程地址空间映射到物理内存上。当一个进程请求访问内存时，操作系统通过存储在kernel中的进程页表把这个虚拟地址映射到物理地址，如果还没有为这个">
@@ -123,10 +123,30 @@
 <p>每秒总的时钟中断数就是 = cpu个数 <em> 核数 </em> CONFIG_HZ</p>
 <h2 id="系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现"><a href="#系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现" class="headerlink" title="系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现"></a>系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现</h2><p>pidstat监控指定进程的Context Switch上下文切换：</p>
 <p>首先安装sysstat：yum install sysstat  //使用的是fedora，ubuntu/debian使用apg-get</p>
-<p>pidstat -w -G testp 1 10       //根据进程名监控上下文切换<br>pidstat -w -p 48863 1 10     //根据PID监控上下文切换</p>
-<p>平均时间: UID    PID       cswch/s     nvcswch/s   Command<br>平均时间: 0         48770     2.53          2.78               testp</p>
+<p>pidstat -w -G testp 1 10     //根据进程名监控上下文切换<br>pidstat -w -p 48863 1 10     //根据PID监控上下文切换</p>
+<p>平均时间: UID       PID       cswch/s     nvcswch/s     Command<br>平均时间: 0         48770     2.53        2.78          testp</p>
 <p>cswch/s: 每秒任务主动(自愿的)切换上下文的次数，当某一任务处于阻塞等待时，将主动让出自己的CPU资源。</p>
 <p>nvcswch/s: 每秒任务被动(不自愿的)切换上下文的次数，CPU分配给某一任务的时间片已经用完，因此将强迫该进程让出CPU的执行权。</p>
+<p>性能评估主要对CPU、memory、disk IO和network IO四个指标，从带宽和时延两个角度评估。</p>
+<p>所谓带宽，不仅仅是硬件上的读写速度，而是数据从源头到达CPU，然后CPU将其送往目的地的速度，考验的是传输能力；所谓时延，更多的评估传输的效率，读取一定量的数据，数据可以在多长时间内从内存读取到CPU。</p>
+<p>所谓时延，其实也是另一种意义的速度，比如context switch，并没有吞吐量这个概念，但是通过将多个进程切换N次，得到总体时间，平均后可以获得单次切换用时，用以评估context switch的latency。</p>
+<p>context switch（上下文切换）对于CPU的load影响非常大。在将线程数减为之前的1/3时，load居然降到之前的1/5。通常导致context switch（上下文切换）的主要原因是应用程序启动的线程过多。</p>
+<p>多线程 vs 多进程 切换的成本<br>多线程之间堆内存共享，而进程相互独立，线程间通信可以直接基于共享内存来实现，比进程的常用的那些多进程通信方式更轻量。<br>在上下文切换来说，不管是多线程还是都进程都涉及到寄存器、栈的保存，但是线程不需要切换 页面映射（虚拟内存空间）、文件描述符等，所以线程的上下文切换也比多进程轻量<br>多进程比多线程更安全，一个进程基本上不会影响另外一个进程<br>在实际的开发中，一般不同任务间（可以把一个线程、进程叫做一个任务）需要通信，使用多线程的场景比多进程多。但是多进程有更高的容错性，一个进程的crash不会导致整个系统的崩溃，在任务安全性较高的情况下，采用多进程。</p>
+<p>进程的概念<br>为了实现多任务系统，现代操作系统提出了进程的概念，在linux系统初期，进程作为 CPU 调度的基本单位，后来由于操作系统普遍引入了线程的概念，线程成为了CPU调度的基本单位，而进程只能作为资源拥有的基本单位</p>
+<p>Load Average &lt; CPU个数 <em> 核数 </em> 0.7</p>
+<p>比如1个1核CPU，Load Average &lt; 1 <em> 1 </em> 0.7；1个4核的CPU，Load Average必须 &lt; 1 <em> 4 </em> 0.7 = 2.8。</p>
+<p>压力测试衡量CPU的三个指标：CPU Utilization、Load Average和Context Switch Rate</p>
+<h3 id="上下文切换性能影响："><a href="#上下文切换性能影响：" class="headerlink" title="上下文切换性能影响："></a>上下文切换性能影响：</h3><p>中断和进程(包括线程)切换，一次中断（Interrupt）会引起一次切换，进程（线程）的创建、激活之类的也会引起一次切换。CS的值也和TPS（Transaction Per Second）相关的，假设每次调用会引起N次CS，那么就可以得出</p>
+<p>Context Switch Rate = Interrupt Rate + TPS * N</p>
+<p>CSR减掉IR，就是进程/线程的切换，假如主进程收到请求交给线程处理，线程处理完毕归还给主进程，这里就是2次切换。也可以用CSR、IR、TPS的值代入公式中，得出每次事物导致的切换数。因此，要降低CSR，就必须在每个TPS引起的切换上下功夫，只有N这个值降下去，CSR就能降低，理想情况下N=0，但是无论如何如果N &gt;= 4，则要好好检查检查。</p>
+<p>Interrupt Rate包括内核由于进程的时间片中断。（在 Linux 2.6 中，系统时钟每 1 毫秒中断一次时钟频率，用 HZ 宏表示，定义为 1000，即每秒中断 1000 次。系统不一样，内核不一样配置100、250的都有。）</p>
+<p>内核的时钟频率可以通过如下命令知道</p>
+<p>cat /boot/config-<code>uname -r</code> | grep ‘^CONFIG_HZ=’</p>
+<p>CONFIG_HZ=100</p>
+<p>每秒总的时钟中断数就是 = cpu个数 <em> 核数 </em> CONFIG_HZ</p>
+<p>cat /proc/interrupts</p>
+<pre><code>CPU0       CPU1       CPU2       CPU3       
+</code></pre><p>LOC:   97574747   52361843  105207680   69447653   Local timer interrupts<br>RES:     107368     257510      98635     186294   Rescheduling interrupts<br>CAL:      14174      14206      14164        194   function call interrupts<br>TLB:    1007949     853117     992546     591410   TLB shootdowns</p>
   
 	</div>
 		<footer class="article-footer clearfix">

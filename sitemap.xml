@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://scoolor.github.io/2019/01/01/LMbench/</loc>
+    <loc>https://scoolor.github.io/2019/01/10/toml/</loc>
     
-    <lastmod>2019-01-01T12:12:56.188Z</lastmod>
+    <lastmod>2019-01-10T10:26:14.190Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://scoolor.github.io/tcp-time-wait.html</loc>
     
-    <lastmod>2019-01-01T01:25:01.916Z</lastmod>
+    <lastmod>2019-01-01T16:17:07.416Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://scoolor.github.io/2019/01/01/LMbench/</loc>
+    
+    <lastmod>2019-01-01T12:12:56.188Z</lastmod>
     
   </url>
   
