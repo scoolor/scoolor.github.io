@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>聊聊Cookie那些事 | 为什么这么涛的个人博客</title>
@@ -36,7 +36,7 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
@@ -103,15 +103,19 @@
 <p>Cookie 本质上是浏览器存储数据的方式，只不过，这部分数据会自动携带到 Http 的请求头中。</p>
 <h2 id="创建-Cookie"><a href="#创建-Cookie" class="headerlink" title="创建 Cookie"></a>创建 Cookie</h2><p>Web 服务器通过发送一个称为 Set-Cookie 的 HTTP 消息头来创建一个 cookie，Set-Cookie 消息头是一个字符串，其格式如下（中括号中的部分是可选的）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: value[; expires=date][; domain=domain][; path=path][; secure]</span><br></pre></td></tr></table></figure>
+
 <h2 id="Cookie的属性"><a href="#Cookie的属性" class="headerlink" title="Cookie的属性"></a>Cookie的属性</h2><p>每个cookie都有一定的属性，如什么时候失效，要发送到哪个域名，哪个路径等等。这些属性是通过cookie选项来设置的，cookie选项包括：expires、domain、path、secure、HttpOnly。在设置任一个cookie时都可以设置相关的这些属性，当然也可以不设置，这时会使用这些属性的默认值。在设置这些属性时，属性之间由一个分号和一个空格隔开。</p>
 <p>代码示例如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;key=name; expires=Thu, 25 Feb 2016 04:18:00 GMT; domain=ppsc.sankuai.com; path=/; secure; HttpOnly&quot;</span><br></pre></td></tr></table></figure>
+
 <h3 id="domain-选项"><a href="#domain-选项" class="headerlink" title="domain 选项"></a>domain 选项</h3><p>指定了 cookie 将要被发送至哪个或哪些域中。默认情况下，domain 会被设置为创建该 cookie 的页面所在的域名，所以当给相同域名发送请求时该 cookie 会被发送至服务器。</p>
 <p>主域下的 Cookie 会扩散到该主域下所有的子域上。例如：a.com有cookie，用户访问b.a.com时，也会获取到a.com下的cookie。</p>
 <h3 id="path-选项"><a href="#path-选项" class="headerlink" title="path 选项"></a>path 选项</h3><p>path 选项指定了请求的资源 URL 中必须存在指定的路径时，才会发送Cookie 消息头。这个比较通常是将 path 选项的值与请求的 URL 从头开始逐字符比较完成的。如果字符匹配，则发送 Cookie 消息头，例如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie:name=Scoolor; path=/blog</span><br></pre></td></tr></table></figure>
+
 <h3 id="secure-选项"><a href="#secure-选项" class="headerlink" title="secure 选项"></a>secure 选项</h3><p>secure选项，不像其它选项，该选项只是一个标记而没有值。只有当一个请求通过 SSL 或 HTTPS 创建时，包含 secure 选项的 cookie 才能被发送至服务器。这种 cookie 的内容具有很高的价值，如果以纯文本形式传递很有可能被篡改，例如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: name=Scoolor; secure</span><br></pre></td></tr></table></figure>
+
 <h3 id="HTTP-only"><a href="#HTTP-only" class="headerlink" title="HTTP-only"></a>HTTP-only</h3><p>HTTP-Only 是告诉浏览器 cookie 不能通过 JavaScript 的 document.cookie 属性访问。设计该特征意在提供一个安全措施来帮助阻止通过 JavaScript 发起的跨站脚本攻击 (XSS) 窃取 cookie 的行为。</p>
 <h2 id="设置cookie的方式"><a href="#设置cookie的方式" class="headerlink" title="设置cookie的方式"></a>设置cookie的方式</h2><ol>
 <li>http response Set-Cookie</li>
@@ -128,6 +132,7 @@
 </ol>
 <h2 id="跨域传输-Cookie"><a href="#跨域传输-Cookie" class="headerlink" title="跨域传输 Cookie"></a>跨域传输 Cookie</h2><p>现在很多应用都做了前后端的分离，会涉及到跨域传输Cookie的问题，当然不一定要使用HTTP request的方式发送cookie，可以直接放到URL中传输，哈哈哈。默认情况下，Cookie 不能跨域传输，如果要跨域传输，需要服务端同意，同时客户端需要开启<code>withCredentials</code>属性，具体如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">浏览器设置:</span><br><span class="line">xhr.withCredentials=true</span><br><span class="line"></span><br><span class="line">服务端设置响应头:</span><br><span class="line">Access-Control-Allow-Credentials:true</span><br><span class="line">Access-Control-Allow-Origin: http://www.xxx.com（注意这里设为*不行，没做测试）</span><br></pre></td></tr></table></figure>
+
 <h2 id="Cookie的设置与读取"><a href="#Cookie的设置与读取" class="headerlink" title="Cookie的设置与读取"></a>Cookie的设置与读取</h2><p>测试了若干种设置与读取的方式，可能不全，应该能涵盖到大多数情况。</p>
 <ol>
 <li>相同域名，不可以跨路径设置与读取 Cookie</li>
@@ -252,15 +257,23 @@
 			
 		
 			
-				<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
 			
 		
 			
@@ -272,15 +285,7 @@
 			
 		
 			
-				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/TOML/" title="TOML">TOML<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
 			
 		
 		</ul>

@@ -1,24 +1,27 @@
 
  <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
-    <title>icmp | 为什么这么涛的个人博客</title>
+    <title>浏览器是如何工作的 | 为什么这么涛的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="为什么这么涛">
     
 
     
-    <meta property="og:type" content="article">
-<meta property="og:title" content="icmp">
-<meta property="og:url" content="https://scoolor.github.io/2018/11/10/icmp/index.html">
+    <meta name="description" content="浏览器  序言这是一篇全面介绍 Webkit 和 Gecko 内部操作的入门文章，是以色列开发人员塔利·加希尔大量研究的成果。在过去的几年中，她查阅了所有公开发布的关于浏览器内部机制的数据（请参见资源），并花了很多时间来研读网络浏览器的源代码。她写道： 在 IE 占据 90% 市场份额的年代，我们除了把浏览器当成一个“黑箱”，什么也做不了。但是现在，开放源代码的浏览器拥有了过半的市场份额，因此，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器是如何工作的">
+<meta property="og:url" content="https://scoolor.github.io/2019/08/25/how-browsers-work/index.html">
 <meta property="og:site_name" content="为什么这么涛的个人博客">
+<meta property="og:description" content="浏览器  序言这是一篇全面介绍 Webkit 和 Gecko 内部操作的入门文章，是以色列开发人员塔利·加希尔大量研究的成果。在过去的几年中，她查阅了所有公开发布的关于浏览器内部机制的数据（请参见资源），并花了很多时间来研读网络浏览器的源代码。她写道： 在 IE 占据 90% 市场份额的年代，我们除了把浏览器当成一个“黑箱”，什么也做不了。但是现在，开放源代码的浏览器拥有了过半的市场份额，因此，">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-10T03:30:02.982Z">
+<meta property="og:updated_time" content="2019-08-25T02:24:05.095Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="icmp">
+<meta name="twitter:title" content="浏览器是如何工作的">
+<meta name="twitter:description" content="浏览器  序言这是一篇全面介绍 Webkit 和 Gecko 内部操作的入门文章，是以色列开发人员塔利·加希尔大量研究的成果。在过去的几年中，她查阅了所有公开发布的关于浏览器内部机制的数据（请参见资源），并花了很多时间来研读网络浏览器的源代码。她写道： 在 IE 占据 90% 市场份额的年代，我们除了把浏览器当成一个“黑箱”，什么也做不了。但是现在，开放源代码的浏览器拥有了过半的市场份额，因此，">
 
     
     <link rel="alternative" href="/atom.xml" title="为什么这么涛的个人博客" type="application/atom+xml">
@@ -32,7 +35,7 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
@@ -74,14 +77,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/11/10/icmp/" title="icmp" itemprop="url">icmp</a>
+      <a href="/2019/08/25/how-browsers-work/" title="浏览器是如何工作的" itemprop="url">浏览器是如何工作的</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="为什么这么涛" target="_blank" itemprop="author">为什么这么涛</a>
 		
   <p class="article-time">
-    <time datetime="2018-11-10T03:30:02.000Z" itemprop="datePublished"> Published 2018-11-10</time>
+    <time datetime="2019-08-25T01:43:08.000Z" itemprop="datePublished"> Published 2019-08-25</time>
     
   </p>
 </header>
@@ -90,11 +93,19 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序言"><span class="toc-number">1.</span> <span class="toc-text">序言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">2.</span> <span class="toc-text">简介</span></a></li></ol>
 		
 		</div>
 		
-		  
+		<ul>
+<li>浏览器</li>
+</ul>
+<h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>这是一篇全面介绍 Webkit 和 Gecko 内部操作的入门文章，是以色列开发人员塔利·加希尔大量研究的成果。在过去的几年中，她查阅了所有公开发布的关于浏览器内部机制的数据（请参见资源），并花了很多时间来研读网络浏览器的源代码。她写道：</p>
+<p>在 IE 占据 90% 市场份额的年代，我们除了把浏览器当成一个“黑箱”，什么也做不了。但是现在，开放源代码的浏览器拥有了过半的市场份额，因此，是时候来揭开神秘的面纱，一探网络浏览器的内幕了。呃，里面只有数以百万行计的 C++ 代码…</p>
+<p>塔利在她的网站上公布了自己的研究成果，但是我们觉得它值得让更多的人来了解，所以我们在此重新整理并公布。</p>
+<p>作为一名网络开发人员，学习浏览器的内部工作原理将有助于您作出更明智的决策，并理解那些最佳开发实践的个中缘由。尽管这是一篇相当长的文档，但是我们建议您花些时间来仔细阅读；读完之后，您肯定会觉得所费不虚——保罗·爱丽诗 (Paul Irish)，Chrome 浏览器开发人员事务部</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>网络浏览器很可能是使用最广的软件。在这篇入门文章中，我将会介绍它们的幕后工作原理。我们会了解到，从您在地址栏输入 google.com 直到您在浏览器屏幕上看到 Google 首页的整个过程中都发生了些什么。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -106,7 +117,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://scoolor.github.io/2018/11/10/icmp/" data-title="icmp | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
+	  <div data-url="https://scoolor.github.io/2019/08/25/how-browsers-work/" data-title="浏览器是如何工作的 | 为什么这么涛的个人博客" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -119,19 +130,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/11/10/dns/" title="dns">
-  <strong>上一篇：</strong><br/>
-  <span>
-  dns</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/11/10/charles-https/"  title="为什么charles/fiddler可以明文抓取https">
+<a href="/2019/01/10/toml/"  title="TOML 简介">
  <strong>下一篇：</strong><br/> 
- <span>为什么charles/fiddler可以明文抓取https
+ <span>TOML 简介
 </span>
 </a>
 </div>
@@ -148,7 +151,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序言"><span class="toc-number">1.</span> <span class="toc-text">序言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">2.</span> <span class="toc-text">简介</span></a></li></ol>
  
   </div>
 
@@ -164,11 +167,15 @@
 		<ul class="clearfix">
 		
 			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/https/" title="https">https<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+				<li><a href="/tags/dns/" title="dns">dns<sup>2</sup></a></li>
 			
 		
 			
@@ -184,6 +191,30 @@
 			
 		
 			
+				<li><a href="/tags/TCP/" title="TCP">TCP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/HTTP/" title="HTTP">HTTP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
 			
 		
@@ -192,7 +223,15 @@
 			
 		
 			
-				<li><a href="/tags/charle/" title="charle">charle<sup>1</sup></a></li>
+				<li><a href="/tags/网络协议/" title="网络协议">网络协议<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Internet-Protocol/" title="Internet Protocol">Internet Protocol<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/TOML/" title="TOML">TOML<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -202,12 +241,6 @@
   <div class="linkslist">
   <p class="asidetitle">Links</p>
     <ul>
-        
-          <li>
-            
-            	<a href="https://scoolor.com" target="_blank" title="Scoolor">Scoolor</a>
-            
-          </li>
         
     </ul>
 </div>
@@ -257,7 +290,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
 		
 		<a href="/about" target="_blank" title="为什么这么涛">为什么这么涛</a>
 		

@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>TOML 简介 | 为什么这么涛的个人博客</title>
@@ -36,7 +36,7 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
       
@@ -102,12 +102,17 @@
 <p>TOML 是目录最优秀的配置文件格式方案，相较于yaml、json、ini，优势很明显。目前很多新项目直接使用 TOML作为配置文件的格式，比如golang官方的go.mod。</p>
 <h2 id="TOML-的目标"><a href="#TOML-的目标" class="headerlink" title="TOML 的目标"></a>TOML 的目标</h2><p>TOML 的目标是成为一个极简的配置文件格式。TOML 被设计成可以无歧义地被映射为哈希表，从而被多种语言解析。</p>
 <h2 id="官方示例"><a href="#官方示例" class="headerlink" title="官方示例"></a>官方示例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">title = &quot;TOML 例子&quot;</span><br><span class="line"></span><br><span class="line">[owner]</span><br><span class="line">name = &quot;Tom Preston-Werner&quot;</span><br><span class="line">organization = &quot;GitHub&quot;</span><br><span class="line">bio = &quot;GitHub Cofounder &amp; CEO\nLikes tater tots and beer.&quot;</span><br><span class="line">dob = 1979-05-27T07:32:00Z # 日期时间是一等公民。为什么不呢？</span><br><span class="line"></span><br><span class="line">[database]</span><br><span class="line">server = &quot;192.168.1.1&quot;</span><br><span class="line">ports = [ 8001, 8001, 8002 ]</span><br><span class="line">connection_max = 5000</span><br><span class="line">enabled = true</span><br><span class="line"></span><br><span class="line">[servers]</span><br><span class="line"></span><br><span class="line">  # 你可以依照你的意愿缩进。使用空格或Tab。TOML不会在意。</span><br><span class="line">  [servers.alpha]</span><br><span class="line">  ip = &quot;10.0.0.1&quot;</span><br><span class="line">  dc = &quot;eqdc10&quot;</span><br><span class="line"></span><br><span class="line">  [servers.beta]</span><br><span class="line">  ip = &quot;10.0.0.2&quot;</span><br><span class="line">  dc = &quot;eqdc10&quot;</span><br><span class="line"></span><br><span class="line">[clients]</span><br><span class="line">data = [ [&quot;gamma&quot;, &quot;delta&quot;], [1, 2] ]</span><br><span class="line"></span><br><span class="line"># 在数组里换行没有关系。</span><br><span class="line">hosts = [</span><br><span class="line">  &quot;alpha&quot;,</span><br><span class="line">  &quot;omega&quot;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
 <h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>使用 <code>#</code> 注释：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># I am a comment. Hear me roar. Roar.</span><br><span class="line">key = &quot;value&quot; # Yeah, you can do this.</span><br></pre></td></tr></table></figure>
+
 <h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wrong = &quot;C:\Users\nodejs\templates&quot; # 注意：这不会生成合法的路径。</span><br><span class="line">right = &quot;C:\\Users\\nodejs\\templates&quot;</span><br></pre></td></tr></table></figure>
+
 <h2 id="布尔值"><a href="#布尔值" class="headerlink" title="布尔值"></a>布尔值</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 布尔值永远是小写</span><br><span class="line">true</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+
 <h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>数组使用方括号包裹。空格会被忽略。元素使用逗号分隔。注意，不允许混用数据类型。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[ 1, 2, 3 ]</span><br><span class="line">[ &quot;red&quot;, &quot;yellow&quot;, &quot;green&quot; ]</span><br><span class="line">[ [ 1, 2 ], [3, 4, 5] ]</span><br><span class="line">[ [ 1, 2 ], [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;] ] # 这是可以的。</span><br><span class="line">[ 1, 2.0 ] # 注意：这是不行的。</span><br></pre></td></tr></table></figure>
+
 <p>以上基本覆盖了配置的使用场景，TOML 各个语言支持都很好，直接使用即可。</p>
   
 	</div>
@@ -139,6 +144,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2019/08/25/how-browsers-work/" title="浏览器是如何工作的">
+  <strong>上一篇：</strong><br/>
+  <span>
+  浏览器是如何工作的</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2019/01/01/LMbench/"  title="LMbench 安装与使用">
@@ -212,15 +225,23 @@
 			
 		
 			
-				<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
 			
 		
 			
@@ -232,15 +253,7 @@
 			
 		
 			
-				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/TOML/" title="TOML">TOML<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
 			
 		
 		</ul>

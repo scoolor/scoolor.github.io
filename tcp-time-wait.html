@@ -1,8 +1,8 @@
 
   
     <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>tcp time wait | 为什么这么涛的个人博客</title>
@@ -36,7 +36,7 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
       <body>
         <header>
           
@@ -114,13 +114,12 @@
 
 ​    ​4、用户代码挂起当前任务，让出CPU时间；
 
-​    ​5、硬件中断；
-</code></pre><p>Load这个东西确实表现为当前有多少个线程在等待运行，最优的值是你的核数（或者超线程数）</p>
+​    ​5、硬件中断；</code></pre><p>Load这个东西确实表现为当前有多少个线程在等待运行，最优的值是你的核数（或者超线程数）</p>
 <p>Interrupt Rate包括内核由于进程的时间片中断。（在 Linux 2.6 中，系统时钟每 1 毫秒中断一次时钟频率，用 HZ 宏表示，定义为 1000，即每秒中断 1000 次。系统不一样，内核不一样配置100、250的都有。）</p>
 <p>内核的时钟频率可以通过如下命令知道</p>
 <p>cat /boot/config-<code>uname -r</code> | grep ‘^CONFIG_HZ=’</p>
 <p>CONFIG_HZ=100</p>
-<p>每秒总的时钟中断数就是 = cpu个数 <em> 核数 </em> CONFIG_HZ</p>
+<p>每秒总的时钟中断数就是 = cpu个数 * 核数 * CONFIG_HZ</p>
 <h2 id="系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现"><a href="#系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现" class="headerlink" title="系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现"></a>系统调用的机制，其核心还是使用了操作系统为用户特别开放的一个中断来实现</h2><p>pidstat监控指定进程的Context Switch上下文切换：</p>
 <p>首先安装sysstat：yum install sysstat  //使用的是fedora，ubuntu/debian使用apg-get</p>
 <p>pidstat -w -G testp 1 10     //根据进程名监控上下文切换<br>pidstat -w -p 48863 1 10     //根据PID监控上下文切换</p>
@@ -133,8 +132,8 @@
 <p>context switch（上下文切换）对于CPU的load影响非常大。在将线程数减为之前的1/3时，load居然降到之前的1/5。通常导致context switch（上下文切换）的主要原因是应用程序启动的线程过多。</p>
 <p>多线程 vs 多进程 切换的成本<br>多线程之间堆内存共享，而进程相互独立，线程间通信可以直接基于共享内存来实现，比进程的常用的那些多进程通信方式更轻量。<br>在上下文切换来说，不管是多线程还是都进程都涉及到寄存器、栈的保存，但是线程不需要切换 页面映射（虚拟内存空间）、文件描述符等，所以线程的上下文切换也比多进程轻量<br>多进程比多线程更安全，一个进程基本上不会影响另外一个进程<br>在实际的开发中，一般不同任务间（可以把一个线程、进程叫做一个任务）需要通信，使用多线程的场景比多进程多。但是多进程有更高的容错性，一个进程的crash不会导致整个系统的崩溃，在任务安全性较高的情况下，采用多进程。</p>
 <p>进程的概念<br>为了实现多任务系统，现代操作系统提出了进程的概念，在linux系统初期，进程作为 CPU 调度的基本单位，后来由于操作系统普遍引入了线程的概念，线程成为了CPU调度的基本单位，而进程只能作为资源拥有的基本单位</p>
-<p>Load Average &lt; CPU个数 <em> 核数 </em> 0.7</p>
-<p>比如1个1核CPU，Load Average &lt; 1 <em> 1 </em> 0.7；1个4核的CPU，Load Average必须 &lt; 1 <em> 4 </em> 0.7 = 2.8。</p>
+<p>Load Average &lt; CPU个数 * 核数 * 0.7</p>
+<p>比如1个1核CPU，Load Average &lt; 1 * 1 * 0.7；1个4核的CPU，Load Average必须 &lt; 1 * 4 * 0.7 = 2.8。</p>
 <p>压力测试衡量CPU的三个指标：CPU Utilization、Load Average和Context Switch Rate</p>
 <h3 id="上下文切换性能影响："><a href="#上下文切换性能影响：" class="headerlink" title="上下文切换性能影响："></a>上下文切换性能影响：</h3><p>中断和进程(包括线程)切换，一次中断（Interrupt）会引起一次切换，进程（线程）的创建、激活之类的也会引起一次切换。CS的值也和TPS（Transaction Per Second）相关的，假设每次调用会引起N次CS，那么就可以得出</p>
 <p>Context Switch Rate = Interrupt Rate + TPS * N</p>
@@ -143,10 +142,9 @@
 <p>内核的时钟频率可以通过如下命令知道</p>
 <p>cat /boot/config-<code>uname -r</code> | grep ‘^CONFIG_HZ=’</p>
 <p>CONFIG_HZ=100</p>
-<p>每秒总的时钟中断数就是 = cpu个数 <em> 核数 </em> CONFIG_HZ</p>
+<p>每秒总的时钟中断数就是 = cpu个数 * 核数 * CONFIG_HZ</p>
 <p>cat /proc/interrupts</p>
-<pre><code>CPU0       CPU1       CPU2       CPU3       
-</code></pre><p>LOC:   97574747   52361843  105207680   69447653   Local timer interrupts<br>RES:     107368     257510      98635     186294   Rescheduling interrupts<br>CAL:      14174      14206      14164        194   function call interrupts<br>TLB:    1007949     853117     992546     591410   TLB shootdowns</p>
+<pre><code>CPU0       CPU1       CPU2       CPU3       </code></pre><p>LOC:   97574747   52361843  105207680   69447653   Local timer interrupts<br>RES:     107368     257510      98635     186294   Rescheduling interrupts<br>CAL:      14174      14206      14164        194   function call interrupts<br>TLB:    1007949     853117     992546     591410   TLB shootdowns</p>
   
 	</div>
 		<footer class="article-footer clearfix">
