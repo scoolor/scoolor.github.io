@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="为什么这么涛的个人博客">
 <meta property="og:description" content="Let’s Encrypt 是一个免费开源的SSL项目，由Mozilla、Cisco、Akamai、IdenTrust、EFF等组织人员发起。在一定程度上Let’s Encrypt推进了国内HTTPS的进程。CertBot 是基于Let’s Encrypt 的简化部署解决方案。另外acme也是也不不错的解决方案。下面简单介绍一下使用Certbot部署Let’s Encrypt。 环境debian">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-09-03T14:25:46.080Z">
+<meta property="og:updated_time" content="2020-02-17T06:38:21.798Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Certbot开启网站HTTPS">
 <meta name="twitter:description" content="Let’s Encrypt 是一个免费开源的SSL项目，由Mozilla、Cisco、Akamai、IdenTrust、EFF等组织人员发起。在一定程度上Let’s Encrypt推进了国内HTTPS的进程。CertBot 是基于Let’s Encrypt 的简化部署解决方案。另外acme也是也不不错的解决方案。下面简单介绍一下使用Certbot部署Let’s Encrypt。 环境debian">
@@ -116,7 +116,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048</span><br></pre></td></tr></table></figure>
 
 <h1 id="配置Nginx"><a href="#配置Nginx" class="headerlink" title="配置Nginx"></a>配置Nginx</h1><p>SSL部分nginx 配置如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ssl_certificate      /etc/letsencrypt/live/example.com/fullchain.pem;</span><br><span class="line">ssl_certificate_key  /etc/letsencrypt/live/example.com/privkey.pem;</span><br><span class="line">ssl_dhparam /etc/ssl/certs/dhparams.pem;</span><br><span class="line"></span><br><span class="line">ssl_session_cache shared:SSL:1m;</span><br><span class="line">ssl_session_timeout  10m;</span><br><span class="line">ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ssl_certificate      /etc/letsencrypt/live/example.com/fullchain.pem;</span><br><span class="line">ssl_certificate_key  /etc/letsencrypt/live/example.com/privkey.pem;</span><br><span class="line">ssl_dhparam /etc/ssl/certs/dhparam.pem;</span><br><span class="line"></span><br><span class="line">ssl_session_cache shared:SSL:1m;</span><br><span class="line">ssl_session_timeout  10m;</span><br><span class="line">ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br></pre></td></tr></table></figure>
 
 <p>80端口配置自动Https</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">return 301 https://$server_name$request_uri;</span><br></pre></td></tr></table></figure>
@@ -244,11 +244,11 @@
 			
 		
 			
-				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
+				<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+				<li><a href="/tags/http/" title="http">http<sup>1</sup></a></li>
 			
 		
 			
@@ -323,7 +323,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
 		
 		<a href="/about" target="_blank" title="为什么这么涛">为什么这么涛</a>
 		
