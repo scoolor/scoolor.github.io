@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="为什么这么涛的个人博客">
 <meta property="og:description" content="Let’s Encrypt 是一个免费开源的SSL项目，由Mozilla、Cisco、Akamai、IdenTrust、EFF等组织人员发起。在一定程度上Let’s Encrypt推进了国内HTTPS的进程。CertBot 是基于Let’s Encrypt 的简化部署解决方案。另外acme也是也不不错的解决方案。下面简单介绍一下使用Certbot部署Let’s Encrypt。 环境debian">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-02-17T06:40:42.756Z">
+<meta property="og:updated_time" content="2020-02-17T06:46:43.191Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Certbot开启网站HTTPS">
 <meta name="twitter:description" content="Let’s Encrypt 是一个免费开源的SSL项目，由Mozilla、Cisco、Akamai、IdenTrust、EFF等组织人员发起。在一定程度上Let’s Encrypt推进了国内HTTPS的进程。CertBot 是基于Let’s Encrypt 的简化部署解决方案。另外acme也是也不不错的解决方案。下面简单介绍一下使用Certbot部署Let’s Encrypt。 环境debian">
@@ -105,7 +105,7 @@
 <p>debian 8 的默认仓库是没有Certbot的，需要依赖第三方仓库Jessie backports；执行以下命令安装仓库；</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;deb http://ftp.debian.org/debian jessie-backports main&apos;\</span><br><span class="line">| sudo tee /etc/apt/sources.list.d/backports.list</span><br></pre></td></tr></table></figure>
 
-<p>执行完后，更新apt包管理工具<br><code>sudo apt-get update</code><br>接下来就可以安装certbot了，执行以下命令<br>`sudo apt-get install certbot </p>
+<p>执行完后，更新apt包管理工具<br><code>sudo apt-get update</code><br>接下来就可以安装certbot了，执行以下命令<br><code>sudo apt-get install certbot</code> </p>
 <h1 id="获取SSL证书"><a href="#获取SSL证书" class="headerlink" title="获取SSL证书"></a>获取SSL证书</h1><p>let’S Encrypt 支持两种获取证书的方式，Webroot和Standalone，Standalone需要80或443端口没有占用，往往需要暂停nginx服务，所以我们一般使用Webroot方式。<br>首先需要配置一个nginx服务，添加以下配置，重启nginx：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">location ~ /.well-known &#123;</span><br><span class="line">    allow all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -236,19 +236,15 @@
 			
 		
 			
+				<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/tcp/" title="tcp">tcp<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/udp/" title="udp">udp<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
 			
 		
 			
@@ -261,6 +257,10 @@
 		
 			
 				<li><a href="/tags/Internet-Protocol/" title="Internet Protocol">Internet Protocol<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
 			
 		
 			
